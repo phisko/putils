@@ -1,0 +1,111 @@
+TGUI 0.7.7  (21 April 2018)
+---------------------------
+
+- Fixed EditBox InputValidator in textEntered when text was selected
+- Hover image of EditBox wasn't being used in Black theme
+- Loading widgets from theme was partially broken on android
+- ChatBox::setScrollbar didn't correctly position the scrollbar
+- ChildWindow::setTitleButtons didn't set the button positions
+- ComboBox::setListBox removed all items from combo box
+- Added support for using SFMLConfig.cmake to find SFML
+
+
+TGUI 0.7.6  (25 November 2017)
+------------------------------
+
+- Fixed _fullpath function not found in some MinGW versions
+- Knob did not display correctly when using textures
+- Fixed crash in layouts in specific case with GCC 7
+- ChildWindow::setTitleButtons did not accept combinations of buttons
+- Theme files missed MinimizeButton and MaximizeButton in ChildWindow section
+- ComboBox::setItemsToDisplay did not show full list when 0 was passed
+- Non-string layouts are now also copied when copying a widget
+- OpenGL is no longer used for clipping
+- Fixed crash that could occur when performing a division by 0 in the layouts
+
+
+TGUI 0.7.5  (11 September 2017)
+-------------------------------
+
+- Added closeMenu function to MenuBar
+- System clipboard is now used on all platforms when using SFML >= 2.5
+- Fixed FindTGUI.cmake script when patch version is not specified
+- Label didn't send a SizeChanged signal when its text changed
+- The size of a Grid was reset in removeAllWidgets
+- Holding shift and pressing arrow keys will select text in EditBox
+- Fixed syntax error in BabyBlue and TransparentGrey themes
+- Resource path was not correctly used for all resources
+- Picture::create did not store the filename used
+
+
+TGUI 0.7.4  (3 April 2017)
+--------------------------
+
+- Theme and widget file parser now provides line number on error
+- Scrollbar in ListBox remained in hover state until mouse left the ListBox
+- The position of TextBox could be wrong when using layouts
+- Fixed incorrect clipping when the viewport was changed
+- Optional parameter from Checked/Unchecked signal could have been wrong
+
+
+TGUI 0.7.3  (9 February 2017)
+-----------------------------
+
+- Added create function to widgets and Theme which is now the preferred way to construct them
+- Added setDefaultTextStyle to EditBoxRenderer
+- Touch events were not handled properly when not using the default view
+- Optimized EditBox::findCaretPosition
+
+
+TGUI 0.7.2  (2 December 2016)
+-----------------------------
+
+- EditBox did not send a TextChanged signal when pressing ctrl+X
+- Added optional maximize and minimize buttons to ChildWindow (#61)
+- Calling Picture::setTexture yourself now works properly
+- Added optional parameter to Widget::disable to let mouse events pass through to the widgets behind it
+- ChatBox didn't scroll down automatically when size was not a multiple of item heigh
+- Clipping in ChatBox did not take padding into account
+- Mouse wheel scroll on top of combo box changed the item internally but did not display the new item
+- When ComboBox was destroyed while the list was still open then the list remained visible
+- Fixed invalid memory reads when widget gets destroyed from inside a callback function
+- Allow the ChildWindow to have maximum and minimum sizes (#64)
+- Removed support for 32-bit on OS X
+- Fixed texture rotation in some rare cases
+- Menus in MenuBar didn't stay open when the menu bar was added inside a Panel
+- Added EditBox::getCaretPosition
+- Fixed clipping issues when not using the default view
+- getAbsolutePosition no longer takes the position of the gui view into account
+
+
+TGUI 0.7.1  (12 June 2016)
+--------------------------
+
+- Picture can now be loaded from a part of an sf::Texture
+- Any texture in any widget can now be set to an sf::Texture
+- Optimized adding lines to ChatBox
+- You can now pass const char* directly to layout (instead of needing std::string)
+- Panel widgets can now have borders around them
+- Setting texture color did not work when using transparent widgets
+- Passing std::bind expression as parameter to the connect function did not work on VS2013
+- Fixed tab key not working for widgets inside several containers
+- Fixed crash in Signal class under specific circumstances
+
+
+TGUI 0.7.0  (4 April 2016)
+--------------------------
+
+- Experimental Android and iOS support
+- Layout system for relative sizes and positions
+- Rewritten callback system
+- New loading system to share theme between widgets and allow customizing loading steps
+- Exceptions are now used for error handing
+- No longer only textured widgets, also colored widgets which do not need external files
+- Many, many more changes
+
+
+Older Releases
+--------------
+
+See the website for changelogs of older releases: https://tgui.eu/changelog/
+
