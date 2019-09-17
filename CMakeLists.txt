@@ -16,11 +16,6 @@ add_library(imgui STATIC ${imguiSrc})
 target_include_directories(imgui PUBLIC imgui)
 target_link_libraries(putils PUBLIC imgui)
 
-if (PUTILS_BUILD_CONNECTION)
-    add_subdirectory(connection)
-    target_link_libraries(putils PUBLIC connection)
-endif()
-
 if(PUTILS_BUILD_LUA)
     add_subdirectory(lua)
     target_link_libraries(putils PUBLIC lua)
@@ -29,11 +24,6 @@ endif()
 if(PUTILS_BUILD_MEDIATOR)
     add_subdirectory(mediator)
     target_link_libraries(putils PUBLIC mediator)
-endif()
-
-if(PUTILS_BUILD_HTTP)
-    add_subdirectory(http)
-    target_link_libraries(putils PUBLIC http)
 endif()
 
 if(PUTILS_BUILD_PYTHON)
