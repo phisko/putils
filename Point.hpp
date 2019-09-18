@@ -64,22 +64,22 @@ namespace putils {
 		Point operator/(float rhs) const noexcept { return { x / rhs, y / rhs }; }
 		Point & operator/=(float rhs) const noexcept { x /= rhs; y /= rhs; return *this; }
 
-        template<typename P>
-        float distanceTo(const Point<P> & rhs) const noexcept {
+        float getDistanceTo(const Point & rhs) const noexcept {
             return std::sqrtf(
                     std::powf((float)x - (float)rhs.x, 2) +
                     std::powf((float)y - (float)rhs.y, 2)
             );
         }
 
+		float getLengthSquared() const noexcept {
+			return x * x + y * y;
+		}
+
         float getLength() const noexcept {
-            return std::sqrtf(
-                    std::powf((float)x, 2.f) +
-                    std::powf((float)y, 2.f)
-            );
+            return std::sqrtf(getLengthSquared());
         }
 
-        float angleTo(const Point<Precision, 3> & rhs) const noexcept {
+        float getAngleTo(const Point & rhs) const noexcept {
             return std::atan2f((float)y - (float)rhs.y, (float)rhs.x - (float)x);
         }
 
@@ -98,9 +98,9 @@ namespace putils {
                 pmeta_reflectible_attribute(&Point::y)
         );
         pmeta_get_methods(
-                std::string_view(pmeta_nameof(distanceTo)), &Point::distanceTo<Precision>,
+                pmeta_reflectible_attribute(&Point::getDistanceTo),
                 pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::angleTo),
+                pmeta_reflectible_attribute(&Point::getAngleTo),
                 pmeta_reflectible_attribute(&Point::normalize)
         );
         pmeta_get_parents();
@@ -114,56 +114,15 @@ namespace putils {
         Rect(Point<Precision, Dimensions> position = {}, Point<Precision, Dimensions> size = {})
                 : position(position), size(size) {}
 
-        template<typename P>
-        bool operator==(const Rect<P> & rhs) const { return position == rhs.position && size == rhs.size; }
+        bool operator==(const Rect & rhs) const { return position == rhs.position && size == rhs.size; }
 
-        template<typename P>
-        bool operator!=(const Rect<P> & rhs) const { return !(*this == rhs); }
-
-        bool intersect(const Rect & other, bool inclusiveBorders = false) const {
-            if (inclusiveBorders)
-                return !(position.x > other.position.x + other.size.x ||
-                         position.x + size.x < other.position.x ||
-                         position.y > other.position.y + other.size.y ||
-                         position.y + size.y < other.position.y
-                );
-
-            return !(position.x >= other.position.x + other.size.x ||
-                     position.x + size.x <= other.position.x ||
-                     position.y >= other.position.y + other.size.y ||
-                     position.y + size.y <= other.position.y
-            );
-        }
-
-		Point<Precision, Dimensions> getCenter() const {
-			return { position.x + size.x / 2, position.y - size.y / 2 };
-        }
-
-		void setCenter(const Point<Precision, Dimensions> & center) {
-			position.x = center.x - size.x / 2.0;
-			position.y = center.y + size.y / 2.0;
-		}
-
-        bool contains(const Point<Precision, 2> & point) const {
-            return (position.x <= point.x &&
-                    position.x + size.x > point.x &&
-                    position.y <= point.y &&
-                    position.y + size.y > point.y
-            );
-        }
+        bool operator!=(const Rect & rhs) const { return !(*this == rhs); }
 
         pmeta_get_class_name("Rect2");
         pmeta_get_attributes(
                 pmeta_reflectible_attribute(&Rect::position),
                 pmeta_reflectible_attribute(&Rect::size)
         );
-        pmeta_get_methods(
-                pmeta_reflectible_attribute(&Rect::intersect),
-                pmeta_reflectible_attribute(&Rect::contains),
-                pmeta_reflectible_attribute(&Rect::getCenter),
-                pmeta_reflectible_attribute(&Rect::setCenter)
-        );
-        pmeta_get_parents();
     };
 
     template<typename Precision>
@@ -189,30 +148,24 @@ namespace putils {
         template<typename P>
         Point(const Point<P, 2> & other) : x(other.x), y(other.y), z(0) {}
 
-        template<typename P>
-        bool operator==(const Point<P, 3> & rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
+        bool operator==(const Point & rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
-        template<typename P>
-        bool operator!=(const Point<P, 3> & rhs) const noexcept { return !(*this == rhs); }
+        bool operator!=(const Point & rhs) const noexcept { return !(*this == rhs); }
 
         Point operator-() const noexcept { return { -x, -y, -z }; }
 
-        template<typename P>
-        Point operator+(const Point<P, 3> & rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
+        Point operator+(const Point & rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
 
-        template<typename P>
-        Point & operator+=(const Point<P, 3> & rhs) noexcept {
+        Point & operator+=(const Point & rhs) noexcept {
             x += rhs.x;
             y += rhs.y;
             z += rhs.z;
             return *this;
         }
 
-        template<typename P>
-        Point operator-(const Point<P, 3> & rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
+        Point operator-(const Point & rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
 
-        template<typename P>
-        Point & operator-=(const Point<P, 3> & rhs) noexcept {
+        Point & operator-=(const Point & rhs) noexcept {
             x -= rhs.x;
             y -= rhs.y;
             z -= rhs.z;
@@ -231,8 +184,7 @@ namespace putils {
 		Point operator/(float rhs) const noexcept { return { x / rhs, y / rhs, z / rhs }; }
 		Point & operator/=(float rhs) noexcept { x /= rhs; y /= rhs; z /= rhs; return *this; }
 
-        template<typename P>
-        float distanceTo(const Point<P, 3> & rhs) const noexcept {
+        float getDistanceTo(const Point & rhs) const noexcept {
             return std::sqrtf(
                     std::powf((float)x - (float)rhs.x, 2.f) +
                     std::powf((float)y - (float)rhs.y, 2.f) +
@@ -240,21 +192,31 @@ namespace putils {
             );
         }
 
+		float getLengthSquared() const noexcept {
+			return x * x + y * y + z * z;
+		}
+
         float getLength() const noexcept {
-            return std::sqrtf(
-                    std::powf((float)x, 2.f) +
-                    std::powf((float)y, 2.f) +
-                    std::powf((float)z, 2.f)
-            );
+            return std::sqrtf(getLengthSquared());
         }
 
-        float angleToXY(const Point<Precision, 3> & rhs) const noexcept {
-            return std::atan2f((float)y - (float)rhs.y, (float)rhs.x - (float)x);
-        }
+		float getAngleTo(const Point & rhs) const noexcept {
+			const auto dot = x * rhs + y * rhs.y + z * rhs.z;
+			return std::acos(dot / std::sqrtf(getLengthSquared() * rhs.getLengthSquared()));
+		}
 
-        float angleToXZ(const Point<Precision, 3> & rhs) const noexcept {
-            return std::atan2f((float)z - (float)rhs.z, (float)rhs.x - (float)x);
-        }
+		float getYawTo(const Point & rhs) const noexcept {
+			const auto dx = rhs.x - x;
+			const auto dz = rhs.z - z;
+			return -std::atan2f(dz, dx);
+		}
+
+		float getPitchTo(const Point & rhs) const noexcept {
+			const auto dx = rhs.x - x;
+			const auto dy = rhs.y - y;
+			const auto dz = rhs.z - z;
+			return -std::atan2f(std::sqrtf(dz * dz + dx * dx), dy) + 3.14159265359f / 2.f;
+		}
 
 		void normalize(float desiredLength = 1) {
 			auto n = getLength();
@@ -273,13 +235,12 @@ namespace putils {
                 pmeta_reflectible_attribute(&Point::z)
         );
         pmeta_get_methods(
-                std::string_view(pmeta_nameof(distanceTo)), &Point::distanceTo<Precision>,
+                pmeta_reflectible_attribute(&Point::getDistanceTo),
                 pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::angleToXY),
-                pmeta_reflectible_attribute(&Point::angleToXZ),
+                pmeta_reflectible_attribute(&Point::getYawTo),
+                pmeta_reflectible_attribute(&Point::getPitchTo),
                 pmeta_reflectible_attribute(&Point::normalize)
         );
-        pmeta_get_parents();
     };
 
     template<typename Precision>
@@ -290,63 +251,15 @@ namespace putils {
         Rect(Point<Precision, 3> position = {}, Point<Precision, 3> size = {})
                 : position(position), size(size) {}
 
-        template<typename P>
-        bool operator==(const Rect<P> & rhs) { return position == rhs.position && size == rhs.size; }
+        bool operator==(const Rect & rhs) { return position == rhs.position && size == rhs.size; }
 
-        template<typename P>
-        bool operator!=(const Rect<P> & rhs) { return !(*this == rhs); }
-
-        bool intersect(const Rect & other, bool inclusiveBorders = false) const {
-            if (inclusiveBorders)
-                return !(position.x > other.position.x + other.size.x ||
-                         position.x + size.x < other.position.x ||
-                         position.y > other.position.y + other.size.y ||
-                         position.y + size.y < other.position.y ||
-                         position.z > other.position.z + other.size.z ||
-                         position.z + size.z < other.position.z
-                );
-
-            return !(position.x >= other.position.x + other.size.x ||
-                     position.x + size.x <= other.position.x ||
-                     position.y >= other.position.y + other.size.y ||
-                     position.y + size.y <= other.position.y ||
-                     position.z >= other.position.z + other.size.z ||
-                     position.z + size.z <= other.position.z
-            );
-        }
-
-        bool contains(const Point<Precision, 3> & point) const {
-            return (position.x <= point.x &&
-                    position.x + size.x > point.x &&
-                    position.y <= point.y &&
-                    position.y + size.y > point.y &&
-                    position.z <= point.z &&
-                    position.z + size.z > point.z
-            );
-        }
-
-		Point<Precision, 3> getCenter() const {
-			return { position.x + size.x / 2, position.y - size.y / 2, position.z - size.z / 2 };
-        }
-
-		void setCenter(const Point<Precision, 3> & center) {
-			position.x = center.x - size.x / 2;
-			position.y = center.y + size.y / 2;
-			position.z = center.z + size.z / 2;
-        }
+        bool operator!=(const Rect & rhs) { return !(*this == rhs); }
 
         pmeta_get_class_name("Rect3");
         pmeta_get_attributes(
                 pmeta_reflectible_attribute(&Rect::position),
                 pmeta_reflectible_attribute(&Rect::size)
         );
-        pmeta_get_methods(
-                pmeta_reflectible_attribute(&Rect::intersect),
-                pmeta_reflectible_attribute(&Rect::contains),
-                pmeta_reflectible_attribute(&Rect::getCenter),
-                pmeta_reflectible_attribute(&Rect::setCenter)
-        );
-        pmeta_get_parents();
     };
 
 	template<typename Precision, size_t Dimensions>

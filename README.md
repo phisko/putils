@@ -5,7 +5,6 @@ Phiste's C++ Utilities
 ### Stand-alone utility classes
 
 * [AbstractFactory](AbstractFactory.md) Base class for a factory able to create any type in a given typelist calling ``make<T>()``.
-* [AStar](AStar.md) An implementation of the AStar pathfinding algorithm.
 * [CellularAutomaton](CellularAutomaton.md) Simple cellular automaton implementation
 * [CLI](CLI.md) Simple and extensible Command-Line Interface.
 * [Directory](Directory.md) An abstraction to Unix and Windows directories, which lets you iterate through a directory and get information about each file.
