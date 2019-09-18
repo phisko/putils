@@ -19,18 +19,61 @@ Precision y;
 ```cpp
 bool operator==(const Point<P> &rhs) const;
 bool operator!=(const Point<P> &rhs) const;
+
+Point operator-() const noexcept;
+
 Point operator+(const Point<P> &rhs) const;
 Point &operator+=(const Point<P> &rhs);
+
 Point operator-(const Point<P> &rhs) const;
 Point &operator-=(const Point<P> &rhs);
+
+Point operator*(const Point & rhs) const noexcept;
+Point & operator*=(const Point & rhs) noexcept;
+
+Point operator*(float rhs) const noexcept;
+Point & operator*=(float rhs) noexcept;
+
+Point operator/(const Point & rhs) const noexcept;
+Point & operator/=(const Point & rhs) noexcept;
+
+Point operator/(float rhs) const noexcept;
+Point & operator/=(float rhs) noexcept;
 ```
 
-##### distanceTo
+##### getDistanceTo
 
 ```cpp
-Precision distanceTo(const Point<P> &rhs) const;
+float getDistanceTo(const Point & rhs) const noexcept;
 ```
 Returns the distance to another point.
+
+##### getLengthSquared, getLength
+
+```cpp
+float getLengthSquared() const noexcept;
+float getLength() const noexcept;
+```
+
+Return the (optionnally squared, to avoid call to `sqrt`) length of the vector.
+
+##### getAngleTo, getYawTo, getPitchTo
+
+```cpp
+float getAngleTo(const Point & rhs) const noexcept; // If Dimensions == 2
+float getYawTo(const Point & rhs) const noexcept; // If Dimensions == 3
+float getPitchTo(const Point & rhs) const noexcept; // If Dimensions == 3
+```
+
+Return the angle (or pitch/yaw) between this point and another.
+
+##### normalize
+
+```cpp
+void normalize(float desiredLength = 1);
+```
+
+Normalizes the vector so that its total length matches the desired value.
 
 ## Rect
 
@@ -49,10 +92,3 @@ Point<Precision> size;
 bool operator==(const Rect<P> &rhs) const;
 bool operator!=(const Rect<P> &rhs) const;
 ```
-
-##### intersect
-
-```cpp
-bool intersect(const Rect &other) const
-```
-Returns whether this rectangle intersects with `other`.
