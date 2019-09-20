@@ -216,6 +216,16 @@ namespace putils {
 		);
 		pmeta_get_parents();
 	};
+
+	template<size_t Size, const char * Name>
+	inline bool operator==(const char * lhs, const putils::string<Size, Name> & rhs) { return rhs == lhs; }
+	template<size_t Size, const char * Name>
+	inline bool operator!=(const char * lhs, const putils::string<Size, Name> & rhs) { return rhs != lhs; }
+
+	template<size_t Size, const char * Name>
+	inline bool operator==(const std::string & lhs, const putils::string<Size, Name> & rhs) { return rhs == lhs; }
+	template<size_t Size, const char * Name>
+	inline bool operator!=(const std::string & lhs, const putils::string<Size, Name> & rhs) { return rhs != lhs; }
 }
 
 namespace std {
