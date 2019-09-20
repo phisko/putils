@@ -138,9 +138,8 @@ namespace putils {
 
 			template<typename CRTP, size_t N>
 			void initWithShaders(const putils::vector<ShaderDescription, N> & shaders) {
-				assert(_handle == -1);
-				// if (_handle != -1)
-				// 	glDeleteProgram(_handle);
+				if (_handle != -1)
+					glDeleteProgram(_handle);
 				_handle = glCreateProgram();
 
 				for (const auto & shader : shaders)
