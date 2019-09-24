@@ -33,21 +33,12 @@ namespace putils {
 
 			if constexpr (putils::has_member_get_methods<T>()) {
 				putils::for_each_attribute(T::get_methods(), [&type](auto name, auto member) {
-					//if constexpr (std::is_member_function_pointer_v<decltype(member)>) {
-						using Ret = putils::member_function_return_type<decltype(member)>;
+					using Ret = putils::member_function_return_type<decltype(member)>;
 
-						if constexpr (std::is_reference_v<Ret>)
-							type.def(name, member, py::return_value_policy::reference);
-						else
-							type.def(name, member);
-					// }
-					// else {
-					// 	using Ret = putils::function_return_type<decltype(member)>;
-					// 	if constexpr (std::is_reference_v<Ret>)
-					// 		type.def(name, member, py::return_value_policy::reference);
-					// 	else
-					// 		type.def(name, member);
-					// }
+					if constexpr (std::is_reference_v<Ret>)
+						type.def(name, member, py::return_value_policy::reference);
+					else
+						type.def(name, member);
 				});
 			}
 
