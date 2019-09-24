@@ -79,49 +79,19 @@ namespace putils {
 		void registerType(sol::state & state) {
 			static_assert(putils::has_member_get_class_name<T>());
 
-			if constexpr (putils::has_member_get_attributes<T>() && putils::has_member_get_methods<T>()) {
-				const auto t = std::tuple_cat(
-					std::make_tuple(T::get_class_name()),
-					T::get_attributes().getFlatKeyValues(),
-					T::get_methods().getFlatKeyValues()
-				);
-				std::apply(
-					[&state](auto && ...params) { state.new_usertype<T>(FWD(params)...); },
-					t
-				);
-			}
-			else if constexpr (putils::has_member_get_attributes<T>()) {
-				const auto t = std::tuple_cat(
-					std::make_tuple(T::get_class_name()),
-					T::get_attributes().getFlatKeyValues()
-				);
-				std::apply(
-					[&state](auto && ...params) { state.new_usertype<T>(FWD(params)...); },
-					t
-				);
-			}
-			else if constexpr (putils::has_member_get_methods<T>()) {
-				const auto t = std::tuple_cat(
-					std::make_tuple(T::get_class_name()),
-					T::get_methods().getFlatKeyValues()
-				);
-				std::apply(
-					[&state](auto && ...params) { state.new_usertype<T>(FWD(params)...); },
-					t
-				);
-			}
-			else {
-				const auto t = std::tuple_cat(std::make_tuple(T::get_class_name()));
-				std::apply(
-					[&state](auto && ...params) { state.new_usertype<T>(FWD(params)...); },
-					t
-				);
-			}
+			auto type = state.new_usertype<T>(T::get_class_name());
+			if constexpr (putils::has_member_get_attributes<T>())
+				putils::for_each_attribute(T::get_attributes(), [&](const char * name, const auto member) {
+					type[name] = member;
+				});
+			if constexpr (putils::has_member_get_methods<T>())
+				putils::for_each_attribute(T::get_methods(), [&](const char * name, const auto member) {
+					type[name] = member;
+				});
 
-            if constexpr (putils::is_streamable<std::ostream, T>::value) {
-                state[T::get_class_name()][sol::meta_function::to_string] =
+			if constexpr (putils::is_streamable<std::ostream, T>::value)
+                type[sol::meta_function::to_string] =
                         [](const T & obj) { return putils::toString(obj); };
-            }
         }
     }
 }
