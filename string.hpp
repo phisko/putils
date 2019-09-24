@@ -3,8 +3,9 @@
 #include <assert.h>
 #include <algorithm>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include "reflection/Reflectible.hpp"
-#include "anonymous_variable.hpp"
 
 namespace putils {
 	namespace detail_string {
@@ -120,7 +121,6 @@ namespace putils {
 			return *this;
 		}
 #endif
-
 
 		template<typename T>
 		string operator+(T rhs) const {
