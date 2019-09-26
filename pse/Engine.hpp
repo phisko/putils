@@ -6,11 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-#ifdef PSE_TGUI
-#include <TGUI/Gui.hpp>
-#include <TGUI/Widget.hpp>
-#endif
-
 #include <unordered_map>
 #include "ViewItem.hpp"
 
@@ -74,14 +69,7 @@ namespace pse {
         // Poll event
     public:
         bool pollEvent(sf::Event & e) noexcept {
-            bool ret = _window.pollEvent(e);
-
-#ifdef PSE_TGUI
-            if (ret)
-                _tgui.handleEvent(e);
-#endif
-
-            return ret;
+            return _window.pollEvent(e);
         }
 
         // Splash a color on screen
@@ -103,29 +91,9 @@ namespace pse {
         std::unordered_map<std::string, std::pair<sf::View, size_t>> _views;
         putils::Timer _refreshTimer;
 
-#ifdef PSE_TGUI
-        public:
-            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-            void addItem(const std::shared_ptr<T> &widget, const std::string & name = "")
-            { _tgui.add(widget, name); }
-
-            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-            bool removeItem(const std::shared_ptr<T> &widget)
-            { return _tgui.remove(widget); }
-
-            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-            typename T::Ptr get(std::string_view name, bool recursive = false) const
-            { return _tgui.get(name, recursive); }
-
-            tgui::Gui &getGui() noexcept { return _tgui; }
-        private:
-            tgui::Gui _tgui;
-#endif
-
         // Coplien
     public:
         Engine(const Engine &) = delete;
-
         Engine & operator=(const Engine &) = delete;
     };
 }

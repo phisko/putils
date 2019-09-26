@@ -1,7 +1,6 @@
 # putils
 Phiste's C++ Utilities
 
-
 ### Stand-alone utility classes
 
 * [AbstractFactory](AbstractFactory.md) Base class for a factory able to create any type in a given typelist calling ``make<T>()``.
@@ -34,6 +33,11 @@ Phiste's C++ Utilities
 * [PSE](pse/README.md) (enabled with the PUTILS_BUILD_PSE CMake option)
 * [Reflection](reflection/README.md)
 
+PSE makes use of [Conan](https://conan.io/) for dependency management. The necessary packages will be automatically downloaded when you run CMake, but Conan must be installed separately by running:
+```
+pip install conan
+```
+
 ### Function-only headers
 
 * [anonymous_variable.hpp](anonymous_variable.hpp): macro to define an anonymous variable
@@ -60,3 +64,9 @@ Phiste's C++ Utilities
 * [traits.hpp](traits.hpp): type traits
 * [url.hpp](url.hpp): URL encoder and decoder
 * [with.hpp](with.hpp): `with` macro mimicking the Kotlin construct
+
+### CMake tools
+
+* [conan](CMakeModules/conan.cmake): lets you run conan commands directly from cmake
+* [conan_helper](CMakeModules/conan_helper.cmake): provides a helper macro to simply list conan dependencies
+* [cotire](https://github.com/sakra/cotire): lets you easily set up precompiled-header and single-compilation-unit compilations to speed up builds

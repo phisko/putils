@@ -6,9 +6,6 @@ namespace pse {
                    float refreshRate) noexcept
             : _window(sf::VideoMode(screenWidth, screenHeight), screenName, sfWindowStyle),
               _refreshTimer(1 / refreshRate)
-#ifdef PSE_TGUI
-    , _tgui(_window)
-#endif
     {
         addView("default",
                 { (float)screenWidth / 2, (float)screenHeight / 2 }, { (float)screenWidth, (float)screenHeight },
@@ -20,10 +17,6 @@ namespace pse {
             displayColor(sf::Color::Black);
 
         drawViews();
-
-#ifdef PSE_TGUI
-        _tgui.draw();
-#endif
 
         if (preDisplay != nullptr)
             preDisplay();
