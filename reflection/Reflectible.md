@@ -41,10 +41,28 @@ Can be easily generated with `pmeta_get_parents`.
 
 ```cpp
 template<typename T>
+struct has_member_get_class_name;
+template<typename T>
+struct has_member_get_attributes;
+template<typename T>
+struct has_member_get_methods;
+template<typename T>
+struct has_member_get_parents;
+
+template<typename T>
 struct is_reflectible;
 ```
 
-Lets client code check whether a given-type is reflectible.
+Let client code check whether a given-type is reflectible.
+
+### Iterating attributes
+
+```cpp
+template<typename Attributes, typename Func> // Func: void(const char * name, MemberPointer ptr)
+void for_each_attribute(Attributes && attributes, Func && func);
+```
+
+Lets client code iterate over the attributes/methods for a given type. See the `Example` section below.
 
 ### Helper macros
 
@@ -107,17 +125,9 @@ Defines a `get_parents` static member function returning a table of parent types
 ### Example
 
 ```cpp
-class ExampleParent
-{
-};
+class ExampleParent {};
 
-class Test : public Reflectible<Test>, public ExampleParent
-{
-public:
-    Test()
-    {
-    }
-
+class Test : public Reflectible<Test>, public ExampleParent {
 public:
     std::string exampleMethod() const { return "Method"; }
 
@@ -137,38 +147,31 @@ public:
     );
 };
 
-int main()
-{
+int main() {
     Test t;
 
     // Walk attributes
-    pmeta::tuple_for_each(Test::get_attributes().getKeyValues(),
-                          [&t](auto &&pair)
-                          {
-                              const auto &name = std::get<0>(pair);
-                              const auto ptr = std::get<1>(pair);
-                              std::cout << name << ": " << t.*ptr << std::endl;
-                          }
+    putils::for_each_attribute(Test::getAttributes(),
+        [&](const char * name, auto member) {
+            std::cout << name << ": " << t.*ptr << std::endl;
+        }
     );
 
     // Walk methods
-    pmeta::tuple_for_each(Test::get_methods().getKeyValues(),
-                          [&t](auto &&pair)
-                          {
-                              const auto &name = std::get<0>(pair);
-                              const auto ptr = std::get<1>(pair);
-                              std::cout << name << ": " << (t.*ptr)() << std::endl;
-                          }
+    putils::for_each_attribute(Test::get_methods(),
+        [&](const char * name, auto member) {
+            std::cout << name << ": " << (t.*ptr)() << std::endl;
+        }
     );
 
     // Walk parents
-     pmeta::tuple_for_each(Test::get_parents().getKeyValues(),
-                          [&t](auto &&pair)
-                          {
-                              const auto &name = std::get<0>(pair);
-                              using ParentType = pmeta_wrapped(std::get<1>(pair));
-                              std::cout << name << ": " << typeid(ParentType).name() << std::endl;
-                          }
+    putils::for_each_attribute(Test::get_parents(),
+        [&](const char * name, auto parent) {
+            using ParentType = pmeta_wrapped(parent);
+            std::cout << name << ": " << typeid(ParentType).name() << std::endl;
+        }
     );
+
+    return 0;
 }
 ```
