@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Mediator.hpp"
+#include "termcolor.hpp"
 
 namespace putils
 {
@@ -32,7 +33,7 @@ namespace putils
 			try {
 				m->receive(packet);
 			} catch (const std::exception & e) {
-				std::cerr << e.what() << std::endl;
+				std::cerr << putils::termcolor::red << e.what() << std::endl << putils::termcolor::reset;
 			}
         }
     }

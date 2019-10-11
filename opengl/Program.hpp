@@ -19,6 +19,7 @@
 #include "read_stream.hpp"
 #include "vector.hpp"
 #include "string.hpp"
+#include "termcolor.hpp"
 
 #ifndef PUTILS_UNIFORM_NAME_MAX_LENGTH
 # define PUTILS_UNIFORM_NAME_MAX_LENGTH 256
@@ -155,8 +156,8 @@ namespace putils {
 				char buffer[512];
 				glGetProgramInfoLog(_handle, lengthof(buffer), nullptr, buffer);
 				if (strlen(buffer) != 0) {
-					std::cerr << "Error linking shaders:\n\t" << buffer << '\n';
-					std::cerr << "\tNote: When building [" << _name << "] program\n";
+					std::cerr << putils::termcolor::red << "Error linking shaders:\n\t" << buffer << '\n';
+					std::cerr << "\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::red << "] program\n" << putils::termcolor::reset;
 					assert(false);
 				}
 
@@ -174,8 +175,10 @@ namespace putils {
 						loc = glGetUniformLocation(_handle, name);
 #if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 						if (loc == -1) {
-							std::cerr << "Failed to get location for `" << name << "` uniform\n";
-							std::cerr << "\tNote: When building [" << _name << "] program\n";
+							std::cerr << putils::termcolor::yellow <<
+								"Failed to get location for `" << putils::termcolor::cyan << name << putils::termcolor::yellow << "` uniform\n"
+								"\tNote: When building [" << putils::termcolor::cyan << _name <<  putils::termcolor::yellow << "] program\n"
+								<< putils::termcolor::reset;
 						}
 #endif
 					};
@@ -206,8 +209,10 @@ namespace putils {
 					glUniform1i(attrib, texture);
 #if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				else {
-					std::cerr << "Failed to get location for `" << gName << "` uniform\n";
-					std::cerr << "\tNote: When building [" << _name << "] program\n";
+					std::cerr << putils::termcolor::yellow
+						<< "Failed to get location for `" << putils::termcolor::cyan << gName << putils::termcolor::yellow << "` uniform\n"
+						"\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::yellow << "] program\n"
+						<< putils::termcolor::reset;
 				}
 #endif
 			}
@@ -222,7 +227,9 @@ namespace putils {
 					char buffer[512];
 					glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
 					if (strlen(buffer) != 0) {
-						std::cerr << "Error compiling program [" << _name << "]:\n\t" << buffer << '\n';
+						std::cerr << putils::termcolor::red <<
+							"Error compiling program [" << putils::termcolor::cyan << _name << putils::termcolor::red << "]:\n\t" << putils::termcolor::white << buffer << '\n'
+							<< putils::termcolor::reset;
 						assert(false);
 					}
 

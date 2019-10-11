@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Text.hpp"
 #include "concat.hpp"
+#include "termcolor.hpp"
 
 namespace pse {
     Text::Text(const sf::String & str, const sf::Vector2f & pos, const sf::Color & color, unsigned int textSize,
@@ -43,7 +44,7 @@ namespace pse {
         if (fonts.find(font) == fonts.end()) {
             auto f = std::make_unique<sf::Font>();
             if (!(f->loadFromFile(font))) {
-                std::cerr << putils::concat("Error loading font '", font, "'") << std::endl;
+                std::cerr << putils::termcolor::red << putils::concat("Error loading font '", font, "'") << std::endl << putils::termcolor::reset;
                 return;
             }
             fonts.emplace(font, std::move(f));

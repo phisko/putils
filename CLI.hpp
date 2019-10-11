@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <iostream>
 #include "fwd.hpp"
+#include "termcolor.hpp"
 
 #ifdef __unix__
 
@@ -31,7 +32,7 @@ namespace putils {
     public:
         CLI(const CommandMap & funcs,
             const Command & default_ = [](std::string_view cmd, const std::vector<Param> &) {
-                std::cout << "Unknown command: " << cmd << std::endl;
+                std::cout << putils::termcolor::red << "Unknown command: " << putils::termcolor::cyan << cmd << std::endl << putils::termcolor::reset;
             },
             const std::function<std::string()> & prompt = [] { return "> "; },
             std::vector<std::pair<char, char>> && delimiters =
