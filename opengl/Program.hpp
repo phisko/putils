@@ -20,6 +20,10 @@
 #include "vector.hpp"
 #include "string.hpp"
 
+#ifndef PUTILS_UNIFORM_NAME_MAX_LENGTH
+# define PUTILS_UNIFORM_NAME_MAX_LENGTH 256
+#endif
+
 namespace putils {
 	namespace gl {
 		inline void setUniform(GLint location, int val) { glUniform1i(location, val); }
@@ -115,6 +119,7 @@ namespace putils {
 				glm::mat4 view;
 				glm::mat4 proj;
 				glm::vec3 camPos;
+				float camFOV;
 				glm::vec2 screenSize;
 				float nearPlane;
 				float farPlane;
@@ -145,7 +150,6 @@ namespace putils {
 				for (const auto & shader : shaders)
 					glAttachShader(_handle, loadShader(shader.src, shader.type));
 
-				// glBindFragDataLocation(_handle, 0, "outColor"); // Not necessary right now since fragment has only one output
 				glLinkProgram(_handle);
 #if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				char buffer[512];
@@ -165,13 +169,23 @@ namespace putils {
 				putils::for_each_attribute(CRTP::get_attributes(), [&](const char * name, auto member) {
 					auto & crtp = static_cast<CRTP &>(*this);
 					auto & uniformLocation = crtp.*member;
-					uniformLocation = glGetUniformLocation(_handle, name);
+
+					static const auto setLocation = [this](GLint & loc, const char * name) {
+						loc = glGetUniformLocation(_handle, name);
 #if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
-					if (uniformLocation == -1) {
-						std::cerr << "Failed to get location for `" << name << "` uniform\n";
-						std::cerr << "\tNote: When building [" << _name << "] program\n";
-					}
+						if (loc == -1) {
+							std::cerr << "Failed to get location for `" << name << "` uniform\n";
+							std::cerr << "\tNote: When building [" << _name << "] program\n";
+						}
 #endif
+					};
+
+					if constexpr (std::is_array<putils::MemberType<CRTP, decltype(member)>>::value) {
+						for (size_t i = 0; i < lengthof(uniformLocation); ++i)
+							setLocation(uniformLocation[i], putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", name, i));
+					}
+					else
+						setLocation(uniformLocation, name);
 				});
 			}
 
@@ -198,7 +212,7 @@ namespace putils {
 #endif
 			}
 
-			static GLint loadShader(const char * src, GLenum type) {
+			GLint loadShader(const char * src, GLenum type) {
 				const auto shader = glCreateShader(type);
 				glShaderSource(shader, 1, &src, nullptr);
 				glCompileShader(shader);
@@ -208,7 +222,7 @@ namespace putils {
 					char buffer[512];
 					glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
 					if (strlen(buffer) != 0) {
-						std::cerr << "Error compiling program:\n\t" << buffer << '\n';
+						std::cerr << "Error compiling program [" << _name << "]:\n\t" << buffer << '\n';
 						assert(false);
 					}
 
