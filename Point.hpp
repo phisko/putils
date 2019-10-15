@@ -20,11 +20,21 @@ namespace putils {
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
 
-        Point(Point &&) noexcept = default;
-        Point & operator=(Point &&) noexcept = default;
+        template<typename P>
+        Point(const Point<P, 2> & other) noexcept : x((Precision)other.x), y((Precision)other.y) {}
+        template<typename P>
+		Point & operator=(const Point<P, 2> & other) noexcept {
+			x = (Precision)other.x; y = (Precision)other.y;
+			return *this;
+		}
 
         template<typename P>
-        Point(const Point<P, 3> & other) : x(other.x), y(other.y) {}
+        Point(const Point<P, 3> & other) noexcept : x((Precision)other.x), y((Precision)other.y) {}
+        template<typename P>
+		Point & operator=(const Point<P, 3> & other) noexcept {
+			x = (Precision)other.x; y = (Precision)other.y;
+			return *this;
+		}
 
         template<typename P>
         bool operator==(const Point<P> & rhs) const noexcept { return x == rhs.x && y == rhs.y; }
@@ -142,11 +152,21 @@ namespace putils {
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
 
-        Point(Point &&) noexcept = default;
-        Point & operator=(Point &&) noexcept = default;
+        template<typename P>
+        Point(const Point<P, 2> & other) noexcept : x((Precision)other.x), y((Precision)other.y), z(0) {}
+        template<typename P>
+		Point & operator=(const Point<P, 2> & other) noexcept {
+			x = (Precision)other.x; y = (Precision)other.y; z = 0;
+			return * this;
+		}
 
         template<typename P>
-        Point(const Point<P, 2> & other) : x(other.x), y(other.y), z(0) {}
+        Point(const Point<P, 3> & other) : x((Precision)other.x), y((Precision)other.y), z((Precision)other.z) {}
+		template<typename P>
+		Point & operator=(const Point<P, 3> & other) noexcept {
+			x = (Precision)other.x; y = (Precision)other.y; z = (Precision)other.z;
+			return * this;
+		}
 
         bool operator==(const Point & rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
