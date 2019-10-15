@@ -45,6 +45,8 @@ namespace putils {
 
 		inline void setUniform(GLint location, const glm::mat4 & val) { glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val)); }
 
+		inline void setViewPort(const putils::Rect2i & viewPort) { glViewport(viewPort.position.x, viewPort.position.y, viewPort.position.x, viewPort.position.y); }
+
 		template<typename VertexType, typename Member>
 		void setAttrib(size_t location, size_t length, size_t offset) {
 			glEnableVertexAttribArray((GLuint)location);
@@ -121,7 +123,7 @@ namespace putils {
 				glm::mat4 proj;
 				glm::vec3 camPos;
 				float camFOV;
-				glm::vec2 screenSize;
+				putils::Rect2i viewPort;
 				float nearPlane;
 				float farPlane;
 			};
