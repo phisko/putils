@@ -106,7 +106,7 @@ namespace putils {
 		class Program {
 		public:
 			Program(bool usesGBuffer = false, const char * name = "") : _usesGBuffer(usesGBuffer)
-#ifndef NDEBUG
+#ifndef PUTILS_NDEBUG
 				, _name(name)
 #endif
 			{}
@@ -154,7 +154,7 @@ namespace putils {
 					glAttachShader(_handle, loadShader(shader.src, shader.type));
 
 				glLinkProgram(_handle);
-#if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
+#if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				char buffer[512];
 				glGetProgramInfoLog(_handle, lengthof(buffer), nullptr, buffer);
 				if (strlen(buffer) != 0) {
@@ -175,7 +175,7 @@ namespace putils {
 
 					static const auto setLocation = [this](GLint & loc, const char * name) {
 						loc = glGetUniformLocation(_handle, name);
-#if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
+#if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 						if (loc == -1) {
 							std::cerr << putils::termcolor::yellow <<
 								"Failed to get location for `" << putils::termcolor::cyan << name << putils::termcolor::yellow << "` uniform\n"
@@ -209,7 +209,7 @@ namespace putils {
 				const auto attrib = glGetUniformLocation(_handle, gName.data());
 				if (attrib != -1)
 					glUniform1i(attrib, texture);
-#if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
+#if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				else {
 					std::cerr << putils::termcolor::yellow
 						<< "Failed to get location for `" << putils::termcolor::cyan << gName << putils::termcolor::yellow << "` uniform\n"
@@ -224,7 +224,7 @@ namespace putils {
 				glShaderSource(shader, 1, &src, nullptr);
 				glCompileShader(shader);
 
-#if !defined(NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
+#if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				{
 					char buffer[512];
 					glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
@@ -246,7 +246,7 @@ namespace putils {
 		public:
 			bool usesGBuffer() const { return _usesGBuffer; }
 
-#ifndef NDEBUG
+#ifndef PUTILS_NDEBUG
 			const auto & getName() const { return _name; }
 #endif
 
@@ -254,7 +254,7 @@ namespace putils {
 			GLuint _handle = -1;
 			bool _usesGBuffer;
 
-#ifndef NDEBUG
+#ifndef PUTILS_NDEBUG
 			putils::string<64> _name;
 #endif
 		};
