@@ -1,4 +1,5 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeModules)
+include(cmake_helper)
 include(conan_helper)
 
 if(WIN32)
