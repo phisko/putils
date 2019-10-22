@@ -92,8 +92,22 @@ namespace putils {
 			return *this;
 		}
 
+		string & operator+=(std::string_view rhs) {
+			strncat_s(_buff, rhs.data(), rhs.size());
+			_size += rhs.size();
+			assert(_size < MaxSize);
+			return *this;
+		}
+
 		template<size_t Size, const char * Name>
 		string & operator+=(const string<Size, Name> & rhs) { return *this += rhs.c_str(); }
+
+		string & operator+=(char rhs) {
+			_buff[_size++] = rhs;
+			assert(_size < MaxSize);
+			_buff[_size] = 0;
+			return *this;
+		}
 
 		string & operator+=(int rhs) {
 			_size += snprintf(_buff + _size, MaxSize - _size, "%d", rhs);
