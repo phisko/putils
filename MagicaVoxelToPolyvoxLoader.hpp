@@ -12,6 +12,7 @@
 #include "file_extension.hpp"
 #include "termcolor.hpp"
 #include "Color.hpp"
+#include "Point.hpp"
 
 namespace putils::MagicaVoxel {
 	struct VertexData {
@@ -66,7 +67,7 @@ namespace putils::MagicaVoxel {
 		}
 	}
 
-	static auto loadVoxFile(const char * f) {
+	static auto loadVoxFile(const char * f, putils::Point3i * outSize = nullptr) {
 #ifndef KENGINE_NDEBUG
 		std::cout << putils::termcolor::green << "[MagicaVoxel] Loading " << putils::termcolor::cyan << f << putils::termcolor::green << "..." << putils::termcolor::reset;
 #endif
@@ -86,6 +87,11 @@ namespace putils::MagicaVoxel {
 
 		MagicaVoxel::ChunkContent::Size size;
 		detail::readFromStream(size, stream);
+		if (outSize != nullptr) {
+			outSize->x = size.x;
+			outSize->y = size.y;
+			outSize->z = size.z;
+		}
 
 		PolyVox::RawVolume<VertexData> volume(PolyVox::Region{ { 0, 0, 0, }, { size.x, size.z, size.y } });
 
