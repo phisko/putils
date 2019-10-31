@@ -27,6 +27,7 @@
 
 namespace putils {
 	namespace gl {
+		inline void setUniform(GLint location, bool val) { glUniform1i(location, val); }
 		inline void setUniform(GLint location, int val) { glUniform1i(location, val); }
 		inline void setUniform(GLint location, GLuint val) { glUniform1i(location, val); }
 		inline void setUniform(GLint location, size_t val) { glUniform1i(location, (GLint)val); }
@@ -45,7 +46,7 @@ namespace putils {
 
 		inline void setUniform(GLint location, const glm::mat4 & val) { glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val)); }
 
-		inline void setViewPort(const putils::Rect2i & viewPort) { glViewport(viewPort.position.x, viewPort.position.y, viewPort.position.x, viewPort.position.y); }
+		inline void setViewPort(const putils::Rect2i & viewPort) { glViewport(viewPort.position.x, viewPort.position.y, viewPort.size.x, viewPort.size.y); }
 
 		template<typename VertexType, typename Member>
 		void setAttrib(size_t location, size_t length, size_t offset) {
