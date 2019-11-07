@@ -55,10 +55,8 @@ namespace pmeta {
             const auto & pair = std::get<I>(table);
 
 			using KeyType = pmeta_typeof(std::get<KPos>(pair));
-			if constexpr (std::is_same<KeyType, pmeta_typeof(key)>::value)
-			{
-				if (std::get<KPos>(pair) == key)
-				{
+			if constexpr (std::is_same<KeyType, pmeta_typeof(key)>::value) {
+				if (std::get<KPos>(pair) == key) {
 					func(std::get<VPos>(pair));
 					return;
 				}
