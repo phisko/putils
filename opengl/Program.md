@@ -45,7 +45,7 @@ template<typename CRTP, size_t N>
 void initWithShaders(const putils::vector<ShaderDescription, N> & shaders);
 ```
 
-Uses the [reflectible API](../reflection/Reflectible.md) and gets all the attributes of `CRTP`, which are expected to match the `uniforms` declared in the shader sources. Sets the attribute values to the location of the `uniforms` so they may be used by the child class.
+Uses the [reflectible API](../reflection.md) and gets all the attributes of `CRTP`, which are expected to match the `uniforms` declared in the shader sources. Sets the attribute values to the location of the `uniforms` so they may be used by the child class.
 
 ##### addGBufferTexture
 

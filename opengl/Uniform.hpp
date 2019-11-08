@@ -19,14 +19,14 @@ namespace putils::gl {
 
 	inline void setUniform(GLint location, const float(&val)[3]) { glUniform3f(location, val[0], val[1], val[2]); }
 	inline void setUniform(GLint location, const glm::vec3 & val) { glUniform3f(location, val.x, val.y, val.z); }
-	inline void setUniform(GLint location, const putils::Point3f & val) { glUniform3f(location, val.x, val.y, val.z); }
+	inline void setUniform(GLint location, const Point3f & val) { glUniform3f(location, val.x, val.y, val.z); }
 
 	inline void setUniform(GLint location, const float(&val)[4]) { glUniform4f(location, val[0], val[1], val[2], val[3]); }
 	inline void setUniform(GLint location, const NormalizedColor & val) { glUniform4f(location, val.r, val.g, val.b, val.a); }
 
 	inline void setUniform(GLint location, const float(&val)[2]) { glUniform2f(location, val[0], val[1]); }
 	inline void setUniform(GLint location, const glm::vec2 & val) { glUniform2f(location, val.x, val.y); }
-	inline void setUniform(GLint location, const putils::Point2f & val) { glUniform2f(location, val.x, val.y); }
+	inline void setUniform(GLint location, const Point2f & val) { glUniform2f(location, val.x, val.y); }
 
 	inline void setUniform(GLint location, const glm::mat4 & val) { glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val)); }
 

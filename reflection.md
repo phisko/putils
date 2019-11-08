@@ -1,10 +1,6 @@
-# [Reflectible](Reflectible.hpp)
-
-Template class that should be inherited by any type wanting to expose its members.
+# [Reflection](reflection.hpp)
 
 ### Reflection methods
-
-These should be defined by all types inheriting from Reflectible. This is enforced by Reflectible, and client code will not compile unless these are defined.
 
 ##### get_class_name
 
@@ -37,7 +33,7 @@ static const auto &get_parents();
 Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to `pmeta::type` objects for each of the class' parents.
 Can be easily generated with `pmeta_get_parents`.
 
-### type trait
+### Type traits
 
 ```cpp
 template<typename T>
@@ -48,21 +44,38 @@ template<typename T>
 struct has_member_get_methods;
 template<typename T>
 struct has_member_get_parents;
-
-template<typename T>
-struct is_reflectible;
 ```
 
 Let client code check whether a given-type is reflectible.
 
 ### Iterating attributes
 
+##### for_each_attribute
+
 ```cpp
-template<typename Attributes, typename Func> // Func: void(const char * name, MemberPointer ptr)
-void for_each_attribute(Attributes && attributes, Func && func);
+template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
+void for_each_attribute(Func && func);
 ```
 
-Lets client code iterate over the attributes/methods for a given type. See the `Example` section below.
+Lets client code iterate over the attributes for a given type. See the `Example` section below.
+
+##### for_each_method
+
+```cpp
+template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
+void for_each_method(Func && func);
+```
+
+Lets client code iterate over the methods for a given type. See the `Example` section below.
+
+##### for_each_parent
+
+```cpp
+template<typename T, typename Func> // Func: void(const char * name, TypeObject type)
+void for_each_parent(Func && func);
+```
+
+Lets client code iterate over the parents for a given type. See the `Example` section below.
 
 ### Helper macros
 
@@ -127,7 +140,7 @@ Defines a `get_parents` static member function returning a table of parent types
 ```cpp
 class ExampleParent {};
 
-class Test : public Reflectible<Test>, public ExampleParent {
+class Test : public ExampleParent {
 public:
     std::string exampleMethod() const { return "Method"; }
 
@@ -151,21 +164,21 @@ int main() {
     Test t;
 
     // Walk attributes
-    putils::for_each_attribute(Test::getAttributes(),
+    putils::for_each_attribute<Test>(
         [&](const char * name, auto member) {
             std::cout << name << ": " << t.*ptr << std::endl;
         }
     );
 
     // Walk methods
-    putils::for_each_attribute(Test::get_methods(),
+    putils::for_each_method<Test>(
         [&](const char * name, auto member) {
             std::cout << name << ": " << (t.*ptr)() << std::endl;
         }
     );
 
     // Walk parents
-    putils::for_each_attribute(Test::get_parents(),
+    putils::for_each_parent<Test>(
         [&](const char * name, auto parent) {
             using ParentType = pmeta_wrapped(parent);
             std::cout << name << ": " << typeid(ParentType).name() << std::endl;

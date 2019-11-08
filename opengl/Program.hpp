@@ -42,7 +42,7 @@ namespace putils::gl {
 	template<typename T>
 	void setVertexType() {
 		size_t location = 0;
-		putils::for_each_attribute(T::get_attributes(), [&](const char *, auto member) {
+		putils::for_each_attribute<T>([&](const char *, auto member) {
 			using Ptr = decltype(member);
 			using Member = std::remove_reference_t<decltype(std::declval<T>().*(std::declval<Ptr>()))>;
 
@@ -62,7 +62,7 @@ namespace putils::gl {
 		if constexpr (putils::has_member_get_attributes<Data>()) {
 			const auto dataOffset = offsetof(VertexType, data);
 
-			putils::for_each_attribute(Data::get_attributes(), [&](const char *, auto member) {
+			putils::for_each_attribute<Data>([&](const char *, auto member) {
 				using Ptr = decltype(member);
 				using Member = std::remove_reference_t<decltype(std::declval<Data>().*(std::declval<Ptr>()))>;
 
@@ -71,7 +71,7 @@ namespace putils::gl {
 					length = lengthof(std::declval<Member>());
 
 				setAttrib<VertexType, Member>(location++, length, dataOffset + putils::member_offset(member));
-				});
+			});
 		}
 	}
 
@@ -141,7 +141,7 @@ namespace putils::gl {
 #endif
 			glUseProgram(_handle);
 
-			putils::for_each_attribute(CRTP::get_attributes(), [&](const char * name, auto member) {
+			putils::for_each_attribute<CRTP>([&](const char * name, auto member) {
 				auto & crtp = static_cast<CRTP &>(*this);
 				auto & uniformLocation = crtp.*member;
 
