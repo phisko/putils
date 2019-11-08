@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 #include "anonymous_variable.hpp"
 #include "fwd.hpp"
 

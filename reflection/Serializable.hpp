@@ -6,7 +6,7 @@
 #include "fwd.hpp"
 #include "OutputPolicies.hpp"
 
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 
 namespace putils
 {
@@ -82,7 +82,7 @@ namespace putils
         // Reflectible constructor
     public:
         Serializable() {
-            static_assert( putils::is_reflectible<Derived>::value,
+            static_assert( putils::has_member_get_attributes<Derived>::value,
 				"Serializable types should be reflectible, or specify their fields at construction time");
 
             if (!_serializer)

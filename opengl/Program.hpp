@@ -5,7 +5,7 @@
 #include <fstream>
 #include "opengl/Uniform.hpp"
 
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 #include "lengthof.hpp"
 #include "members.hpp"
 #include "read_stream.hpp"

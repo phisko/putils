@@ -7,7 +7,7 @@
 #include "pybind11/iostream.h"
 #include "pybind11/embed.h"
 #include "traits.hpp"
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 #include "to_string.hpp"
 #include "members.hpp"
 

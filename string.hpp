@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 
 namespace putils {
 	namespace detail_string {

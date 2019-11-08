@@ -1,11 +1,11 @@
 #pragma once
 
 #include "hash.hpp"
-#include "reflection/Reflectible.hpp"
+#include "reflection.hpp"
 
 namespace putils {
     template<typename Precision, std::size_t Dimensions = 2>
-    struct Point : putils::Reflectible<Point<Precision, Dimensions>> {
+    struct Point {
 		union {
 			Precision raw[2];
 			struct {
@@ -117,7 +117,7 @@ namespace putils {
     };
 
     template<typename Precision, std::size_t Dimensions = 2>
-    struct Rect : public Reflectible<Rect<Precision, Dimensions>> {
+    struct Rect {
         Point<Precision> position;
         Point<Precision> size;
 
@@ -136,7 +136,7 @@ namespace putils {
     };
 
     template<typename Precision>
-    struct Point<Precision, 3> : public Reflectible<Point<Precision, 3>> {
+    struct Point<Precision, 3> {
 		union {
 			Precision raw[3];
 			struct {
@@ -264,7 +264,7 @@ namespace putils {
     };
 
     template<typename Precision>
-    struct Rect<Precision, 3> : public Reflectible<Rect<Precision, 3>> {
+    struct Rect<Precision, 3> {
         Point<Precision, 3> position;
         Point<Precision, 3> size;
 
