@@ -88,7 +88,7 @@ namespace putils::gl {
 				glDeleteProgram(_handle);
 		}
 
-		virtual void init(size_t firstTextureID, size_t screenWidth, size_t screenHeight, GLuint gBufferFBO) = 0;
+		virtual void init(size_t firstTextureID) = 0;
 
 		struct Parameters {
 			glm::mat4 view;
@@ -102,12 +102,6 @@ namespace putils::gl {
 		virtual void run(const Parameters & params) = 0;
 
 		void use() { glUseProgram(_handle); }
-
-		struct Texture {
-			putils::string<64> name;
-			GLuint id = (GLuint)-1;
-		};
-		putils::vector<Texture, 4> texturesToDebug;
 
 		struct ShaderDescription {
 			const char * src;
