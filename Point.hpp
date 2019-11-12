@@ -32,49 +32,90 @@ namespace putils {
         Point(const Point<P, 3> & other) noexcept : x((Precision)other.x), y((Precision)other.y) {}
         template<typename P>
 		Point & operator=(const Point<P, 3> & other) noexcept {
-			x = (Precision)other.x; y = (Precision)other.y;
+			x = (Precision)other.x;
+			y = (Precision)other.y;
 			return *this;
 		}
 
         template<typename P>
-        bool operator==(const Point<P> & rhs) const noexcept { return x == rhs.x && y == rhs.y; }
+        bool operator==(const Point<P> & rhs) const noexcept {
+			return x == (Precision)rhs.x && y == (Precision)rhs.y;
+		}
 
         template<typename P>
-        bool operator!=(const Point<P> & rhs) const noexcept { return !(*this == rhs); }
+        bool operator!=(const Point<P> & rhs) const noexcept {
+			return !(*this == rhs);
+		}
 
         template<typename P>
-        Point operator+(const Point<P> & rhs) const noexcept { return { x + rhs.x, y + rhs.y }; }
+        Point operator+(const Point<P> & rhs) const noexcept {
+			return { x + (Precision)rhs.x, y + (Precision)rhs.y };
+		}
 
         template<typename P>
         Point & operator+=(const Point<P> & rhs) noexcept {
-            x += rhs.x;
-            y += rhs.y;
+            x += (Precision)rhs.x;
+            y += (Precision)rhs.y;
             return *this;
         }
 
         template<typename P>
-        Point operator-(const Point<P> & rhs) const noexcept { return { x - rhs.x, y - rhs.y }; }
+        Point operator-(const Point<P> & rhs) const noexcept {
+			return { x - (Precision)rhs.x, y - (Precision)rhs.y };
+		}
 
         template<typename P>
         Point & operator-=(const Point<P> & rhs) noexcept {
-            x -= rhs.x;
-            y -= rhs.y;
+            x -= (Precision)rhs.x;
+            y -= (Precision)rhs.y;
             return *this;
         }
 
-		Point operator*(const Point & rhs) const noexcept { return { x * rhs.x, y * rhs.y }; }
-		Point & operator*=(const Point & rhs) const noexcept { x *= rhs.x; y *= rhs.y; return *this; }
+		template<typename P>
+		Point operator*(const Point<P> & rhs) const noexcept {
+			return { x * (Precision)rhs.x, y * (Precision)rhs.y };
+		}
 
-		Point operator*(float rhs) const noexcept { return { x * rhs, y * rhs }; }
-		Point & operator*=(float rhs) const noexcept { x *= rhs; y *= rhs; return *this; }
+		template<typename P>
+		Point & operator*=(const Point<P> & rhs) const noexcept {
+			x *= (Precision)rhs.x;
+			y *= (Precision)rhs.y;
+			return *this;
+		}
 
-		Point operator/(const Point & rhs) const noexcept { return { x / rhs.x, y / rhs.y }; }
-		Point & operator/=(const Point & rhs) const noexcept { x /= rhs.x; y /= rhs.y; return *this; }
+		Point operator*(float rhs) const noexcept {
+			return { x * rhs, y * rhs };
+		}
 
-		Point operator/(float rhs) const noexcept { return { x / rhs, y / rhs }; }
-		Point & operator/=(float rhs) const noexcept { x /= rhs; y /= rhs; return *this; }
+		Point & operator*=(float rhs) const noexcept {
+			x *= rhs;
+			y *= rhs;
+			return *this;
+		}
 
-        float getDistanceTo(const Point & rhs) const noexcept {
+		template<typename P>
+		Point operator/(const Point<P> & rhs) const noexcept {
+			return { x / (Precision)rhs.x, y / (Precision)rhs.y };
+		}
+
+		template<typename P>
+		Point & operator/=(const Point<P> & rhs) const noexcept {
+			x /= (Precision)rhs.x;
+			y /= (Precision)rhs.y;
+			return *this;
+		}
+
+		Point operator/(float rhs) const noexcept {
+			return { x / rhs, y / rhs };
+		}
+		Point & operator/=(float rhs) const noexcept {
+			x /= rhs;
+			y /= rhs;
+			return *this;
+		}
+
+		template<typename P>
+        float getDistanceTo(const Point<P> & rhs) const noexcept {
             return std::sqrtf(
                     std::powf((float)x - (float)rhs.x, 2) +
                     std::powf((float)y - (float)rhs.y, 2)
@@ -89,7 +130,8 @@ namespace putils {
             return std::sqrtf(getLengthSquared());
         }
 
-        float getAngleTo(const Point & rhs) const noexcept {
+		template<typename P>
+        float getAngleTo(const Point<P> & rhs) const noexcept {
             return std::atan2f((float)y - (float)rhs.y, (float)rhs.x - (float)x);
         }
 
@@ -108,9 +150,9 @@ namespace putils {
                 pmeta_reflectible_attribute(&Point::y)
         );
         pmeta_get_methods(
-                pmeta_reflectible_attribute(&Point::getDistanceTo),
+                pmeta_reflectible_attribute(&Point::getDistanceTo<Precision>),
                 pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::getAngleTo),
+                pmeta_reflectible_attribute(&Point::getAngleTo<Precision>),
                 pmeta_reflectible_attribute(&Point::normalize)
         );
         pmeta_get_parents();
@@ -168,43 +210,76 @@ namespace putils {
 			return * this;
 		}
 
-        bool operator==(const Point & rhs) const noexcept { return x == rhs.x && y == rhs.y && z == rhs.z; }
+		template<typename P>
+        bool operator==(const Point<P, 3> & rhs) const noexcept {
+			return x == (Precision)rhs.x && y == (Precision)rhs.y && z == (Precision)rhs.z;
+		}
 
-        bool operator!=(const Point & rhs) const noexcept { return !(*this == rhs); }
+		template<typename P>
+        bool operator!=(const Point<P, 3> & rhs) const noexcept { return !(*this == rhs); }
 
         Point operator-() const noexcept { return { -x, -y, -z }; }
 
-        Point operator+(const Point & rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
+		template<typename P>
+        Point operator+(const Point<P, 3> & rhs) const noexcept {
+			return { x + (Precision)rhs.x, y + (Precision)rhs.y, z + (Precision)rhs.z };
+		}
 
-        Point & operator+=(const Point & rhs) noexcept {
-            x += rhs.x;
-            y += rhs.y;
-            z += rhs.z;
+		template<typename P>
+        Point & operator+=(const Point<P, 3> & rhs) noexcept {
+            x += (Precision)rhs.x;
+            y += (Precision)rhs.y;
+            z += (Precision)rhs.z;
             return *this;
         }
 
-        Point operator-(const Point & rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
+		template<typename P>
+        Point operator-(const Point<P, 3> & rhs) const noexcept {
+			return { x - (Precision)rhs.x, y - (Precision)rhs.y, z - (Precision)rhs.z };
+		}
 
-        Point & operator-=(const Point & rhs) noexcept {
-            x -= rhs.x;
-            y -= rhs.y;
-            z -= rhs.z;
+		template<typename P>
+        Point & operator-=(const Point<P, 3> & rhs) noexcept {
+            x -= (Precision)rhs.x;
+            y -= (Precision)rhs.y;
+            z -= (Precision)rhs.z;
             return *this;
         }
 
-		Point operator*(const Point & rhs) const noexcept { return { x * rhs.x, y * rhs.y, z * rhs.z }; }
-		Point & operator*=(const Point & rhs) noexcept { x *= rhs.x; y *= rhs.y; z *= rhs.z; return *this; }
+		template<typename P>
+		Point operator*(const Point<P, 3> & rhs) const noexcept {
+			return { x * (Precision)rhs.x, y * (Precision)rhs.y, z * (Precision)rhs.z };
+		}
+
+		template<typename P>
+		Point & operator*=(const Point<P, 3> & rhs) noexcept {
+			x *= (Precision)rhs.x;
+			y *= (Precision)rhs.y;
+			z *= (Precision)rhs.z;
+			return *this;
+		}
 
 		Point operator*(float rhs) const noexcept { return { x * rhs, y * rhs, z * rhs }; }
 		Point & operator*=(float rhs) noexcept { x *= rhs; y *= rhs; z *= rhs; return *this; }
 
-		Point operator/(const Point & rhs) const noexcept { return { x / rhs.x, y / rhs.y, z / rhs.z }; }
-		Point & operator/=(const Point & rhs) noexcept { x /= rhs.x; y /= rhs.y; z /= rhs.z; return *this; }
+		template<typename P>
+		Point operator/(const Point<P, 3> & rhs) const noexcept {
+			return { x / (Precision)rhs.x, y / (Precision)rhs.y, z / (Precision)rhs.z };
+		}
+
+		template<typename P>
+		Point & operator/=(const Point<P, 3> & rhs) noexcept {
+			x /= (Precision)rhs.x;
+			y /= (Precision)rhs.y;
+			z /= (Precision)rhs.z;
+			return *this;
+		}
 
 		Point operator/(float rhs) const noexcept { return { x / rhs, y / rhs, z / rhs }; }
 		Point & operator/=(float rhs) noexcept { x /= rhs; y /= rhs; z /= rhs; return *this; }
 
-        float getDistanceTo(const Point & rhs) const noexcept {
+		template<typename P>
+        float getDistanceTo(const Point<P, 3> & rhs) const noexcept {
             return std::sqrtf(
                     std::powf((float)x - (float)rhs.x, 2.f) +
                     std::powf((float)y - (float)rhs.y, 2.f) +
@@ -220,21 +295,24 @@ namespace putils {
             return std::sqrtf(getLengthSquared());
         }
 
-		float getAngleTo(const Point & rhs) const noexcept {
-			const auto dot = x * rhs + y * rhs.y + z * rhs.z;
+		template<typename P>
+		float getAngleTo(const Point<P, 3> & rhs) const noexcept {
+			const auto dot = x * (Precision)rhs + y * (Precision)rhs.y + z * (Precision)rhs.z;
 			return std::acos(dot / std::sqrtf(getLengthSquared() * rhs.getLengthSquared()));
 		}
 
-		float getYawTo(const Point & rhs) const noexcept {
-			const auto dx = rhs.x - x;
-			const auto dz = rhs.z - z;
+		template<typename P>
+		float getYawTo(const Point<P, 3> & rhs) const noexcept {
+			const auto dx = (Precision)rhs.x - x;
+			const auto dz = (Precision)rhs.z - z;
 			return -std::atan2f(dz, dx);
 		}
 
-		float getPitchTo(const Point & rhs) const noexcept {
-			const auto dx = rhs.x - x;
-			const auto dy = rhs.y - y;
-			const auto dz = rhs.z - z;
+		template<typename P>
+		float getPitchTo(const Point<P, 3> & rhs) const noexcept {
+			const auto dx = (Precision)rhs.x - x;
+			const auto dy = (Precision)rhs.y - y;
+			const auto dz = (Precision)rhs.z - z;
 			return -std::atan2f(std::sqrtf(dz * dz + dx * dx), dy) + 3.14159265359f / 2.f;
 		}
 
@@ -255,10 +333,10 @@ namespace putils {
                 pmeta_reflectible_attribute(&Point::z)
         );
         pmeta_get_methods(
-                pmeta_reflectible_attribute(&Point::getDistanceTo),
+                pmeta_reflectible_attribute(&Point::getDistanceTo<Precision>),
                 pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::getYawTo),
-                pmeta_reflectible_attribute(&Point::getPitchTo),
+                pmeta_reflectible_attribute(&Point::getYawTo<Precision>),
+                pmeta_reflectible_attribute(&Point::getPitchTo<Precision>),
                 pmeta_reflectible_attribute(&Point::normalize)
         );
     };
