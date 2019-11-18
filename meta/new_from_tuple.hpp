@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace pmeta {
+namespace putils {
     namespace detail {
         template<class T, class Tuple, std::size_t... I>
         std::unique_ptr<T> new_from_tuple_impl(Tuple && t, std::index_sequence<I...>) {

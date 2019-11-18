@@ -2,7 +2,7 @@
 
 Object representation of a type.
 
-A `pmeta::type` is an empty object which can be passed to template functions to simply identify a type.
+A `putils::meta::type` is an empty object which can be passed to template functions to simply identify a type.
 
 ### Static members
 
@@ -24,8 +24,8 @@ For instance, in an Entity Component System, `Entities` may map their `Component
 ### Macros
 
 ```cpp
-#define pmeta_typeof(object) std::decay_t<decltype(object)>
-#define pmeta_wrapped(typeObject) typename pmeta_typeof(typeObject)::wrapped
+#define putils_typeof(object) std::decay_t<decltype(object)>
+#define putils_wrapped_type(typeObject) typename putils_typeof(typeObject)::wrapped
 ```
-These macros are defined to make using `pmeta::type` objects as `auto` parameters easier.
+These macros are defined to make using `putils::meta::type` objects as `auto` parameters easier.
 

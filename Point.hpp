@@ -144,18 +144,18 @@ namespace putils {
 			}
 		}
 
-        pmeta_get_class_name("Point2");
-        pmeta_get_attributes(
-                pmeta_reflectible_attribute(&Point::x),
-                pmeta_reflectible_attribute(&Point::y)
+        putils_reflection_class_name("Point2");
+        putils_reflection_attributes(
+                putils_reflection_attribute(&Point::x),
+                putils_reflection_attribute(&Point::y)
         );
-        pmeta_get_methods(
-                pmeta_reflectible_attribute(&Point::getDistanceTo<Precision>),
-                pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::getAngleTo<Precision>),
-                pmeta_reflectible_attribute(&Point::normalize)
+        putils_reflection_methods(
+                putils_reflection_attribute(&Point::getDistanceTo<Precision>),
+                putils_reflection_attribute(&Point::getLength),
+                putils_reflection_attribute(&Point::getAngleTo<Precision>),
+                putils_reflection_attribute(&Point::normalize)
         );
-        pmeta_get_parents();
+        putils_reflection_parents();
     };
 
     template<typename Precision, std::size_t Dimensions = 2>
@@ -170,10 +170,10 @@ namespace putils {
 
         bool operator!=(const Rect & rhs) const { return !(*this == rhs); }
 
-        pmeta_get_class_name("Rect2");
-        pmeta_get_attributes(
-                pmeta_reflectible_attribute(&Rect::position),
-                pmeta_reflectible_attribute(&Rect::size)
+        putils_reflection_class_name("Rect2");
+        putils_reflection_attributes(
+                putils_reflection_attribute(&Rect::position),
+                putils_reflection_attribute(&Rect::size)
         );
     };
 
@@ -326,18 +326,18 @@ namespace putils {
 			}
 		}
 
-        pmeta_get_class_name("Point3");
-        pmeta_get_attributes(
-                pmeta_reflectible_attribute(&Point::x),
-                pmeta_reflectible_attribute(&Point::y),
-                pmeta_reflectible_attribute(&Point::z)
+        putils_reflection_class_name("Point3");
+        putils_reflection_attributes(
+                putils_reflection_attribute(&Point::x),
+                putils_reflection_attribute(&Point::y),
+                putils_reflection_attribute(&Point::z)
         );
-        pmeta_get_methods(
-                pmeta_reflectible_attribute(&Point::getDistanceTo<Precision>),
-                pmeta_reflectible_attribute(&Point::getLength),
-                pmeta_reflectible_attribute(&Point::getYawTo<Precision>),
-                pmeta_reflectible_attribute(&Point::getPitchTo<Precision>),
-                pmeta_reflectible_attribute(&Point::normalize)
+        putils_reflection_methods(
+                putils_reflection_attribute(&Point::getDistanceTo<Precision>),
+                putils_reflection_attribute(&Point::getLength),
+                putils_reflection_attribute(&Point::getYawTo<Precision>),
+                putils_reflection_attribute(&Point::getPitchTo<Precision>),
+                putils_reflection_attribute(&Point::normalize)
         );
     };
 
@@ -353,10 +353,10 @@ namespace putils {
 
         bool operator!=(const Rect & rhs) { return !(*this == rhs); }
 
-        pmeta_get_class_name("Rect3");
-        pmeta_get_attributes(
-                pmeta_reflectible_attribute(&Rect::position),
-                pmeta_reflectible_attribute(&Rect::size)
+        putils_reflection_class_name("Rect3");
+        putils_reflection_attributes(
+                putils_reflection_attribute(&Rect::position),
+                putils_reflection_attribute(&Rect::size)
         );
     };
 

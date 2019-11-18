@@ -20,9 +20,9 @@ namespace putils {
 
 		template<typename T>
 		void registerType(py::module & m) {
-			py::class_<T> type(m, T::get_class_name(), py::dynamic_attr());
-			if constexpr (putils::has_member_get_attributes<T>()) {
-				putils::for_each_attribute<T>([&type](auto name, auto member) {
+			py::class_<T> type(m, putils::reflection::get_class_name<T>(), py::dynamic_attr());
+			if constexpr (putils::reflection::has_attributes<T>()) {
+				putils::reflection::for_each_attribute<T>([&type](auto name, auto member) {
 					using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(member))>;
 					if constexpr (std::is_const<MemberType>::value || !std::is_assignable<MemberType, MemberType>::value)
 						type.def_readonly(name, member);
@@ -31,8 +31,8 @@ namespace putils {
 				});
 			}
 
-			if constexpr (putils::has_member_get_methods<T>()) {
-				putils::for_each_method<T>([&type](auto name, auto member) {
+			if constexpr (putils::reflection::has_methods<T>()) {
+				putils::reflection::for_each_method<T>([&type](auto name, auto member) {
 					using Ret = putils::member_function_return_type<decltype(member)>;
 
 					if constexpr (std::is_reference_v<Ret>)

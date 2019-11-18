@@ -45,7 +45,7 @@ namespace putils
 
     private:
         // Map a type to the modules subscribing to that type
-        std::unordered_map<pmeta::type_index, std::vector<putils::BaseModule*>> _modules;
+        std::unordered_map<putils::meta::type_index, std::vector<putils::BaseModule*>> _modules;
 		ThreadPool _threadPool;
     };
 }

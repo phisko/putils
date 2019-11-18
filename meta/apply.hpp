@@ -3,7 +3,7 @@
 #include <functional>
 #include <type_traits>
 
-namespace pmeta {
+namespace putils {
     namespace {
         template<typename F, class Tuple, std::size_t ...Is>
         decltype(auto) apply(F && f, Tuple && tuple, std::index_sequence<Is...>) {

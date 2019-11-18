@@ -33,14 +33,14 @@ inline void table()
      * Type map
      */
 
-    auto types = pmeta::make_table(
-            "string", pmeta::type<std::string>(),
-            "int", pmeta::type<int>(),
-            "float", pmeta::type<float>()
+    auto types = putils::make_table(
+            "string", putils::meta::type<std::string>(),
+            "int", putils::meta::type<int>(),
+            "float", putils::meta::type<float>()
     );
 
     // Get a key from type
-    types.get_key(pmeta::type<std::string>(),
+    types.get_key(putils::meta::type<std::string>(),
                   [](auto &&value)
                   {
                       std::cout << value << std::endl;
@@ -50,7 +50,7 @@ inline void table()
     types.get_value("int",
             [](auto &&t)
             {
-                using Type = pmeta_wrapped(t);
+                using Type = putils_wrapped_type(t);
                 std::cout << typeid(Type).name() << std::endl;
             }
     );
@@ -59,7 +59,7 @@ inline void table()
      * Any table
      */
 
-    auto table = pmeta::make_table(
+    auto table = putils::make_table(
             "42", 42,
             12, "Hi there"
     );

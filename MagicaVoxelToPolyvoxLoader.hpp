@@ -18,8 +18,8 @@ namespace putils::MagicaVoxel {
 	struct VertexData {
 		float color[3] = { 0.f, 0.f, 0.f };
 
-		pmeta_get_attributes(
-			pmeta_reflectible_attribute(&VertexData::color)
+		putils_reflection_attributes(
+			putils_reflection_attribute(&VertexData::color)
 		);
 
 		bool operator==(size_t i) const {

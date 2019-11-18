@@ -2,7 +2,7 @@
 
 #include "type.hpp"
 
-namespace pmeta {
+namespace putils {
     // Implementation details
     namespace detail {
         template<typename F, typename Tuple, size_t ...Is>
@@ -14,7 +14,7 @@ namespace pmeta {
     // For each `e` element in `tuple`, call `f(e)`
     // For instance:
     //      std::tuple<int, std::string, int> t(42, "test", 1);
-    //      pmeta::tuple_for_each(t, [](auto &attr) { std::cout << attr << std::endl; });
+    //      putils::tuple_for_each(t, [](auto &attr) { std::cout << attr << std::endl; });
     // Will print
     //      42
     //      test
@@ -31,7 +31,7 @@ namespace pmeta {
         detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence_for<Args...>());
     }
 
-#define pmeta_comma ,
-#define pmeta_for_each(_TYPES_, _FUNC_) \
-	pmeta::tuple_for_each(std::tuple<pmeta::type<_TYPES_>...>(), _FUNC_)
+#define putils_macro_comma ,
+#define putils_for_each_type(_TYPES_, _FUNC_) \
+	putils::tuple_for_each(std::tuple<putils::meta::type<_TYPES_>...>(), _FUNC_)
 }

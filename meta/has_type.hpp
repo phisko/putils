@@ -3,7 +3,7 @@
 #include <tuple>
 #include <type_traits>
 
-namespace pmeta {
+namespace putils {
     //
     // Boolean structure
     // inheriting from std::true_type if Tuple contains T

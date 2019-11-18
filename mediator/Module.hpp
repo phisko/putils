@@ -13,9 +13,9 @@ namespace putils {
             static_assert(std::is_base_of<Module, CRTP>::value,
                           "Module's first template parameter should be its inheriting class");
 
-            pmeta::tuple_for_each(std::tuple<pmeta::type<DataPackets>...>(),
+            putils::tuple_for_each(std::tuple<putils::meta::type<DataPackets>...>(),
                                   [this](auto && type) {
-                                      this->setHandler<pmeta_wrapped(type)>(
+                                      this->setHandler<putils_wrapped_type(type)>(
                                               [this](const auto & p) { static_cast<CRTP *>(this)->handle(p); }
                                       );
                                   });
@@ -48,8 +48,8 @@ namespace putils {
         };
 
     private:
-        const std::vector<pmeta::type_index> & getSubscriptions() const noexcept final {
-            static const std::vector<pmeta::type_index> _subs = { pmeta::type<DataPackets>::index... };
+        const std::vector<putils::meta::type_index> & getSubscriptions() const noexcept final {
+            static const std::vector<putils::meta::type_index> _subs = { putils::meta::type<DataPackets>::index... };
             return _subs;
         }
     };

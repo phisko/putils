@@ -1,6 +1,6 @@
 #pragma once
 
-namespace pmeta {
+namespace putils {
     //
     // Class which, for each type X in Tuple,
     // inherits from T<X>

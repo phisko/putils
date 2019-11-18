@@ -23,8 +23,8 @@ int main()
 {
     class CFactory : public AbstractFactory<int, double>
     {
-        std::unique_ptr<int> makeImpl(pmeta::type<int>) noexcept final { return std::make_unique<int>(0); }
-        std::unique_ptr<double> makeImpl(pmeta::type<double>) noexcept final { return std::make_unique<double>(42); }
+        std::unique_ptr<int> makeImpl(putils::meta::type<int>) noexcept final { return std::make_unique<int>(0); }
+        std::unique_ptr<double> makeImpl(putils::meta::type<double>) noexcept final { return std::make_unique<double>(42); }
     };
 
     CFactory factory;

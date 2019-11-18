@@ -38,7 +38,7 @@ namespace putils
                 OutputPolicy::startSerialize(s);
 
                 bool first = true;
-                pmeta::tuple_for_each(*_attrs, [&s, obj, &first](const auto &attr) {
+                putils::tuple_for_each(*_attrs, [&s, obj, &first](const auto &attr) {
                     const auto &val = obj->*(attr.second);
 
                     if (!first)

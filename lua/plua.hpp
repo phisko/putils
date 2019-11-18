@@ -77,17 +77,15 @@ namespace putils {
 	namespace lua {
 		template<typename T>
 		void registerType(sol::state & state) {
-			static_assert(putils::has_member_get_class_name<T>());
+			static_assert(putils::reflection::has_class_name<T>());
 
-			auto type = state.new_usertype<T>(T::get_class_name());
-			if constexpr (putils::has_member_get_attributes<T>())
-				putils::for_each_attribute<T>([&](const char * name, const auto member) {
-					type[name] = member;
-				});
-			if constexpr (putils::has_member_get_methods<T>())
-				putils::for_each_method<T>([&](const char * name, const auto member) {
-					type[name] = member;
-				});
+			auto type = state.new_usertype<T>(putils::reflection::get_class_name<T>());
+			putils::reflection::for_each_attribute<T>([&](const char * name, const auto member) {
+				type[name] = member;
+			});
+			putils::reflection::for_each_method<T>([&](const char * name, const auto member) {
+				type[name] = member;
+			});
 
 			if constexpr (putils::is_streamable<std::ostream, T>::value)
                 type[sol::meta_function::to_string] =

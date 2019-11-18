@@ -103,19 +103,19 @@ namespace putils {
 		size_t _size = 0;
 
 	public:
-		static const auto get_class_name() { return ClassName; }
-		pmeta_get_attributes();
-		pmeta_get_methods(
-			pmeta_reflectible_attribute(&vector::add),
-			pmeta_reflectible_attribute(&vector::back),
-			pmeta_reflectible_attribute(&vector::get),
-			pmeta_reflectible_attribute(&vector::remove),
-			pmeta_reflectible_attribute(&vector::size),
-			pmeta_reflectible_attribute(&vector::empty),
-			pmeta_reflectible_attribute(&vector::full),
-			pmeta_reflectible_attribute(&vector::clear)
+		static const auto reflection_get_class_name() { return ClassName; }
+		putils_reflection_attributes();
+		putils_reflection_methods(
+			putils_reflection_attribute(&vector::add),
+			putils_reflection_attribute(&vector::back),
+			putils_reflection_attribute(&vector::get),
+			putils_reflection_attribute(&vector::remove),
+			putils_reflection_attribute(&vector::size),
+			putils_reflection_attribute(&vector::empty),
+			putils_reflection_attribute(&vector::full),
+			putils_reflection_attribute(&vector::clear)
 		);
-		pmeta_get_parents();
+		putils_reflection_parents();
 	};
 
 	template<typename ... Args>

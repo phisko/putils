@@ -47,7 +47,7 @@ namespace putils {
 
                 const auto jsonObject = putils::json::parse(str);
 
-                pmeta::tuple_for_each(tuple, [&obj, &jsonObject](const auto & attr) {
+                putils::tuple_for_each(tuple, [&obj, &jsonObject](const auto & attr) {
 					using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(attr.second))>;
 
 					if constexpr (!std::is_const<MemberType>::value && !std::is_abstract<MemberType>::value) {
@@ -144,11 +144,11 @@ namespace putils {
                 s << '"' << name << '"' << ": [";
                 bool first = true;
                 for (const auto & val : container) {
-					if constexpr (putils::is_streamable<std::ostream, pmeta_typeof(val)>::value) {
+					if constexpr (putils::is_streamable<std::ostream, putils_typeof(val)>::value) {
 						if (!first)
 							s << ",";
 
-						if constexpr (std::is_constructible<std::string, decltype(val)>::value || std::is_pointer<pmeta_typeof(val)>::value)
+						if constexpr (std::is_constructible<std::string, decltype(val)>::value || std::is_pointer<putils_typeof(val)>::value)
 							s << '"' << val << '"';
 						else
 							s << val;
@@ -250,7 +250,7 @@ namespace putils {
 
             template<typename T, typename Tuple>
             static void unserialize(std::istream & s, T & obj, const Tuple & tuple) {
-                pmeta::tuple_for_each(tuple, [&s, &obj](const auto & attr) {
+                putils::tuple_for_each(tuple, [&s, &obj](const auto & attr) {
                     try {
                         unserialize(s, obj.*(attr.second));
                     }
@@ -292,7 +292,7 @@ namespace putils {
 
             template<typename T, typename Tuple>
             static void unserialize(std::istream & s, T & obj, const Tuple & tuple) {
-                pmeta::tuple_for_each(tuple, [&s, &obj](const auto & attr) {
+                putils::tuple_for_each(tuple, [&s, &obj](const auto & attr) {
                     try {
                         unserialize(s, obj.*(attr.second));
                     }

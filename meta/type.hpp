@@ -2,10 +2,10 @@
 
 #include <typeindex>
 
-#define pmeta_typeof(object) std::decay_t<decltype(object)>
-#define pmeta_wrapped(typeObject) typename pmeta_typeof(typeObject)::wrapped
+#define putils_typeof(object) std::decay_t<decltype(object)>
+#define putils_wrapped_type(typeObject) typename putils_typeof(typeObject)::wrapped
 
-namespace pmeta {
+namespace putils::meta {
     using type_index = std::size_t;
 
     template<typename T>
@@ -16,8 +16,8 @@ namespace pmeta {
 }
 
 template<typename T>
-const pmeta::type_index pmeta::type<T>::index = std::hash<std::type_index>()(std::type_index(typeid(T)));
+const putils::meta::type_index putils::meta::type<T>::index = std::hash<std::type_index>()(std::type_index(typeid(T)));
 
 template<typename T>
-bool operator==(pmeta::type<T>, pmeta::type<T>) { return true; }
+bool operator==(putils::meta::type<T>, putils::meta::type<T>) { return true; }
 

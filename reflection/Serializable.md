@@ -64,23 +64,23 @@ int main()
     s >> test;
     std::cout << test << std::endl;
     
-    class ReflectibleTest : public putils::Reflectible<ReflectibleTest>, public putils::Serializable<ReflectibleTest>
+    class ReflectibleTest : public putils::Serializable<ReflectibleTest>
     {
     public:
         std::string hiString = "hi";
         int _fourtyTwo = 42;
         
-        static const auto get_class_name() { return pmeta_nameof(ReflectibleTest); }
-        static const auto &get_attributes()
+        static const auto reflection_get_class_name() { return putils_nameof(ReflectibleTest); }
+        static const auto & reflection_get_attributes()
         {
-            static const auto table = pmeta::make_table(
-                pmeta_reflectible_attribute(&ReflectibleTest::hiString),
-                pmeta_reflectible_attribute_private(&ReflectibleTest::_fourtyTwo)
+            static const auto table = putils::make_table(
+                putils_reflection_attribute(&ReflectibleTest::hiString),
+                putils_reflection_attribute_private(&ReflectibleTest::_fourtyTwo)
             );
             return table;
         }
-        static void get_methods() {}
-        static void get_parents() {}
+        static void reflection_get_methods() {}
+        static void reflection_get_parents() {}
     };
     
     std::cout << ReflectibleTest{} << std::endl;

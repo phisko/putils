@@ -4,7 +4,7 @@
 #include "fwd.hpp"
 #include "type.hpp"
 
-namespace pmeta {
+namespace putils {
     template<typename Tuple>
     struct table {
         table(Tuple && tuple) : _tuple(FWD(tuple)) {}
@@ -54,8 +54,8 @@ namespace pmeta {
         void get_value(Key && key, Table && table, Func && func, std::index_sequence<I, Is...>) {
             const auto & pair = std::get<I>(table);
 
-			using KeyType = pmeta_typeof(std::get<KPos>(pair));
-			if constexpr (std::is_same<KeyType, pmeta_typeof(key)>::value) {
+			using KeyType = putils_typeof(std::get<KPos>(pair));
+			if constexpr (std::is_same<KeyType, putils_typeof(key)>::value) {
 				if (std::get<KPos>(pair) == key) {
 					func(std::get<VPos>(pair));
 					return;

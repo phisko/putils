@@ -18,7 +18,7 @@ namespace putils {
         BaseModule & operator=(const BaseModule &) = delete;
 
     public:
-        virtual const std::vector<pmeta::type_index> & getSubscriptions() const noexcept = 0;
+        virtual const std::vector<putils::meta::type_index> & getSubscriptions() const noexcept = 0;
         void receive(const putils::ADataPacket & packet) noexcept {
 			_handlers[packet.type](packet);
         }
@@ -49,13 +49,13 @@ namespace putils {
 	protected:
         template<typename Data>
         void setHandler(const std::function<void(const Data &)> & handler) {
-            _handlers[pmeta::type<Data>::index] = [this, handler](const ADataPacket & packet) {
+            _handlers[putils::meta::type<Data>::index] = [this, handler](const ADataPacket & packet) {
                 handler(static_cast<const putils::DataPacket<Data> &>(packet).data);
             };
         }
 
     private:
         Mediator * _mediator;
-        std::unordered_map<pmeta::type_index, std::function<void(const putils::ADataPacket &)>> _handlers;
+        std::unordered_map<putils::meta::type_index, std::function<void(const putils::ADataPacket &)>> _handlers;
     };
 }

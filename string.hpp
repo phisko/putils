@@ -218,17 +218,17 @@ namespace putils {
 		Buffer _buff;
 
 	public:
-		static const auto get_class_name() { return ClassName; }
-		pmeta_get_attributes();
-		pmeta_get_methods(
-			pmeta_reflectible_attribute(&string::clear),
-			pmeta_reflectible_attribute(&string::at),
-			pmeta_reflectible_attribute(&string::assign),
-			pmeta_reflectible_attribute(&string::size),
-			pmeta_reflectible_attribute(&string::empty),
-			pmeta_reflectible_attribute(&string::full)
+		static const auto reflection_get_class_name() { return ClassName; }
+		putils_reflection_attributes();
+		putils_reflection_methods(
+			putils_reflection_attribute(&string::clear),
+			putils_reflection_attribute(&string::at),
+			putils_reflection_attribute(&string::assign),
+			putils_reflection_attribute(&string::size),
+			putils_reflection_attribute(&string::empty),
+			putils_reflection_attribute(&string::full)
 		);
-		pmeta_get_parents();
+		putils_reflection_parents();
 	};
 
 	template<size_t Size, const char * Name>

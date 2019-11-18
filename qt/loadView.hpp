@@ -15,11 +15,11 @@ namespace putils {
             auto ret = QUiLoader().load(&f);
             f.close();
 
-            pmeta::tuple_for_each(View::get_attributes().getKeyValues(),
+            putils::tuple_for_each(View::get_attributes().getKeyValues(),
                                   [ret, &view](auto && pair) {
                                       auto & attr = view.*(pair.second);
                                       std::string name(pair.first);
-                                      attr = ret->findChild<pmeta_typeof(attr)>(name);
+                                      attr = ret->findChild<putils_typeof(attr)>(name);
                                   }
             );
 
