@@ -219,7 +219,6 @@ namespace putils {
 
 	public:
 		static const auto reflection_get_class_name() { return ClassName; }
-		putils_reflection_attributes();
 		putils_reflection_methods(
 			putils_reflection_attribute(&string::clear),
 			putils_reflection_attribute(&string::at),
@@ -228,8 +227,12 @@ namespace putils {
 			putils_reflection_attribute(&string::empty),
 			putils_reflection_attribute(&string::full)
 		);
-		putils_reflection_parents();
 	};
+
+	template<size_t Size, const char * Name>
+	auto begin(const string<Size, Name> & s) { return s.begin(); }
+	template<size_t Size, const char * Name>
+	auto end(const string<Size, Name> & s) { return s.end(); }
 
 	template<size_t Size, const char * Name>
 	inline bool operator==(const char * lhs, const putils::string<Size, Name> & rhs) { return rhs == lhs; }

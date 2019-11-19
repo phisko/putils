@@ -104,7 +104,6 @@ namespace putils {
 
 	public:
 		static const auto reflection_get_class_name() { return ClassName; }
-		putils_reflection_attributes();
 		putils_reflection_methods(
 			putils_reflection_attribute(&vector::add),
 			putils_reflection_attribute(&vector::back),
@@ -115,8 +114,12 @@ namespace putils {
 			putils_reflection_attribute(&vector::full),
 			putils_reflection_attribute(&vector::clear)
 		);
-		putils_reflection_parents();
 	};
+
+	template<typename T, size_t Size, const char * Name>
+	auto begin(const vector<T, Size, Name> & v) { return v.begin(); }
+	template<typename T, size_t Size, const char * Name>
+	auto end(const vector<T, Size, Name> & v) { return v.end(); }
 
 	template<typename ... Args>
 	auto make_vector(Args && ... args) -> vector<std::common_type_t<Args...>, sizeof...(Args)> {
