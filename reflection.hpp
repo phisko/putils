@@ -12,15 +12,15 @@
 
 #define putils_reflection_class_name(className) static const auto reflection_get_class_name() { return putils_nameof(className); }
 #define putils_reflection_attributes(...) static const auto & reflection_get_attributes() { \
-    static const auto table = putils::make_table(__VA_ARGS__); \
+    static thread_local const auto table = putils::make_table(__VA_ARGS__); \
     return table; \
 }
 #define putils_reflection_methods(...) static const auto & reflection_get_methods() { \
-    static const auto table = putils::make_table(__VA_ARGS__); \
+    static thread_local const auto table = putils::make_table(__VA_ARGS__); \
     return table; \
 }
 #define putils_reflection_parents(...) static const auto & reflection_get_parents() { \
-    static const auto table = putils::make_table(__VA_ARGS__); \
+    static thread_local const auto table = putils::make_table(__VA_ARGS__); \
     return table; \
 }
 
