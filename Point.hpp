@@ -155,7 +155,6 @@ namespace putils {
                 putils_reflection_attribute(&Point::getAngleTo<Precision>),
                 putils_reflection_attribute(&Point::normalize)
         );
-        putils_reflection_parents();
     };
 
     template<typename Precision, std::size_t Dimensions = 2>
