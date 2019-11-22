@@ -119,7 +119,7 @@ namespace putils::reflection {
 				displayInColumns(name, [&] {
 					ImGui::PushItemWidth(-1.f);
 					auto val = member;
-					if (ImGui::InputInt(getID(name, member), &val, ImGuiInputTextFlags_EnterReturnsTrue))
+					if (ImGui::InputInt(getID(name, member), &val, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue))
 						member = val;
 					ImGui::PopItemWidth();
 				});
