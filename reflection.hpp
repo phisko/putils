@@ -26,29 +26,53 @@
 
 namespace putils::reflection
 {
+	namespace detail {
+		inline static const std::tuple<> emptyTuple;
+	}
+
 	putils_member_detector(reflection_get_class_name);
 	template<typename T>
 	using has_class_name = has_member_reflection_get_class_name<T>;
 	template<typename T>
-	const auto get_class_name() { return T::reflection_get_class_name(); }
+	const auto get_class_name() {
+		if constexpr (has_class_name<T>::value)
+			return T::reflection_get_class_name();
+		else
+			return typeid(T).name();
+	}
 
 	putils_member_detector(reflection_get_attributes);
 	template<typename T>
 	using has_attributes = has_member_reflection_get_attributes<T>;
 	template<typename T>
-	const auto & get_attributes() { return T::reflection_get_attributes(); }
+	const auto & get_attributes() {
+		if constexpr (has_attributes<T>::value)
+			return T::reflection_get_attributes();
+		else
+			return detail::emptyTuple;
+	}
 
 	putils_member_detector(reflection_get_methods);
 	template<typename T>
 	using has_methods = has_member_reflection_get_methods<T>;
 	template<typename T>
-	const auto & get_methods() { return T::reflection_get_methods(); }
+	const auto & get_methods() {
+		if constexpr (has_methods<T>::value)
+			return T::reflection_get_methods();
+		else
+			return detail::emptyTuple;
+	}
 
 	putils_member_detector(reflection_get_parents);
 	template<typename T>
 	using has_parents = has_member_reflection_get_parents<T>;
 	template<typename T>
-	const auto & get_parents() { return T::reflection_get_parents(); }
+	const auto & get_parents() {
+		if constexpr (has_parents<T>::value)
+			return T::reflection_get_parents();
+		else
+			return detail::emptyTuple;
+	}
 
 	template<typename Attributes, typename Func> // Func: void(const char * name, MemberPointer ptr)
 	void for_each_member(Attributes && attributes, Func && func) {
