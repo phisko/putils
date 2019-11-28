@@ -6,7 +6,7 @@
 namespace putils {
     template<typename T>
     inline T rand(T start = 0, T end = std::numeric_limits<T>::max) noexcept {
-        if constexpr (std::is_floating_point<T>::value) {
+        if constexpr (std::is_floating_point<T>()) {
             static std::random_device r;
             static std::default_random_engine e(r());
             std::uniform_real_distribution<T> d(start, end);

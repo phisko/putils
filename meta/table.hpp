@@ -17,7 +17,7 @@ namespace putils {
 
         const Tuple & getKeyValues() const { return _tuple; }
 
-		static constexpr auto size = std::tuple_size<Tuple>::value;
+		static constexpr auto size = std::tuple_size<Tuple>();
 
     private:
         Tuple _tuple;

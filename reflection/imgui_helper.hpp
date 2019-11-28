@@ -35,7 +35,7 @@ namespace putils::reflection {
 		void editAttribute(const char * name, MemberRef && member) {
 			using Member = std::remove_reference_t<MemberRef>;
 
-			if constexpr (detail::imgui::has_member_c_str<Member>::value) {
+			if constexpr (detail::imgui::has_member_c_str<Member>()) {
 				displayInColumns(name, [&] {
 					putils::string<1024> s = member.c_str();
 					ImGui::PushItemWidth(-1.f);
@@ -47,9 +47,9 @@ namespace putils::reflection {
 			// else if constexpr (std::is_same_v<Member, const char *>::value)
 			// 	ImGui::LabelText(name, member);
 
-			else if constexpr (putils::is_iterable<Member>::value) {
+			else if constexpr (putils::is_iterable<Member>()) {
 				if (ImGui::TreeNode(name)) {
-					if constexpr (detail::imgui::has_member_emplace_back<Member>::value)
+					if constexpr (detail::imgui::has_member_emplace_back<Member>())
 						if (ImGui::Button("Add"))
 							member.emplace_back();
 					int i = 0;
@@ -87,7 +87,7 @@ namespace putils::reflection {
 				});
 			}
 
-			else if constexpr (putils::reflection::has_attributes<Member>::value) {
+			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(name)) {
 					putils::reflection::for_each_attribute<Member>([&member](const char * name, const auto attr) {
 						editAttribute(name, member.*attr);
@@ -160,7 +160,7 @@ namespace putils::reflection {
 
 		template<typename Member>
 		static void displayAttribute(const char * name, const Member & member) {
-			if constexpr (detail::imgui::has_member_c_str<Member>::value) {
+			if constexpr (detail::imgui::has_member_c_str<Member>()) {
 				displayInColumns(name, [&] {
 					ImGui::Text(member.c_str());
 				});
@@ -168,7 +168,7 @@ namespace putils::reflection {
 			// else if constexpr (std::is_same_v<Member, const char *>::value)
 			// 	ImGui::LabelText(name, member);
 
-			else if constexpr (putils::is_iterable<Member>::value) {
+			else if constexpr (putils::is_iterable<Member>()) {
 				if (ImGui::TreeNode(name)) {
 					int i = 0;
 					for (const auto & val : member)
@@ -191,7 +191,7 @@ namespace putils::reflection {
 				});
 			}
 
-			else if constexpr (putils::reflection::has_attributes<Member>::value) {
+			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(name)) {
 					putils::reflection::for_each_attribute<Member>([&member](const char * name, const auto attr) {
 						displayAttribute(name, member.*attr);

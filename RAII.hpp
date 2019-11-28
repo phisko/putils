@@ -5,7 +5,7 @@
 #include "fwd.hpp"
 
 namespace putils {
-    template<typename T, bool = std::is_scalar<T>::value>
+    template<typename T, bool = std::is_scalar<T>()>
     class RAII;
 
     //

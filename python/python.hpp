@@ -24,7 +24,7 @@ namespace putils {
 			if constexpr (putils::reflection::has_attributes<T>()) {
 				putils::reflection::for_each_attribute<T>([&type](auto name, auto member) {
 					using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(member))>;
-					if constexpr (std::is_const<MemberType>::value || !std::is_assignable<MemberType, MemberType>::value)
+					if constexpr (std::is_const<MemberType>() || !std::is_assignable<MemberType, MemberType>())
 						type.def_readonly(name, member);
 					else
 						type.def_readwrite(name, member);
@@ -35,14 +35,14 @@ namespace putils {
 				putils::reflection::for_each_method<T>([&type](auto name, auto member) {
 					using Ret = putils::member_function_return_type<decltype(member)>;
 
-					if constexpr (std::is_reference_v<Ret>)
+					if constexpr (std::is_reference<Ret>())
 						type.def(name, member, py::return_value_policy::reference);
 					else
 						type.def(name, member);
 				});
 			}
 
-            if constexpr (putils::is_streamable<std::ostringstream, T>::value)
+            if constexpr (putils::is_streamable<std::ostringstream, T>())
 				type.def("__str__", [](const T & obj) { return putils::toString(obj); });
 
 			if constexpr (has_member_begin<T>() && has_member_end<T>())

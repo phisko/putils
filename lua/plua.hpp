@@ -87,7 +87,7 @@ namespace putils {
 				type[name] = member;
 			});
 
-			if constexpr (putils::is_streamable<std::ostream, T>::value)
+			if constexpr (putils::is_streamable<std::ostream, T>())
                 type[sol::meta_function::to_string] =
                         [](const T & obj) { return putils::toString(obj); };
         }

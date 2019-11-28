@@ -10,7 +10,7 @@ namespace putils {
     class Module : public virtual BaseModule {
     public:
         Module(Mediator * m = nullptr) : BaseModule(m) {
-            static_assert(std::is_base_of<Module, CRTP>::value,
+            static_assert(std::is_base_of<Module, CRTP>(),
                           "Module's first template parameter should be its inheriting class");
 
             putils::tuple_for_each(std::tuple<putils::meta::type<DataPackets>...>(),
@@ -36,7 +36,7 @@ namespace putils {
         struct Handler : Module<Handler<Response>, Response> {
             template<typename Q>
             Handler(Mediator * m, Q && query) : BaseModule(m) {
-                if constexpr (std::is_pointer<Response>::value)
+                if constexpr (std::is_pointer<Response>())
                     res = nullptr;
                 query.sender = this;
                 this->send(FWD(query));

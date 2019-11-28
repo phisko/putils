@@ -27,7 +27,7 @@
 namespace putils::reflection
 {
 	namespace detail {
-		inline static const std::tuple<> emptyTuple;
+		inline static const auto emptyTuple = putils::make_table();
 	}
 
 	putils_member_detector(reflection_get_class_name);
@@ -35,7 +35,7 @@ namespace putils::reflection
 	using has_class_name = has_member_reflection_get_class_name<T>;
 	template<typename T>
 	const auto get_class_name() {
-		if constexpr (has_class_name<T>::value)
+		if constexpr (has_class_name<T>())
 			return T::reflection_get_class_name();
 		else
 			return typeid(T).name();
@@ -46,7 +46,7 @@ namespace putils::reflection
 	using has_attributes = has_member_reflection_get_attributes<T>;
 	template<typename T>
 	const auto & get_attributes() {
-		if constexpr (has_attributes<T>::value)
+		if constexpr (has_attributes<T>())
 			return T::reflection_get_attributes();
 		else
 			return detail::emptyTuple;
@@ -57,7 +57,7 @@ namespace putils::reflection
 	using has_methods = has_member_reflection_get_methods<T>;
 	template<typename T>
 	const auto & get_methods() {
-		if constexpr (has_methods<T>::value)
+		if constexpr (has_methods<T>())
 			return T::reflection_get_methods();
 		else
 			return detail::emptyTuple;
@@ -68,7 +68,7 @@ namespace putils::reflection
 	using has_parents = has_member_reflection_get_parents<T>;
 	template<typename T>
 	const auto & get_parents() {
-		if constexpr (has_parents<T>::value)
+		if constexpr (has_parents<T>())
 			return T::reflection_get_parents();
 		else
 			return detail::emptyTuple;
@@ -83,20 +83,17 @@ namespace putils::reflection
 
 	template<typename T, typename Func>
 	void for_each_parent(Func && func) {
-		if constexpr (has_parents<T>::value) {
-			for_each_member(T::reflection_get_parents(), [&func](const char * name, auto && type) {
-				func(name, type);
+		for_each_member(get_parents<T>(), [&func](const char * name, auto && type) {
+			func(name, type);
 
-				using Parent = putils_wrapped_type(type);
-				for_each_parent<Parent>(func);
-			});
-		}
+			using Parent = putils_wrapped_type(type);
+			for_each_parent<Parent>(func);
+		});
 	}
 
 	template<typename T, typename Func>
 	void for_each_attribute(Func && func) {
-		if constexpr (has_attributes<T>::value)
-			for_each_member(T::reflection_get_attributes(), func);
+		for_each_member(get_attributes<T>(), func);
 
 		for_each_parent<T>([&func](const char * name, auto && type) {
 			using Parent = putils_wrapped_type(type);
@@ -106,8 +103,7 @@ namespace putils::reflection
 
 	template<typename T, typename Func>
 	void for_each_method(Func && func) {
-		if constexpr (has_methods<T>::value)
-			for_each_member(T::reflection_get_methods(), func);
+		for_each_member(get_methods<T>(), func);
 
 		for_each_parent<T>([&func](const char * name, auto && type) {
 			using Parent = putils_wrapped_type(type);

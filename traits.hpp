@@ -4,31 +4,41 @@
 #include <vector>
 
 namespace putils {
-    template<typename S, typename T>
-    class is_streamable {
-        template<typename SS, typename TT>
-        static auto test(int)
-        -> decltype(std::declval<SS &>() << std::declval<TT>(), std::true_type());
+	namespace detail {
+		template<typename S, typename T>
+		class is_streamable {
+			template<typename SS, typename TT>
+			static auto test(int)
+				-> decltype(std::declval<SS &>() << std::declval<TT>(), std::true_type());
 
-        template<typename, typename>
-        static auto test(...) -> std::false_type;
+			template<typename, typename>
+			static auto test(...)->std::false_type;
 
-    public:
-        static const bool value = decltype(test<S, T>(0))::value;
-    };
+		public:
+			using type = decltype(test<S, T>(0));
+		};
+	}
 
-    template<typename S, typename T>
-    class is_unstreamable {
-        template<typename SS, typename TT>
-        static auto test(int)
-        -> decltype(std::declval<SS &>() >> std::declval<TT &>(), std::true_type());
+	template<typename S, typename T>
+	using is_streamable = typename detail::is_streamable<S, T>::type;
 
-        template<typename, typename>
-        static auto test(...) -> std::false_type;
+	namespace detail {
+		template<typename S, typename T>
+		class is_unstreamable {
+			template<typename SS, typename TT>
+			static auto test(int)
+				-> decltype(std::declval<SS &>() >> std::declval<TT &>(), std::true_type());
 
-    public:
-        static const bool value = decltype(test<S, T>(0))::value;
-    };
+			template<typename, typename>
+			static auto test(...)->std::false_type;
+
+		public:
+			using type = decltype(test<S, T>(0));
+		};
+	}
+
+	template<typename S, typename T>
+	using is_unstreamable = typename detail::is_unstreamable<S, T>::type;
 
 	namespace detail {
 		// To allow ADL with custom begin/end
