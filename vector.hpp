@@ -127,11 +127,8 @@ namespace putils {
 	}
 
 	template<typename>
-	struct is_vector;
+	struct is_vector : std::false_type {};
 
 	template<typename T, size_t Size, const char * Name>
 	struct is_vector<putils::vector<T, Size, Name>> : std::true_type {};
-
-	template<typename>
-	struct is_vector : std::false_type {};
 }
