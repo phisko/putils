@@ -114,25 +114,12 @@ namespace putils {
 			return *this;
 		}
 
-		template<typename P>
-        float getDistanceTo(const Point<P> & rhs) const noexcept {
-            return std::sqrtf(
-                    std::powf((float)x - (float)rhs.x, 2) +
-                    std::powf((float)y - (float)rhs.y, 2)
-            );
-        }
-
 		float getLengthSquared() const noexcept {
 			return x * x + y * y;
 		}
 
         float getLength() const noexcept {
             return std::sqrtf(getLengthSquared());
-        }
-
-		template<typename P>
-        float getAngleTo(const Point<P> & rhs) const noexcept {
-            return std::atan2f((float)y - (float)rhs.y, (float)rhs.x - (float)x);
         }
 
 		void normalize(float desiredLength = 1) {
@@ -150,9 +137,8 @@ namespace putils {
                 putils_reflection_attribute(&Point::y)
         );
         putils_reflection_methods(
-                putils_reflection_attribute(&Point::getDistanceTo<Precision>),
+                putils_reflection_attribute(&Point::getLengthSquared),
                 putils_reflection_attribute(&Point::getLength),
-                putils_reflection_attribute(&Point::getAngleTo<Precision>),
                 putils_reflection_attribute(&Point::normalize)
         );
     };
@@ -277,15 +263,6 @@ namespace putils {
 		Point operator/(float rhs) const noexcept { return { x / rhs, y / rhs, z / rhs }; }
 		Point & operator/=(float rhs) noexcept { x /= rhs; y /= rhs; z /= rhs; return *this; }
 
-		template<typename P>
-        float getDistanceTo(const Point<P, 3> & rhs) const noexcept {
-            return std::sqrtf(
-                    std::powf((float)x - (float)rhs.x, 2.f) +
-                    std::powf((float)y - (float)rhs.y, 2.f) +
-                    std::powf((float)z - (float)rhs.z, 2.f)
-            );
-        }
-
 		float getLengthSquared() const noexcept {
 			return x * x + y * y + z * z;
 		}
@@ -293,27 +270,6 @@ namespace putils {
         float getLength() const noexcept {
             return std::sqrtf(getLengthSquared());
         }
-
-		template<typename P>
-		float getAngleTo(const Point<P, 3> & rhs) const noexcept {
-			const auto dot = x * (Precision)rhs + y * (Precision)rhs.y + z * (Precision)rhs.z;
-			return std::acos(dot / std::sqrtf(getLengthSquared() * rhs.getLengthSquared()));
-		}
-
-		template<typename P>
-		float getYawTo(const Point<P, 3> & rhs) const noexcept {
-			const auto dx = (Precision)rhs.x - x;
-			const auto dz = (Precision)rhs.z - z;
-			return -std::atan2f(dz, dx);
-		}
-
-		template<typename P>
-		float getPitchTo(const Point<P, 3> & rhs) const noexcept {
-			const auto dx = (Precision)rhs.x - x;
-			const auto dy = (Precision)rhs.y - y;
-			const auto dz = (Precision)rhs.z - z;
-			return -std::atan2f(std::sqrtf(dz * dz + dx * dx), dy) + 3.14159265359f / 2.f;
-		}
 
 		void normalize(float desiredLength = 1) {
 			auto n = getLength();
@@ -332,10 +288,8 @@ namespace putils {
                 putils_reflection_attribute(&Point::z)
         );
         putils_reflection_methods(
-                putils_reflection_attribute(&Point::getDistanceTo<Precision>),
+                putils_reflection_attribute(&Point::getLengthSquared),
                 putils_reflection_attribute(&Point::getLength),
-                putils_reflection_attribute(&Point::getYawTo<Precision>),
-                putils_reflection_attribute(&Point::getPitchTo<Precision>),
                 putils_reflection_attribute(&Point::normalize)
         );
     };
@@ -406,6 +360,12 @@ namespace putils {
 	template<typename Precision>
 	inline Precision dot(const Vector<Precision, 3> &v, const Vector<Precision, 3> &v2) {
 		return v.x * v2.x + v.y * v2.y + v.z * v2.z;
+	}
+
+	template<typename Precision, size_t Dimensions = 2>
+	Point<float, Dimensions> normalized(Point<Precision, Dimensions> p, float desiredLength = 1) {
+		p.normalize(desiredLength);
+		return p;
 	}
 }
 

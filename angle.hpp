@@ -1,14 +1,13 @@
 #pragma once
 
 #include <math.h>
+#include "Point.hpp"
 
 namespace putils {
     static constexpr auto pi = 3.14159265359f;
 
-    static float constrainAngle(float angle) {
-        angle = fmodf(angle + pi, pi * 2.f);
-        if (angle < 0)
-        angle += pi * 2.f;
-        return angle - pi;
-    }
+	float constrainAngle(float angle);
+	float getYawFromNormalizedDirection(const Vector3f & dir);
+	float getPitchFromNormalizedDirection(const Vector3f & dir);
+	float get2DAngleFromNormalizedDirection(const Vector2f & dir);
 }
