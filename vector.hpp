@@ -40,6 +40,12 @@ namespace putils {
 			return _buff[_size++];
 		}
 
+		template<typename Val>
+		void try_push_back(Val && val) {
+			if (!full())
+				push_back(FWD(val));
+		}
+
 		template<typename ... Args>
 		T & emplace_back(Args && ...args) {
 			assert(!full());
@@ -47,8 +53,15 @@ namespace putils {
 			return _buff[_size++];
 		}
 
+		template<typename ... Args>
+		void try_emplace_back(Args && ...args) {
+			if (!full())
+				emplace_back(FWD(args)...);
+		}
+
 		// Reflectible (no templates/overloads)
 		T & add(const T & val) { return push_back(val); }
+		void try_add(const T & val) { try_push_back(val); }
 
 		T & back() { assert(_size > 0); return _buff[_size - 1]; }
 
@@ -106,6 +119,7 @@ namespace putils {
 		static const auto reflection_get_class_name() { return ClassName; }
 		putils_reflection_methods(
 			putils_reflection_attribute(&vector::add),
+			putils_reflection_attribute(&vector::try_add),
 			putils_reflection_attribute(&vector::back),
 			putils_reflection_attribute(&vector::get),
 			putils_reflection_attribute(&vector::remove),
