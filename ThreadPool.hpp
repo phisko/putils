@@ -48,11 +48,14 @@ namespace putils {
 		ThreadPool(size_t);
 		template<class F>
 		void enqueue(F&& f);
+		template<class F>
+		void runTask(F && f) { enqueue(FWD(f)); }
 		~ThreadPool();
 
 		void complete() const {
 			while (_jobsLeft > 0);
 		}
+		void completeTasks() const { complete(); }
 
 		size_t getThreadCount() const {
 			return _workers.size();
