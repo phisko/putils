@@ -5,7 +5,7 @@ namespace putils {
 	float constrainAngle(float angle) {
 		angle = fmodf(angle + pi, pi * 2.f);
         if (angle < 0)
-        angle += pi * 2.f;
+			angle += pi * 2.f;
         return angle - pi;
 	}
 
