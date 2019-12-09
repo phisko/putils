@@ -131,7 +131,7 @@ namespace putils {
 			}
 		}
 
-        putils_reflection_class_name("Point2");
+        putils_reflection_class_name(Point2);
         putils_reflection_attributes(
                 putils_reflection_attribute(&Point::x),
                 putils_reflection_attribute(&Point::y)
@@ -155,7 +155,7 @@ namespace putils {
 
         bool operator!=(const Rect & rhs) const { return !(*this == rhs); }
 
-        putils_reflection_class_name("Rect2");
+        putils_reflection_class_name(Rect2);
         putils_reflection_attributes(
                 putils_reflection_attribute(&Rect::position),
                 putils_reflection_attribute(&Rect::size)
@@ -281,7 +281,7 @@ namespace putils {
 			}
 		}
 
-        putils_reflection_class_name("Point3");
+        putils_reflection_class_name(Point3);
         putils_reflection_attributes(
                 putils_reflection_attribute(&Point::x),
                 putils_reflection_attribute(&Point::y),
@@ -306,7 +306,7 @@ namespace putils {
 
         bool operator!=(const Rect & rhs) { return !(*this == rhs); }
 
-        putils_reflection_class_name("Rect3");
+        putils_reflection_class_name(Rect3);
         putils_reflection_attributes(
                 putils_reflection_attribute(&Rect::position),
                 putils_reflection_attribute(&Rect::size)
