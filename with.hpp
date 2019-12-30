@@ -6,7 +6,7 @@
 //
 // kengine::EntityManager em;
 // { putils_with(em.createEntity<kengine::GameObject>("Bob") {
-//      { putils_with(_.attachComponent<kengine::TransformComponent3f>()) {  // "_" is provided by putils_with
+//      { putils_with(_.attachComponent<kengine::TransformComponent>()) {  // "_" is provided by putils_with
 //          _.boundingBox.position.x = 0;                                    // "_" is provided by putils_with
 //          _.boundingBox.position.y = 1;
 //      }}

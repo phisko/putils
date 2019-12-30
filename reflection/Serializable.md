@@ -12,7 +12,7 @@ By default, serializes objects as JSON. Can be easily customized with policies.
 Serializable()
 ```
 
-A default constructor is available if the CRTP class is [Reflecitble](Reflectible.md).
+A default constructor is available if the CRTP class is [Reflecitble](../reflection.md).
 
 ```cpp
 Serializable(Fields &&...attrs)
@@ -70,17 +70,10 @@ int main()
         std::string hiString = "hi";
         int _fourtyTwo = 42;
         
-        static const auto reflection_get_class_name() { return putils_nameof(ReflectibleTest); }
-        static const auto & reflection_get_attributes()
-        {
-            static const auto table = putils::make_table(
-                putils_reflection_attribute(&ReflectibleTest::hiString),
-                putils_reflection_attribute_private(&ReflectibleTest::_fourtyTwo)
-            );
-            return table;
-        }
-        static void reflection_get_methods() {}
-        static void reflection_get_parents() {}
+        putils_reflection_attributes(
+            putils_reflection_attribute(&ReflectibleTest::hiString),
+            putils_reflection_attribute_private(&ReflectibleTest::_fourtyTwo)
+        );
     };
     
     std::cout << ReflectibleTest{} << std::endl;

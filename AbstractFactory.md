@@ -3,16 +3,16 @@
 Template class for an abstract factory able to create any type in a provided typelist.
 Given an `AbstractFactory<TList...>`, users can call `make<T>()` to create an object of type T (or any type derived from it, as determined by the concrete factory implementation).
 
-### Members
+## Members
 
-##### make
+### make
 ```cpp
 template<typename T> // T must be in TList
 std::unique_ptr<T> make();
 ```
 Creates an object of type T, or any type derived from T. Construction is performed by a class derived from AbstractFactory (and therefore implementation defined).
 
-### Example code
+## Example code
 In this example, "CFactory" can create `ints` and `doubles`, which isn't particularly useful. However, you can imagine how this could be useful if CFactory could create concrete versions of GUI elements, for instance.
 
 ```cpp
