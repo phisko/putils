@@ -6,7 +6,7 @@ Abstraction to a 2D or 3D point/rectangle.
 
 ### Members
 
-##### Coordinates
+#### Coordinates
 
 ```cpp
 Precision x;
@@ -14,7 +14,7 @@ Precision y;
 { Precision z; } // If Dimensions == 3
 ```
 
-##### Operators
+#### Operators
 
 ```cpp
 bool operator==(const Point<P> &rhs) const;
@@ -41,14 +41,14 @@ Point operator/(float rhs) const noexcept;
 Point & operator/=(float rhs) noexcept;
 ```
 
-##### getDistanceTo
+#### getDistanceTo
 
 ```cpp
 float getDistanceTo(const Point & rhs) const noexcept;
 ```
 Returns the distance to another point.
 
-##### getLengthSquared, getLength
+#### getLengthSquared, getLength
 
 ```cpp
 float getLengthSquared() const noexcept;
@@ -57,7 +57,7 @@ float getLength() const noexcept;
 
 Return the (optionnally squared, to avoid call to `sqrt`) length of the vector.
 
-##### getAngleTo, getYawTo, getPitchTo
+#### getAngleTo, getYawTo, getPitchTo
 
 ```cpp
 float getAngleTo(const Point & rhs) const noexcept; // If Dimensions == 2
@@ -67,7 +67,7 @@ float getPitchTo(const Point & rhs) const noexcept; // If Dimensions == 3
 
 Return the angle (or pitch/yaw) between this point and another.
 
-##### normalize
+#### normalize
 
 ```cpp
 void normalize(float desiredLength = 1);
@@ -79,14 +79,14 @@ Normalizes the vector so that its total length matches the desired value.
 
 ### Members
 
-##### Coordinates
+#### Coordinates
 
 ```cpp
 Point<Precision> position;
 Point<Precision> size;
 ```
 
-##### Operators
+#### Operators
 
 ```cpp
 bool operator==(const Rect<P> &rhs) const;

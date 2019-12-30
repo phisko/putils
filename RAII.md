@@ -5,9 +5,9 @@ Automatic conversions from `RAII<T>` to `T` exist to greatly simplify usage.
 
 Movable, but not copyable.
 
-### Members
+## Members
 
-##### Constructor
+### Constructor
 
 ```cpp
 RAII(T &&res, std::function<void(T &)> &&dtor = [](T &) {});
@@ -15,13 +15,13 @@ RAII(T &&res, std::function<void(T &)> &&dtor = [](T &) {});
 
 Takes the ressource to manage, and the `dtor` function used to release it.
 
-##### Operators and get
+### Operators and get
 
 Operators are in place for implicit conversion to the contained resource.
 
 A `get()` function also lets you explicitly access the resource.
 
-### Example
+## Example
 
 For instance, to securely use a C socket:
 

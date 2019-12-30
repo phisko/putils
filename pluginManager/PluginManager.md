@@ -2,21 +2,21 @@
 
 Manages a set of DLLs.
 
-### Members
+## Members
 
-##### Constructor
+### Constructor
 ```cpp
 PluginManager(const std::string &path) noexcept
 ```
 Loads all libraries (.so/.dll) files in the directory specified by `path`.
 
-##### execute
+### execute
 ```cpp
 void execute(const std::string &name, P &&...params);
 ```
 Execute, in all DLLs, the `name` function taking `Args` as parameters
 
-##### executeWithReturn
+### executeWithReturn
 ```cpp
 std::vector<T> executeWithReturn(const std::string &name, P &&...params);
 ```

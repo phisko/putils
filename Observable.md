@@ -8,9 +8,9 @@ Classes inheriting from `Observable` can notify their observers by calling `chan
 
 `Args` can be used to notify observers about one property in particular (perhaps through an enum indicating which member changed)
 
-### Members
+## Members
 
-##### addObserver
+### addObserver
 ```cpp
 intptr_t addObserver(const std::function<void(const Args &...)> &observer);
 Observable &operator+=(const std::function<void()> &observer) noexcept { addObserver(observer); return *this; }

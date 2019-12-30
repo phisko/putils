@@ -10,9 +10,9 @@ void handle(const DataPacket &);
 
 function for each of those types.
 
-### Members
+## Members
 
-##### Definition
+### Definition
 
 ```cpp
 template<typename CRTP, typename ...DataPackets>
@@ -21,7 +21,7 @@ class Module;
 
 Modules must indicate their sub-type (see `CRTP`), as well as the types of `DataPackets` it would like to receive.
 
-##### Constructor
+### Constructor
 
 ```cpp
 Module(Mediator *m = nullptr);
@@ -29,7 +29,7 @@ Module(Mediator *m = nullptr);
 
 The Mediator can optionally be specified at construction time in order to send `DataPackets` or run tasks during construction.
 
-##### send
+### send
 
 ```cpp
 void send(const T &data) const
@@ -37,7 +37,7 @@ void send(const T &data) const
 
 Sends the `data` `DataPacket` to all subscribed modules.
 
-##### sendTo
+### sendTo
 
 ```cpp
 void sendTo(const T &data, BaseModule *dest) const;
@@ -45,7 +45,7 @@ void sendTo(const T &data, BaseModule *dest) const;
 
 Sends the `data` `DataPacket` to the `dest` `Module`.
 
-##### query
+### query
 
 ```cpp
 template<typename Response>
@@ -56,7 +56,7 @@ Lets a `Module` send a "query" to others, through a `DataPacket` containg a `sen
 
 Other `Modules` can reply to the query by calling `sendTo` with the `sender` field of the `DataPacket` and a `Response` as parameters.
 
-##### runTask
+### runTask
 
 ```cpp
 void runTask(const std::function<void()> &f) const;

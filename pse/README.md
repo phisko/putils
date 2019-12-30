@@ -1,7 +1,7 @@
 # pse
 Phiste's SFML Engine, a simple graphics engine built over SFML
 
-### Classes
+## Classes
 
 * [Engine](Engine.md): main class, manages `ViewItems`
 * ViewItem: base class managed by `Engine`. Provides methods for size and position manipulation.

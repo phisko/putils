@@ -2,9 +2,9 @@
 
 Manages and renders `ViewItems`.
 
-### Members
+## Members
 
-##### Constructor
+### Constructor
 
 ```cpp
 Engine(size_t screenWidth, size_t screenHeight,
@@ -14,7 +14,7 @@ Engine(size_t screenWidth, size_t screenHeight,
 
 Creates a new window with specified properties.
 
-##### addItem
+### addItem
 
 ```cpp
 void addItem(ViewItem *item, size_t height = 0);
@@ -22,7 +22,7 @@ void addItem(ViewItem *item, size_t height = 0);
 
 Adds a new `ViewItem` to manage, at the specified `height` (determines whether it should be drawn over others).
 
-##### removeItem
+### removeItem
 
 ```cpp
 void removeItem(ViewItem *item);
@@ -30,7 +30,7 @@ void removeItem(ViewItem *item);
 
 Removes a ViewItem
 
-##### update
+### update
 
 ```cpp
 void update(bool clear = true);
@@ -38,7 +38,7 @@ void update(bool clear = true);
 
 Updates the window, updating all `ViewItems`' positions according to their movement.
 
-##### pollEvent
+### pollEvent
 
 ```cpp
 bool pollEvent(sf::Event &e);
@@ -46,7 +46,7 @@ bool pollEvent(sf::Event &e);
 
 Lets the user poll events straight from the SFML window.
 
-##### displayColor
+### displayColor
 
 ```cpp
 void displayColor(const sf::Color &color);

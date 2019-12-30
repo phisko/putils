@@ -4,12 +4,12 @@ A type-safe and self-documenting implementation of the Mediator pattern.
 
 A [Mediator](Mediator.md) object manages [Modules](Module.md) and lets them communicate through user-defined (or pre-existing) `DataPacket` types.
 
-### Classes
+## Classes
 
 * [Mediator](Mediator.md)
 * [Module](Module.md)
 
-### Example
+## Example
 
 ```cpp
 int main()

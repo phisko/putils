@@ -2,9 +2,9 @@
 
 Simple timer class based on std::chrono.
 
-### Members
+## Members
 
-##### Constructor
+### Constructor
 
 ```cpp
 Timer(Duration &&duration);
@@ -12,7 +12,7 @@ Timer(Duration &&duration);
 
 Sets the time before the timer "beeps".
 
-##### isDone
+### isDone
 
 ```cpp
 bool isDone() const;
@@ -20,7 +20,7 @@ bool isDone() const;
 
 Is the timer ringing?
 
-##### getTimeSinceStart
+### getTimeSinceStart
 
 ```cpp
 t_duration getTimeSinceStart() const;
@@ -28,7 +28,7 @@ t_duration getTimeSinceStart() const;
 
 How long ago did I start the timer?
 
-##### getTimeLeft
+### getTimeLeft
 
 ```cpp
 t_duration getTimeLeft() const;
@@ -36,13 +36,13 @@ t_duration getTimeLeft() const;
 
 How long until it rings?
 
-##### restart
+### restart
 
 ```cpp
 void restart();
 ```
 
-##### Duration getters and setters
+### Duration getters and setters
 
 ```cpp
 const t_duration &getDuration() const noexcept { return _duration; }
@@ -53,7 +53,7 @@ void setDuration(Duration &&duration) noexcept { _duration = duration; }
 void setDuration(double duration) noexcept { _duration = t_duration(duration); }
 ```
 
-##### Helper types
+### Helper types
 
 ```cpp
 using t_duration = std::chrono::duration<double>;
