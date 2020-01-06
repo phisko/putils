@@ -207,6 +207,22 @@ namespace putils {
 			return (bool)f;
 		}
 
+		const std::type_info & target_type() const { return typeid(vtable_.call); }
+
+		template<typename T>
+		const auto target() const {
+			if (typeid(T) == target_type())
+				return vtable_.call;
+			return (decltype(vtable_.call))nullptr;
+		}
+
+		template<typename T>
+		auto target() {
+			if (typeid(T) == target_type())
+				return vtable_.call;
+			return (decltype(vtable_.call))nullptr;
+		}
+
 	private:
 		template<typename Functor>
 		void create(Functor&& f) {
