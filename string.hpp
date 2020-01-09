@@ -16,7 +16,7 @@ namespace putils {
 	class string {
 	public:
 		using value_type = char;
-		static constexpr auto npos = (size_t)-1;
+		static constexpr auto npos = std::string::npos;
 		static constexpr auto max_size = MaxSize;
 
 	public:
