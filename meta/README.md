@@ -1,6 +1,6 @@
 # Meta
 
-Phiste's metaprogramming utilities.
+Phisko's metaprogramming utilities.
 
 ## Classes
 

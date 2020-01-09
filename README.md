@@ -1,6 +1,6 @@
 # putils
 
-Phiste's C++ Utilities
+Phisko's C++ Utilities
 
 ## [Reflection](reflection.md)
 

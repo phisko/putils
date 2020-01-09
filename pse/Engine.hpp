@@ -10,7 +10,7 @@
 #include "ViewItem.hpp"
 
 //
-// Phiste SFML Engine
+// Phisko SFML Engine
 //
 namespace pse {
     class Engine {

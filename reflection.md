@@ -68,7 +68,7 @@ Can be easily generated with `putils_reflection_class_name`.
 ```cpp
 static const auto & reflection_get_attributes();
 ```
-Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the attributes.
+Returns a [table](https://github.com/phisko/putils/blob/master/meta/table.md) mapping strings to pointers to the attributes.
 Can be easily generated with `putils_reflection_attributes`.
 
 ### get_methods
@@ -76,14 +76,14 @@ Can be easily generated with `putils_reflection_attributes`.
 ```cpp
 static const auto & reflection_get_methods();
 ```
-Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the methods.
+Returns a [table](https://github.com/phisko/putils/blob/master/meta/table.md) mapping strings to pointers to the methods.
 Can be easily generated with `putils_reflection_methods`.
 
 ### get_parents
 ```cpp
 static const auto & reflection_get_parents();
 ```
-Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to `putils::meta::type` objects for each of the class' parents.
+Returns a [table](https://github.com/phisko/putils/blob/master/meta/table.md) mapping strings to `putils::meta::type` objects for each of the class' parents.
 Can be easily generated with `putils_reflection_parents`.
 
 ## Type traits

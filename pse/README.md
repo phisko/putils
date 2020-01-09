@@ -1,5 +1,5 @@
 # pse
-Phiste's SFML Engine, a simple graphics engine built over SFML
+Phisko's SFML Engine, a simple graphics engine built over SFML
 
 ## Classes
 
