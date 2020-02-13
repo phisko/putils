@@ -198,7 +198,7 @@ const auto table = putils::make_table(
 );
 ```
 
-### putils_reflection_parent(name)
+### putils_reflection_type(name)
 
 Provides the same functionality as `putils_reflection_attribute`, but for types. It takes a type name as parameter and generates a pair of parameters under the form `"className", putils::meta::type<className>{}` to avoid redundancy when passing parameters to `putils::make_table`.
 
@@ -223,7 +223,7 @@ public:
         putils_reflection_attribute(&Test::exampleMethod)
     );
     putils_reflection_parents(
-        putils_reflection_parent(ExampleParent)
+        putils_reflection_type(ExampleParent)
     );
 };
 
