@@ -21,6 +21,13 @@ target_link_libraries(putils PUBLIC imgui)
 if(PUTILS_BUILD_LUA)
     add_subdirectory(lua)
     target_link_libraries(putils PUBLIC lua)
+
+    file(GLOB imgui_lua_src
+        imgui_lua_bindings/*.cpp
+        imgui_lua_bindings/*.hpp)
+    add_library(imgui_lua_bindings STATIC ${imgui_lua_src})
+    target_link_libraries(imgui_lua_bindings PUBLIC putils)
+    target_link_libraries(putils PUBLIC imgui_lua_bindings)
 endif()
 
 if(PUTILS_BUILD_MEDIATOR)
