@@ -302,6 +302,10 @@ namespace putils {
         Rect(Point<Precision, 3> position = {}, Point<Precision, 3> size = {})
                 : position(position), size(size) {}
 
+		template<typename P>
+		Rect(const Rect<P, 2> & other)
+			: position(other.position), size(other.size) {}
+
         bool operator==(const Rect & rhs) { return position == rhs.position && size == rhs.size; }
 
         bool operator!=(const Rect & rhs) { return !(*this == rhs); }
