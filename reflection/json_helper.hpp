@@ -36,7 +36,7 @@ namespace putils::reflection {
 				++i;
 			}
 		}
-		else if constexpr (putils::reflection::has_attributes<T>()) {
+		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
 			putils::reflection::for_each_attribute<T>([&](const char * name, const auto attr) {
 				const auto attrJSON = object.find(name);
 				if (attrJSON != object.end())
@@ -61,7 +61,7 @@ namespace putils::reflection {
 		else if constexpr (putils::is_iterable<T>())
 			for (const auto & it : obj)
 				ret.push_back(toJSON(it));
-		else if constexpr (putils::reflection::has_attributes<T>())
+		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>())
 			putils::reflection::for_each_attribute<T>([&](const char * name, const auto attr) {
 				ret[name] = toJSON(obj.*attr);
 			});
