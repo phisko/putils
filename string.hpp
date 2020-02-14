@@ -223,6 +223,7 @@ namespace putils {
 			putils_reflection_attribute(&string::clear),
 			putils_reflection_attribute(&string::at),
 			putils_reflection_attribute(&string::assign),
+			putils_reflection_attribute(&string::c_str),
 			putils_reflection_attribute(&string::size),
 			putils_reflection_attribute(&string::empty),
 			putils_reflection_attribute(&string::full)
