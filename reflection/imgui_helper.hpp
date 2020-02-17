@@ -13,6 +13,25 @@ namespace putils::reflection {
 	template<typename T>
 	void imguiDisplay(const T & obj);
 
+	template<typename E>
+	void imguiEnumCombo(E & e);
+
+	// Impl
+
+	template<typename E>
+	bool imguiEnumCombo(const char * label, E & e) {
+		static_assert(std::is_same_v<std::underlying_type_t<E>, int>);
+
+		static putils::string<64> names[putils::magic_enum::enum_count<E>()];
+		static bool first = true;
+		if (first) {
+			for (int i = 0; i < lengthof(names); ++i)
+				names[i] = putils::magic_enum::enum_names<E>()[i];
+			first = false;
+		}
+		return ImGui::Combo(label, (int *)&e, [](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; }, nullptr, lengthof(names));
+	}
+
 	namespace detail::imgui {
 		putils_member_detector(c_str);
 		putils_member_detector(emplace_back);
@@ -97,17 +116,8 @@ namespace putils::reflection {
 			}
 
 			else if constexpr (std::is_enum_v<Member>) {
-				static_assert(std::is_same_v<std::underlying_type_t<Member>, int>);
-
 				displayInColumns(name, [&] {
-					static putils::string<64> names[putils::magic_enum::enum_count<Member>()];
-					static bool first = true;
-					if (first) {
-						for (int i = 0; i < lengthof(names); ++i)
-							names[i] = putils::magic_enum::enum_names<Member>()[i];
-						first = false;
-					}
-					ImGui::Combo(getID(name, member), (int *)& member, [](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; }, nullptr, lengthof(names));
+					imguiEnumCombo(getID(name, member), member);
 				});
 			}
 			else if constexpr (std::is_same_v<Member, bool>) {
