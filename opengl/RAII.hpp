@@ -13,10 +13,10 @@ namespace putils::gl {
 	struct UIntSwapper {
 		GLuint res = (GLuint)-1;
 
-		operator GLuint() const { return res; }
+		operator GLuint() const noexcept { return res; }
 
-		GLuint & get() { return res; }
-		const GLuint get() const { return res; }
+		GLuint & get() noexcept { return res; }
+		const GLuint get() const noexcept { return res; }
 
 		UIntSwapper(UIntSwapper && rhs) noexcept
 			: res(rhs.res)
@@ -29,7 +29,7 @@ namespace putils::gl {
 			return *this;
 		}
 
-		UIntSwapper() = default;
+		UIntSwapper() noexcept = default;
 		UIntSwapper(const UIntSwapper &) = delete;
 		UIntSwapper & operator=(const UIntSwapper &) = delete;
 	};
@@ -41,9 +41,9 @@ namespace putils::gl {
 
 		void generate() { glGenFramebuffers(1, &res); }
 
-		FrameBuffer() = default;
-		FrameBuffer(FrameBuffer &&) = default;
-		FrameBuffer & operator=(FrameBuffer &&) = default;
+		FrameBuffer() noexcept = default;
+		FrameBuffer(FrameBuffer &&) noexcept = default;
+		FrameBuffer & operator=(FrameBuffer &&) noexcept = default;
 	};
 
 	struct Texture : UIntSwapper {
@@ -53,9 +53,9 @@ namespace putils::gl {
 
 		void generate() { glGenTextures(1, &res); }
 
-		Texture() = default;
-		Texture(Texture &&) = default;
-		Texture & operator=(Texture &&) = default;
+		Texture() noexcept = default;
+		Texture(Texture &&) noexcept = default;
+		Texture & operator=(Texture &&) noexcept = default;
 	};
 
 	struct Buffer : UIntSwapper {
@@ -65,9 +65,9 @@ namespace putils::gl {
 
 		void generate() { glGenBuffers(1, &res); }
 
-		Buffer() = default;
-		Buffer(Buffer &&) = default;
-		Buffer & operator=(Buffer &&) = default;
+		Buffer() noexcept = default;
+		Buffer(Buffer &&) noexcept = default;
+		Buffer & operator=(Buffer &&) noexcept = default;
 	};
 
 	struct VertexArray : UIntSwapper {
@@ -77,8 +77,8 @@ namespace putils::gl {
 
 		void generate() { glGenVertexArrays(1, &res); }
 
-		VertexArray() = default;
-		VertexArray(VertexArray &&) = default;
-		VertexArray & operator=(VertexArray &&) = default;
+		VertexArray() noexcept = default;
+		VertexArray(VertexArray &&) noexcept = default;
+		VertexArray & operator=(VertexArray &&) noexcept = default;
 	};
 }
