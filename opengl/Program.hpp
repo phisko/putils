@@ -18,7 +18,7 @@
 #endif
 
 namespace putils::gl {
-	inline void setViewPort(const putils::Rect2i & viewPort) { glViewport(viewPort.position.x, viewPort.position.y, viewPort.size.x, viewPort.size.y); }
+	inline void setViewPort(const putils::Rect2i & viewport) { glViewport(viewport.position.x, viewport.position.y, viewport.size.x, viewport.size.y); }
 
 	template<typename VertexType, typename Member>
 	void setAttrib(size_t location, size_t length, size_t offset) {
@@ -95,9 +95,10 @@ namespace putils::gl {
 			glm::mat4 proj;
 			glm::vec3 camPos;
 			float camFOV;
-			putils::Rect2i viewPort;
+			putils::Rect2i viewport;
 			float nearPlane;
 			float farPlane;
+			size_t viewportID;
 		};
 		virtual void run(const Parameters & params) = 0;
 
