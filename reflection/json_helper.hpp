@@ -20,7 +20,7 @@ namespace putils::reflection {
 
 		if constexpr (detail::json::has_member_c_str<T>())
 			val = object.get<std::string>().c_str();
-		else if constexpr (putils::is_std_vector<T>() || putils::is_vector<T>()) {
+		else if constexpr (putils::is_specialization<T, std::vector>() || putils::is_vector<T>()) {
 			val.clear();
 			for (const auto & it : object) {
 				val.emplace_back();

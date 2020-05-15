@@ -90,12 +90,9 @@ namespace putils {
 }
 
 namespace putils {
-	template<typename>
-	struct is_std_vector;
+	template<typename T, template<typename...> class Template>
+	struct is_specialization : std::false_type {};
 
-	template<typename T>
-	struct is_std_vector<std::vector<T>> : std::true_type {};
-
-	template<typename>
-	struct is_std_vector : std::false_type {};
+	template<template<typename...> class Template, typename ... Args>
+	struct is_specialization<Template<Args...>, Template> : std::true_type {};
 }
