@@ -152,7 +152,7 @@ namespace putils::gl {
 #endif
 				};
 
-				using MemberType = putils::MemberType<CRTP, decltype(member)>;
+				using MemberType = putils::MemberType<decltype(member)>;
 				if constexpr (std::is_array<MemberType>::value) {
 					for (size_t i = 0; i < lengthof(uniformLocation); ++i) {
 						using SubType = std::remove_reference_t<decltype(uniformLocation[i])>;
