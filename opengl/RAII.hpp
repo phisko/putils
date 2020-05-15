@@ -18,10 +18,8 @@ namespace putils::gl {
 		GLuint & get() noexcept { return res; }
 		const GLuint get() const noexcept { return res; }
 
-		UIntSwapper(UIntSwapper && rhs) noexcept
-			: res(rhs.res)
-		{
-			rhs.res = (GLuint)-1;
+		UIntSwapper(UIntSwapper && rhs) noexcept {
+			std::swap(res, rhs.res);
 		}
 
 		UIntSwapper & operator=(UIntSwapper && rhs) noexcept {
