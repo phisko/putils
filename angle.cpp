@@ -20,4 +20,12 @@ namespace putils {
 	float get2DAngleFromNormalizedDirection(const Vector2f & dir) {
 		return -std::atan2f(dir.y, dir.x) + pi / 2.f;
 	}
+
+	float toDegrees(float rads) {
+		return rads * 180.f / pi;
+	}
+
+	float toRadians(float degs) {
+		return degs * pi / 180.f;
+	}
 }
