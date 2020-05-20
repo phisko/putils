@@ -10,7 +10,7 @@ This does not allow you to introspect any type provided by any library. It simpl
  
 A good example of this is the [Serializable](reflection/Serializable.md) class, that uses reflection to inspect itself and serialize its attributes.
 
-Another example is the [registerType](../lua/README.md) function provided for lua, that inspects a type and registers all its attributes and methods to a lua state.
+Another example is the [registerType](lua/README.md) function provided for lua, that inspects a type and registers all its attributes and methods to a lua state.
 
 ## Utility classes
 
