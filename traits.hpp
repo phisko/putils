@@ -63,11 +63,19 @@ namespace putils {
 }
 
 #define putils_member_detector(member)\
-	template<typename T, typename = int>\
+	template<typename T, typename = std::void_t<>>\
 	struct has_member_##member : std::false_type {};\
 \
 	template<typename T>\
-	struct has_member_##member<T, decltype((void)&T::##member, 0)> : std::true_type {};
+	struct has_member_##member<T, std::void_t<decltype((void)&T::##member)>> : std::true_type {};
+
+#define putils_nested_type_detector(member)\
+	template<typename T, typename = std::void_t<>>\
+	struct has_nested_type_##member : std::false_type {};\
+\
+	template<typename T>\
+	struct has_nested_type_##member<T, std::void_t<typename T::##member>> : std::true_type {};
+
 
 namespace putils {
 	namespace detail {
