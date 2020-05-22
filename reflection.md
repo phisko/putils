@@ -86,6 +86,14 @@ static const auto & reflection_get_parents();
 Returns a [table](https://github.com/phisko/putils/blob/master/meta/table.md) mapping strings to `putils::meta::type` objects for each of the class' parents.
 Can be easily generated with `putils_reflection_parents`.
 
+### get_used_types
+```cpp
+static const auto & reflection_get_used_types();
+```
+Returns a [table](https://github.com/phisko/putils/blob/master/meta/table.md) mapping strings to `putils::meta::type` objects for each non-scalar type used by the class (which should also be registered with scripting systems, for instance).
+Can be easily generated with `putils_reflection_used_types`.
+
+
 ## Type traits
 
 These type traits are defined to let client code check whether a given type is reflectible.
@@ -139,6 +147,18 @@ namespace putils::reflection {
 ```
 
 Lets client code iterate over the parents for a given type. See the `Example` section below.
+
+### for_each_used_type
+
+```cpp
+namespace putils::reflection {
+    template<typename T, typename Func> // Func: void(const char * name, TypeObject type)
+    void for_each_used_type(Func && func);
+}
+```
+
+Lets client code iterate over the types used by a given type. Works similarly to `for_each_parent`.
+
 
 ## Helper macros
 
