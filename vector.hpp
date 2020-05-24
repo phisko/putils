@@ -108,8 +108,12 @@ namespace putils {
 		auto begin() { return _buff; }
 		auto end() { return _buff + _size; }
 
+		auto data() const { return _buff; }
+		auto data() { return _buff; }
+
 		void clear() { _size = 0; }
 		void resize(size_t size) { _size = size; }
+		size_t capacity() const { return MaxSize; }
 
 	private:
 		T _buff[MaxSize] = {};
