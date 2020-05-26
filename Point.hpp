@@ -14,8 +14,19 @@ namespace putils {
 			};
 		};
 
-        Point(Precision x = 0, Precision y = 0)
-                : x(x), y(y) {}
+		Point() noexcept
+			: x(0), y(0) {}
+
+        Point(Precision x, Precision y) noexcept
+			: x(x), y(y) {}
+
+		Point(const Precision * p) noexcept
+			: x(p[0]), y(p[1]) {}
+		Point & operator=(const Precision * rhs) noexcept {
+			x = rhs[0];
+			y = rhs[1];
+			return *this;
+		}
 
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
@@ -24,7 +35,8 @@ namespace putils {
         Point(const Point<P, 2> & other) noexcept : x((Precision)other.x), y((Precision)other.y) {}
         template<typename P>
 		Point & operator=(const Point<P, 2> & other) noexcept {
-			x = (Precision)other.x; y = (Precision)other.y;
+			x = (Precision)other.x;
+			y = (Precision)other.y;
 			return *this;
 		}
 
@@ -35,6 +47,14 @@ namespace putils {
 			x = (Precision)other.x;
 			y = (Precision)other.y;
 			return *this;
+		}
+
+		Precision & operator[](size_t index) {
+			return raw[index];
+		}
+
+		Precision operator[](size_t index) const {
+			return raw[index];
 		}
 
         template<typename P>
@@ -173,8 +193,21 @@ namespace putils {
 			};
 		};
 
-        Point(Precision x = 0, Precision y = 0, Precision z = 0)
-                : x(x), y(y), z(z) {}
+		Point() noexcept
+			: x(0), y(0), z(0) {}
+
+        Point(Precision x, Precision y, Precision z) noexcept
+			: x(x), y(y), z(z) {}
+
+		Point(const Precision * p) noexcept
+			: x(p[0]), y(p[1]), z(p[2]) {}
+
+		Point & operator=(const Precision * rhs) noexcept {
+			x = rhs[0];
+			y = rhs[1];
+			z = rhs[2];
+			return *this;
+		}
 
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
@@ -193,6 +226,14 @@ namespace putils {
 		Point & operator=(const Point<P, 3> & other) noexcept {
 			x = (Precision)other.x; y = (Precision)other.y; z = (Precision)other.z;
 			return * this;
+		}
+
+		Precision & operator[](size_t index) {
+			return raw[index];
+		}
+
+		Precision operator[](size_t index) const {
+			return raw[index];
 		}
 
 		template<typename P>
