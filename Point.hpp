@@ -168,7 +168,7 @@ namespace putils {
         Point<Precision> position;
         Point<Precision> size;
 
-        Rect(Point<Precision, Dimensions> position = {}, Point<Precision, Dimensions> size = {})
+        Rect(const Point<Precision, Dimensions> & position = {}, const Point<Precision, Dimensions> & size = {})
                 : position(position), size(size) {}
 
         bool operator==(const Rect & rhs) const { return position == rhs.position && size == rhs.size; }
@@ -184,8 +184,9 @@ namespace putils {
 
     template<typename Precision>
     struct Point<Precision, 3> {
+		using Buffer = Precision[3];
 		union {
-			Precision raw[3];
+			Buffer raw;
 			struct {
 				Precision x;
 				Precision y;
@@ -235,6 +236,9 @@ namespace putils {
 		Precision operator[](size_t index) const {
 			return raw[index];
 		}
+
+		operator Buffer & () { return raw; }
+		operator const Buffer & () const { return raw; }
 
 		template<typename P>
         bool operator==(const Point<P, 3> & rhs) const noexcept {
@@ -340,7 +344,7 @@ namespace putils {
         Point<Precision, 3> position;
         Point<Precision, 3> size;
 
-        Rect(Point<Precision, 3> position = {}, Point<Precision, 3> size = {})
+        Rect(const Point<Precision, 3> & position = {}, const Point<Precision, 3> & size = {})
                 : position(position), size(size) {}
 
 		template<typename P>
