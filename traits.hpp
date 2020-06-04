@@ -1,7 +1,8 @@
 #pragma once
 
 #include <type_traits>
-#include <vector>
+#include <functional>
+#include "function.hpp"
 
 namespace putils {
 	namespace detail {
@@ -79,22 +80,40 @@ namespace putils {
 
 namespace putils {
 	namespace detail {
+#define SPECIALIZATION(TYPE) \
+		template<typename R, typename ... Args> \
+		struct function_traits< \
+			TYPE \
+		> : std::true_type { \
+			using return_type = R; \
+			using arguments = std::tuple<Args...>; \
+		};
+
 		template<typename T>
-		struct function_traits;
+		struct function_traits : std::false_type {};
 
-		template<typename R, typename ... Args>
-		struct function_traits<
-			R(*)(Args...)
-		> { using return_type = R; };
+		SPECIALIZATION(R(*)(Args...))
+		SPECIALIZATION(R(*)(Args...) noexcept)
+		SPECIALIZATION(std::function<R(Args...)>)
 
-		template<typename R, typename ... Args>
+		template<typename R, size_t Size, typename ... Args>
 		struct function_traits<
-			R(*)(Args...) noexcept
-		> { using return_type = R; };
+			putils::function<R(Args...), Size>
+		> : std::true_type {
+			using return_type = R;
+			using arguments = std::tuple<Args...>;
+		};
+#undef SPECIALIZATION
 	}
 
 	template<typename T>
+	using is_function = detail::function_traits<std::decay_t<T>>;
+
+	template<typename T>
 	using function_return_type = typename detail::function_traits<std::decay_t<T>>::return_type;
+
+	template<typename T>
+	using function_arguments = typename detail::function_traits<std::decay_t<T>>::arguments;
 }
 
 namespace putils {
