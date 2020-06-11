@@ -22,11 +22,6 @@ namespace putils {
 
 		Point(const Precision * p) noexcept
 			: x(p[0]), y(p[1]) {}
-		Point & operator=(const Precision * rhs) noexcept {
-			x = rhs[0];
-			y = rhs[1];
-			return *this;
-		}
 
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
@@ -202,13 +197,6 @@ namespace putils {
 
 		Point(const Precision * p) noexcept
 			: x(p[0]), y(p[1]), z(p[2]) {}
-
-		Point & operator=(const Precision * rhs) noexcept {
-			x = rhs[0];
-			y = rhs[1];
-			z = rhs[2];
-			return *this;
-		}
 
         Point(const Point &) noexcept = default;
         Point & operator=(const Point &) noexcept = default;
@@ -417,6 +405,9 @@ namespace putils {
 		return p;
 	}
 }
+
+template<typename P, size_t D>
+static inline auto operator*(float f, const putils::Point<P, D> & p) { return p * f; }
 
 namespace std {
     template<typename Precision>
