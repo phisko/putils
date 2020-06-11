@@ -5,7 +5,7 @@
 
 namespace putils {
 	static std::string_view remove_directory(const char * file) {
-		const auto slash = std::string_view(file).find_last_of("/");
+		const auto slash = std::string_view(file).find_last_of("\\/");
 		if (slash == std::string_view::npos)
 			return file;
 		return file + slash + 1;
@@ -19,7 +19,7 @@ namespace putils {
 	}
 
 	static std::string_view get_directory(const char * file) {
-		const auto slash = std::string_view(file).find_last_of("/");
+		const auto slash = std::string_view(file).find_last_of("\\/");
 		if (slash == std::string_view::npos)
 			return file;
 		return std::string_view(file, slash);
