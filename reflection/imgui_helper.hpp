@@ -5,6 +5,7 @@
 #include "Color.hpp"
 #include "magic_enum.hpp"
 #include "lengthof.hpp"
+#include "universal_functor.hpp"
 
 namespace putils::reflection {
 	template<typename T>
@@ -116,7 +117,7 @@ namespace putils::reflection {
 
 			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(nameWithID)) {
-					putils::reflection::for_each_attribute(member, editAttribute);
+					putils::reflection::for_each_attribute(member, UNIVERSAL_FUNCTOR(editAttribute));
 					ImGui::TreePop();
 				}
 			}
@@ -216,7 +217,7 @@ namespace putils::reflection {
 
 			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(nameWithID)) {
-					putils::reflection::for_each_attribute(member, displayAttribute);
+					putils::reflection::for_each_attribute(member, UNIVERSAL_FUNCTOR(displayAttribute));
 					ImGui::TreePop();
 				}
 			}
@@ -272,11 +273,11 @@ namespace putils::reflection {
 
 	template<typename T>
 	void imguiEdit(T & obj) {
-		putils::reflection::for_each_attribute(obj, detail::imgui::editAttribute);
+		putils::reflection::for_each_attribute(obj, UNIVERSAL_FUNCTOR(detail::imgui::editAttribute));
 	}
 
 	template<typename T>
 	void imguiDisplay(const T & obj) {
-		putils::reflection::for_each_attribute(obj, detail::imgui::displayAttribute);
+		putils::reflection::for_each_attribute(obj, UNIVERSAL_FUNCTOR(detail::imgui::displayAttribute));
 	}
 }
