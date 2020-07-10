@@ -149,8 +149,7 @@ namespace putils::gl {
 #endif
 				};
 
-				using MemberType = putils::MemberType<decltype(member)>;
-				if constexpr (std::is_array<MemberType>::value) {
+				if constexpr (std::is_array<std::remove_reference_t<decltype(uniformLocation)>>::value) {
 					for (size_t i = 0; i < lengthof(uniformLocation); ++i) {
 						using SubType = std::remove_reference_t<decltype(uniformLocation[i])>;
 						if constexpr (std::is_same_v<SubType, GLint>)
@@ -159,7 +158,7 @@ namespace putils::gl {
 							setLocation(uniformLocation[i].location, putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", name, i));
 					}
 				}
-				else if constexpr (std::is_same_v<MemberType, GLint>)
+				else if constexpr (std::is_same_v<putils_typeof(uniformLocation), GLint>)
 					setLocation(uniformLocation, name);
 				else // should be putils::gl::Uniform<T>
 					setLocation(uniformLocation.location, name);
