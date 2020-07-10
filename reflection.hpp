@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <optional>
 #include "meta/table.hpp"
 #include "meta/nameof.hpp"
 #include "meta/for_each.hpp"
@@ -110,6 +111,18 @@ namespace putils::reflection
 		});
 	}
 
+	template<typename Ret, typename T>
+	std::optional<Ret T::*> get_attribute(const char * name) {
+		std::optional<Ret T:: *> ret;
+		for_each_attribute<T>([&](const char * attrName, const auto member) {
+			if constexpr (std::is_same<putils_typeof(member), Ret T:: *>()) {
+				if (strcmp(name, attrName) == 0)
+					ret = member;
+			}
+		});
+		return ret;
+	}
+
 	template<typename T, typename Func>
 	void for_each_method(Func && func) {
 		for_each_member(get_methods<T>(), func);
@@ -119,6 +132,21 @@ namespace putils::reflection
 			for_each_method<Parent>(func);
 		});
 	}
+
+	template<typename Ret, typename T>
+	std::optional<Ret T::*> get_method(const char * name) {
+		std::optional<Ret T:: *> ret;
+		for_each_method<T>([&](const char * attrName, const auto member) {
+			using wantedSignature = putils::member_function_signature<Ret T::*>;
+			using currentSignature = putils::member_function_signature<putils_typeof(member)>;
+			if constexpr (std::is_same<wantedSignature, currentSignature>()) {
+				if (strcmp(name, attrName) == 0)
+					ret = (Ret T::*)member;
+			}
+		});
+		return ret;
+	}
+
 
 	template<typename T, typename Func>
 	void for_each_used_type(Func && func) {
