@@ -38,11 +38,11 @@ namespace putils::reflection {
 			}
 		}
 		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
-			putils::reflection::for_each_attribute<T>([&](const char * name, const auto attr) {
+			putils::reflection::for_each_attribute(val, [&](const char * name, auto && attr) {
 				const auto attrJSON = object.find(name);
 				if (attrJSON != object.end())
-					fromJSON(*attrJSON, val.*attr);
-				});
+					fromJSON(*attrJSON, attr);
+			});
 		}
 		else if constexpr (std::is_enum<T>()) {
 			for (const auto & p : putils::magic_enum::enum_entries<T>())
@@ -63,8 +63,8 @@ namespace putils::reflection {
 			for (const auto & it : obj)
 				ret.push_back(toJSON(it));
 		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>())
-			putils::reflection::for_each_attribute<T>([&](const char * name, const auto attr) {
-				ret[name] = toJSON(obj.*attr);
+			putils::reflection::for_each_attribute(obj, [&](const char * name, auto && attr) {
+				ret[name] = toJSON(attr);
 			});
 		else if constexpr (std::is_enum<T>())
 			ret = putils::magic_enum::enum_name<T>(obj);

@@ -116,9 +116,7 @@ namespace putils::reflection {
 
 			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(nameWithID)) {
-					putils::reflection::for_each_attribute<Member>([&member](const char * name, const auto attr) {
-						editAttribute(name, member.*attr);
-					});
+					putils::reflection::for_each_attribute(member, editAttribute);
 					ImGui::TreePop();
 				}
 			}
@@ -218,9 +216,7 @@ namespace putils::reflection {
 
 			else if constexpr (putils::reflection::has_attributes<Member>()) {
 				if (ImGui::TreeNode(nameWithID)) {
-					putils::reflection::for_each_attribute<Member>([&member](const char * name, const auto attr) {
-						displayAttribute(name, member.*attr);
-					});
+					putils::reflection::for_each_attribute(member, displayAttribute);
 					ImGui::TreePop();
 				}
 			}
@@ -276,15 +272,11 @@ namespace putils::reflection {
 
 	template<typename T>
 	void imguiEdit(T & obj) {
-		putils::reflection::for_each_attribute<T>([&](const char * name, auto member) {
-			detail::imgui::editAttribute(name, obj.*member);
-		});
+		putils::reflection::for_each_attribute(obj, detail::imgui::editAttribute);
 	}
 
 	template<typename T>
 	void imguiDisplay(const T & obj) {
-		putils::reflection::for_each_attribute<T>([&](const char * name, const auto member) {
-			detail::imgui::displayAttribute(name, obj.*member);
-		});
+		putils::reflection::for_each_attribute(obj, detail::imgui::displayAttribute);
 	}
 }
