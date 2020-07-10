@@ -85,6 +85,7 @@ namespace putils {
 		struct function_traits< \
 			TYPE \
 		> : std::true_type { \
+			using signature = R(*)(Args...);\
 			using return_type = R; \
 			using arguments = std::tuple<Args...>; \
 		};
@@ -100,6 +101,7 @@ namespace putils {
 		struct function_traits<
 			putils::function<R(Args...), Size>
 		> : std::true_type {
+			using signature = R(*)(Args...);
 			using return_type = R;
 			using arguments = std::tuple<Args...>;
 		};
@@ -110,10 +112,52 @@ namespace putils {
 	using is_function = detail::function_traits<std::decay_t<T>>;
 
 	template<typename T>
+	using function_signature = typename detail::function_traits<std::decay_t<T>>::signature;
+
+	template<typename T>
 	using function_return_type = typename detail::function_traits<std::decay_t<T>>::return_type;
 
 	template<typename T>
 	using function_arguments = typename detail::function_traits<std::decay_t<T>>::arguments;
+}
+
+namespace putils {
+	namespace detail {
+#define SPECIALIZATION(TYPE) \
+		template<typename T, typename R, typename ... Args> \
+		struct member_function_traits< \
+			TYPE \
+		> : std::true_type { \
+			using decay = R(T::*)(Args...); /* Remove const noexcept */ \
+			using signature = R(Args...); \
+			using return_type = R; \
+			using arguments = std::tuple<Args...>; \
+		};
+
+		template<typename T>
+		struct member_function_traits : std::false_type {};
+
+		SPECIALIZATION(R(T::*)(Args...))
+		SPECIALIZATION(R(T::*)(Args...) const)
+		SPECIALIZATION(R(T::*)(Args...) noexcept)
+		SPECIALIZATION(R(T::*)(Args...) const noexcept)
+#undef SPECIALIZATION
+	}
+
+	template<typename T>
+	using is_member_function_ptr = detail::member_function_traits<std::decay_t<T>>;
+
+	template<typename T>
+	using member_function_decay = typename detail::member_function_traits<std::decay_t<T>>::decay;
+
+	template<typename T>
+	using member_function_signature = typename detail::member_function_traits<std::decay_t<T>>::signature;
+
+	template<typename T>
+	using member_function_return_type = typename detail::member_function_traits<std::decay_t<T>>::return_type;
+
+	template<typename T>
+	using member_function_arguments = typename detail::member_function_traits<std::decay_t<T>>::arguments;
 }
 
 namespace putils {
