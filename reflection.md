@@ -121,6 +121,9 @@ Once a type is declared reflectible, iterating over its parents, attributes and 
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
     void for_each_attribute(Func && func);
+
+    template<typename T, typename Func> // Func: void(const char * name, Member && member)
+    void for_each_attribute(T && obj, Func && func);
 }
 ```
 
@@ -132,6 +135,8 @@ Lets client code iterate over the attributes for a given type. See the `Example`
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
     void for_each_method(Func && func);
+
+    template<typename T, typename Func> // Func: void(const char * name, const Functor & functor)
 }
 ```
 
@@ -159,6 +164,39 @@ namespace putils::reflection {
 
 Lets client code iterate over the types used by a given type. Works similarly to `for_each_parent`.
 
+## Getting specific attributes
+
+### get_attribute
+
+```cpp
+template<typename Member, typename T>
+std::optional<Member T::*> get_attribute(const char * name);
+
+template<typename Member, typename T>
+Member * get_attribute(T && obj, const char * name);
+```
+
+Returns the attribute called `name` if there is one.
+* The first overload returns an `std::optional` member pointer (or `std::nullopt`)
+* The second overload returns a pointer to `obj`'s attribute (or `nullptr`)
+
+See the `Example` section below.
+
+### get_method
+
+```cpp
+template<typename Signature, typename T>
+std::optional<Signature T::*> get_method(const char * name);
+
+template<typename Signature, typename T>
+std::optional<Functor> get_method(T && obj, const char * name);
+```
+
+Returns the method called `name` if there is one.
+* The first overload returns an `std::optional` member pointer (or `std::nullopt`)
+* The second overload returns an `std::optional` functor which calls the method on `obj` (or `std::nullopt`)
+
+See the `Example` section below.
 
 ## Helper macros
 
@@ -250,17 +288,31 @@ public:
 int main() {
     Test t;
 
-    // Walk attributes
+    // Walk attributes with member pointers
     putils::reflection::for_each_attribute<Test>(
-        [&](const char * name, auto member) {
-            std::cout << name << ": " << t.*ptr << std::endl;
+        [&](const char * name, auto memberPtr) {
+            std::cout << name << ": " << t.*memberPtr << std::endl;
         }
     );
 
-    // Walk methods
+    // Walk attributes with references
+    putils::reflection::for_each_attribute(t,
+        [](const char * name, const auto & member) {
+            std::cout << name << ": " << member << std::endl;
+        }
+    );
+
+    // Walk methods with member pointers
     putils::reflection::for_each_method<Test>(
-        [&](const char * name, auto member) {
-            std::cout << name << ": " << (t.*ptr)() << std::endl;
+        [&](const char * name, auto memberPtr) {
+            std::cout << name << ": " << (t.*memberPtr)() << std::endl;
+        }
+    );
+
+    // Walk methods with functors
+    putils::reflection::for_each_method(t,
+        [&](const char * name, const auto & func) {
+            std::cout << name << ": " << func() << std::endl;
         }
     );
 
@@ -271,6 +323,34 @@ int main() {
             std::cout << name << ": " << typeid(ParentType).name() << std::endl;
         }
     );
+
+    {
+        // Get an attribute as member pointer
+        const auto attributePtr = putils::reflection::get_attribute<std::string, Test>("exampleAttribute");
+        assert(attributePtr != std::nullopt);
+        std::cout << t.*(*attributePtr) << std::endl;
+    }
+
+    {
+        // Get an attribute as normal pointer
+        const auto attribute = putils::reflection::get_attribute<std::string>(t, "exampleAttribute");
+        assert(attribute != nullptr);
+        std::cout << *attribute << std::endl;
+    }
+
+    {
+        // Get a method as member pointer
+        const auto methodPtr = putils::reflection::get_attribute<std::string(), Test>("exampleMethod");
+        assert(methodPtr != std::nullopt);
+        std::cout << (t.*(*methodPtr))() << std::endl;
+    }
+
+    {
+        // Get a method as functor
+        const auto method = putils::reflection::get_attribute<std::string()>(t, "exampleMethod");
+        assert(method != std::nullopt);
+        std::cout << (*method)() << std::endl;
+    }
 
     return 0;
 }

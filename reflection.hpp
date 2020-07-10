@@ -111,6 +111,13 @@ namespace putils::reflection
 		});
 	}
 
+	template<typename T, typename Func>
+	void for_each_attribute(T && obj, Func && func) {
+		for_each_attribute<T>([&](const char * name, const auto member) {
+			func(name, obj.*member);
+		});
+	}
+
 	template<typename Ret, typename T>
 	std::optional<Ret T::*> get_attribute(const char * name) {
 		std::optional<Ret T:: *> ret;
@@ -123,6 +130,14 @@ namespace putils::reflection
 		return ret;
 	}
 
+	template<typename Ret, typename T>
+	Ret * get_attribute(T && obj, const char * name) {
+		const auto member = get_attribute<Ret, std::decay_t<T>>(name);
+		if (!member)
+			return nullptr;
+		return &(obj.*(*member));
+	}
+
 	template<typename T, typename Func>
 	void for_each_method(Func && func) {
 		for_each_member(get_methods<T>(), func);
@@ -130,6 +145,13 @@ namespace putils::reflection
 		for_each_parent<T>([&func](const char * name, auto && type) {
 			using Parent = putils_wrapped_type(type);
 			for_each_method<Parent>(func);
+		});
+	}
+
+	template<typename T, typename Func>
+	void for_each_method(T && obj, Func && func) {
+		for_each_method<T>([&](const char * name, const auto member) {
+			func(name, [&](auto && ... args) { return (obj.*member)(FWD(args)...); });
 		});
 	}
 
@@ -147,6 +169,19 @@ namespace putils::reflection
 		return ret;
 	}
 
+	template<typename Ret, typename T>
+	auto get_method(T && obj, const char * name) {
+		const auto member = get_method<Ret, std::decay_t<T>>(name);
+
+		const auto ret = [&](auto && ... args) {
+			return (obj.*(*member))(FWD(args)...);
+		};
+
+		using ReturnType = std::optional<decltype(ret)>;
+		if (!member)
+			return ReturnType(std::nullopt);
+		return ReturnType(ret);
+	}
 
 	template<typename T, typename Func>
 	void for_each_used_type(Func && func) {
