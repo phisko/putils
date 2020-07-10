@@ -113,7 +113,7 @@ namespace putils::reflection
 
 	template<typename T, typename Func>
 	void for_each_attribute(T && obj, Func && func) {
-		for_each_attribute<T>([&](const char * name, const auto member) {
+		for_each_attribute<std::decay_t<T>>([&](const char * name, const auto member) {
 			func(name, obj.*member);
 		});
 	}
@@ -131,10 +131,12 @@ namespace putils::reflection
 	}
 
 	template<typename Ret, typename T>
-	Ret * get_attribute(T && obj, const char * name) {
+	auto get_attribute(T && obj, const char * name) {
 		const auto member = get_attribute<Ret, std::decay_t<T>>(name);
+
+		using ReturnType = decltype(&(obj.*(*member)));
 		if (!member)
-			return nullptr;
+			return (ReturnType)nullptr;
 		return &(obj.*(*member));
 	}
 
@@ -150,7 +152,7 @@ namespace putils::reflection
 
 	template<typename T, typename Func>
 	void for_each_method(T && obj, Func && func) {
-		for_each_method<T>([&](const char * name, const auto member) {
+		for_each_method<std::decay_t<T>>([&](const char * name, const auto member) {
 			func(name, [&](auto && ... args) { return (obj.*member)(FWD(args)...); });
 		});
 	}
