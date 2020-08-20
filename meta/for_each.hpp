@@ -20,7 +20,7 @@ namespace putils {
 	//		double
 
 	template<typename ...Types, typename Func>
-	void for_each_type(Func && f);
+	constexpr void for_each_type(Func && f);
 
     // For each `e` element in `tuple`, call `f(e)`
     // For instance:
@@ -37,32 +37,32 @@ namespace putils {
     //
 
     template<typename F, typename ...Args>
-	void tuple_for_each(std::tuple<Args...> & tuple, F && f);
+	constexpr void tuple_for_each(std::tuple<Args...> & tuple, F && f);
 
     template<typename F, typename ...Args>
-	void tuple_for_each(const std::tuple<Args...> & tuple, F && f);
+	constexpr void tuple_for_each(const std::tuple<Args...> & tuple, F && f);
 
     // Implementation details
 
 	template<typename ...Types, typename Func>
-	void for_each_type(Func && f) {
+	constexpr void for_each_type(Func && f) {
 		tuple_for_each(std::tuple<putils::meta::type<Types>...>(), FWD(f));
 	}
 
     namespace detail {
         template<typename F, typename Tuple, size_t ...Is>
-        void tuple_for_each(F && f, Tuple && tuple, std::index_sequence<Is...>) {
+        constexpr void tuple_for_each(F && f, Tuple && tuple, std::index_sequence<Is...>) {
             (f(std::get<Is>(tuple)), ...);
         }
     }
 
     template<typename F, typename ...Args>
-    void tuple_for_each(std::tuple<Args...> & tuple, F && f) {
+    constexpr void tuple_for_each(std::tuple<Args...> & tuple, F && f) {
         detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence_for<Args...>());
     }
 
     template<typename F, typename ...Args>
-    void tuple_for_each(const std::tuple<Args...> & tuple, F && f) {
+    constexpr void tuple_for_each(const std::tuple<Args...> & tuple, F && f) {
         detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence_for<Args...>());
     }
 }

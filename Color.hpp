@@ -15,18 +15,22 @@ namespace putils {
 			unsigned int rgba;
 		};
 
-		putils_reflection_class_name(Color);
-		putils_reflection_attributes(
-			putils_reflection_attribute(&Color::r),
-			putils_reflection_attribute(&Color::g),
-			putils_reflection_attribute(&Color::b),
-			putils_reflection_attribute(&Color::a)
-		);
-
 		Color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 255) : r(r), g(g), b(b), a(a) {}
 		Color(const Color & rhs) = default;
 		Color & operator=(const Color & rhs) = default;
 	};
+
+#define refltype Color
+	putils_reflection_info{
+		putils_reflection_class_name;
+		putils_reflection_attributes(
+			putils_reflection_attribute(r),
+			putils_reflection_attribute(g),
+			putils_reflection_attribute(b),
+			putils_reflection_attribute(a)
+		);
+	};
+#undef refltype
 
 	struct NormalizedColor {
 		union {
@@ -39,17 +43,22 @@ namespace putils {
 			};
 		};
 
-		putils_reflection_class_name(NormalizedColor);
-		putils_reflection_attributes(
-			putils_reflection_attribute(&NormalizedColor::r),
-			putils_reflection_attribute(&NormalizedColor::g),
-			putils_reflection_attribute(&NormalizedColor::b),
-			putils_reflection_attribute(&NormalizedColor::a)
-		);
 		NormalizedColor(float r = 1.f, float g = 1.f, float b = 1.f, float a = 1.f) : r(r), g(g), b(b), a(a) {}
 		NormalizedColor(const NormalizedColor & rhs) = default;
 		NormalizedColor & operator=(const NormalizedColor & rhs) = default;
 	};
+
+#define refltype NormalizedColor
+	putils_reflection_info {
+		putils_reflection_class_name;
+		putils_reflection_attributes(
+			putils_reflection_attribute(r),
+			putils_reflection_attribute(g),
+			putils_reflection_attribute(b),
+			putils_reflection_attribute(a)
+		);
+	};
+#undef refltype
 
 	/*
 	** Conversion

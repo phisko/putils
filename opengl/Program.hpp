@@ -48,7 +48,7 @@ namespace putils::gl {
 
 			constexpr auto length = lengthof(std::declval<Member>());
 			setAttrib<T, Member>(location++, length, putils::member_offset(member));
-			});
+		});
 	}
 
 	template<typename VertexType>

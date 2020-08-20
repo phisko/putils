@@ -118,20 +118,6 @@ namespace putils {
 	private:
 		T _buff[MaxSize] = {};
 		size_t _size = 0;
-
-	public:
-		static const auto reflection_get_class_name() { return ClassName; }
-		putils_reflection_methods(
-			putils_reflection_attribute(&vector::add),
-			putils_reflection_attribute(&vector::try_add),
-			putils_reflection_attribute(&vector::back),
-			putils_reflection_attribute(&vector::get),
-			putils_reflection_attribute(&vector::remove),
-			putils_reflection_attribute(&vector::size),
-			putils_reflection_attribute(&vector::empty),
-			putils_reflection_attribute(&vector::full),
-			putils_reflection_attribute(&vector::clear)
-		);
 	};
 
 	template<typename T, size_t Size, const char * Name>
@@ -150,3 +136,21 @@ namespace putils {
 	template<typename T, size_t Size, const char * Name>
 	struct is_vector<putils::vector<T, Size, Name>> : std::true_type {};
 }
+
+template<typename T, size_t MaxSize, const char * ClassName>
+#define refltype putils::vector<T, MaxSize, ClassName>
+putils_reflection_info_template{
+	static constexpr auto class_name = ClassName;
+	putils_reflection_methods(
+		putils_reflection_attribute(add),
+		putils_reflection_attribute(try_add),
+		putils_reflection_attribute(back),
+		putils_reflection_attribute(get),
+		putils_reflection_attribute(remove),
+		putils_reflection_attribute(size),
+		putils_reflection_attribute(empty),
+		putils_reflection_attribute(full),
+		putils_reflection_attribute(clear)
+	);
+};
+#undef refltype

@@ -130,7 +130,7 @@ namespace putils {
 		}
 
 		float getLengthSquared() const noexcept {
-			return x * x + y * y;
+			return (float)(x * x + y * y);
 		}
 
         float getLength() const noexcept {
@@ -145,18 +145,23 @@ namespace putils {
 				y *= (Precision)n;
 			}
 		}
-
-        putils_reflection_class_name(Point2);
-        putils_reflection_attributes(
-                putils_reflection_attribute(&Point::x),
-                putils_reflection_attribute(&Point::y)
-        );
-        putils_reflection_methods(
-                putils_reflection_attribute(&Point::getLengthSquared),
-                putils_reflection_attribute(&Point::getLength),
-                putils_reflection_attribute(&Point::normalize)
-        );
     };
+
+	template<typename T>
+#define refltype Point<T, 2>
+	putils_reflection_info_template{
+		putils_reflection_custom_class_name(Point2);
+		putils_reflection_attributes(
+			putils_reflection_attribute(x),
+			putils_reflection_attribute(y)
+		);
+		putils_reflection_methods(
+			putils_reflection_attribute(getLengthSquared),
+			putils_reflection_attribute(getLength),
+			putils_reflection_attribute(normalize)
+		);
+	};
+#undef refltype
 
     template<typename Precision, std::size_t Dimensions = 2>
     struct Rect {
@@ -169,13 +174,18 @@ namespace putils {
         bool operator==(const Rect & rhs) const { return position == rhs.position && size == rhs.size; }
 
         bool operator!=(const Rect & rhs) const { return !(*this == rhs); }
+	};
 
-        putils_reflection_class_name(Rect2);
+	template<typename T>
+#define refltype Rect<T, 2>
+	putils_reflection_info_template{
+        putils_reflection_custom_class_name(Rect2);
         putils_reflection_attributes(
-                putils_reflection_attribute(&Rect::position),
-                putils_reflection_attribute(&Rect::size)
+			putils_reflection_attribute(position),
+			putils_reflection_attribute(size)
         );
-    };
+	};
+#undef refltype
 
     template<typename Precision>
     struct Point<Precision, 3> {
@@ -313,19 +323,24 @@ namespace putils {
 				z *= (Precision)n;
 			}
 		}
+	};
 
-        putils_reflection_class_name(Point3);
-        putils_reflection_attributes(
-                putils_reflection_attribute(&Point::x),
-                putils_reflection_attribute(&Point::y),
-                putils_reflection_attribute(&Point::z)
-        );
-        putils_reflection_methods(
-                putils_reflection_attribute(&Point::getLengthSquared),
-                putils_reflection_attribute(&Point::getLength),
-                putils_reflection_attribute(&Point::normalize)
-        );
-    };
+	template<typename T>
+#define refltype Point<T, 3>
+	putils_reflection_info_template{
+		putils_reflection_custom_class_name(Point3);
+		putils_reflection_attributes(
+			putils_reflection_attribute(x),
+			putils_reflection_attribute(y),
+			putils_reflection_attribute(z)
+		);
+		putils_reflection_methods(
+			putils_reflection_attribute(getLengthSquared),
+			putils_reflection_attribute(getLength),
+			putils_reflection_attribute(normalize)
+		);
+	};
+#undef refltype
 
     template<typename Precision>
     struct Rect<Precision, 3> {
@@ -342,13 +357,18 @@ namespace putils {
         bool operator==(const Rect & rhs) { return position == rhs.position && size == rhs.size; }
 
         bool operator!=(const Rect & rhs) { return !(*this == rhs); }
+	};
 
-        putils_reflection_class_name(Rect3);
+	template<typename T>
+#define refltype Rect<T, 3>
+	putils_reflection_info_template {
+        putils_reflection_custom_class_name(Rect3);
         putils_reflection_attributes(
-                putils_reflection_attribute(&Rect::position),
-                putils_reflection_attribute(&Rect::size)
+			putils_reflection_attribute(position),
+			putils_reflection_attribute(size)
         );
-    };
+	};
+#undef refltype
 
 	template<typename Precision, size_t Dimensions>
 	using Vector = Point<Precision, Dimensions>;
@@ -422,4 +442,3 @@ namespace putils {
     template<typename Precision>
     using PointHash = std::hash<putils::Point<Precision>>;
 }
-

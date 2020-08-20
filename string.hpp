@@ -216,19 +216,23 @@ namespace putils {
 	private:
 		size_t _size = 0;
 		Buffer _buff;
+	};
 
-	public:
-		static const auto reflection_get_class_name() { return ClassName; }
+	template<size_t MaxSize, const char * ClassName>
+#define refltype string<MaxSize, ClassName>
+	putils_reflection_info_template{
+		static constexpr auto class_name = ClassName;
 		putils_reflection_methods(
-			putils_reflection_attribute(&string::clear),
-			putils_reflection_attribute(&string::at),
-			putils_reflection_attribute(&string::assign),
-			putils_reflection_attribute(&string::c_str),
-			putils_reflection_attribute(&string::size),
-			putils_reflection_attribute(&string::empty),
-			putils_reflection_attribute(&string::full)
+			putils_reflection_attribute(clear),
+			putils_reflection_attribute(at),
+			putils_reflection_attribute(assign),
+			putils_reflection_attribute(c_str),
+			putils_reflection_attribute(size),
+			putils_reflection_attribute(empty),
+			putils_reflection_attribute(full)
 		);
 	};
+#undef refltype
 
 	template<size_t Size, const char * Name>
 	auto begin(const string<Size, Name> & s) { return s.begin(); }
