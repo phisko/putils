@@ -43,10 +43,9 @@ namespace putils::gl {
 	void setVertexType() {
 		size_t location = 0;
 		putils::reflection::for_each_attribute<T>([&](const char *, auto member) {
-			using Ptr = decltype(member);
-			using Member = std::remove_reference_t<decltype(std::declval<T>().*(std::declval<Ptr>()))>;
+			using Member = putils::MemberType<putils_typeof(member)>;
 
-			constexpr auto length = lengthof(std::declval<Member>());
+			constexpr auto length = putils::lengthof<Member>();
 			setAttrib<T, Member>(location++, length, putils::member_offset(member));
 		});
 	}
@@ -68,7 +67,7 @@ namespace putils::gl {
 
 				size_t length = 1;
 				if constexpr (std::is_array_v<Member>)
-					length = lengthof(std::declval<Member>());
+					length = lengthof<Member>();
 
 				setAttrib<VertexType, Member>(location++, length, dataOffset + putils::member_offset(member));
 			});
@@ -123,7 +122,7 @@ namespace putils::gl {
 			glLinkProgram(_handle);
 #if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 			char buffer[512];
-			glGetProgramInfoLog(_handle, lengthof(buffer), nullptr, buffer);
+			glGetProgramInfoLog(_handle, (GLsizei)lengthof(buffer), nullptr, buffer);
 			if (strlen(buffer) != 0) {
 				std::cerr << putils::termcolor::red << "Error linking shaders:\n\t" << buffer << '\n';
 				std::cerr << "\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::red << "] program\n" << putils::termcolor::reset;

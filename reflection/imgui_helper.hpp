@@ -30,7 +30,7 @@ namespace putils::reflection {
 				names[i] = putils::magic_enum::enum_names<E>()[i];
 			first = false;
 		}
-		return ImGui::Combo(label, (int *)&e, [](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; }, nullptr, lengthof(names));
+		return ImGui::Combo(label, (int *)&e, [](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; }, nullptr, (int)lengthof(names));
 	}
 
 	namespace detail::imgui {

@@ -62,7 +62,7 @@ pip install conan
 * [get_last_error_as_string.hpp](get_last_error_as_string.hpp): function for Windows
 * [go_to_bin_dir.hpp](go_to_bin_dir.hpp): function which takes `argv[0]` as parameter and changes the current working directory to that containing the executed file.
 * [hash.hpp](hash.hpp): Pre-defined hashers for enums and pairs
-* [lengthof.hpp](lengthof.hpp): macro returning the length of an array
+* [lengthof.hpp](lengthof.hpp): template function returning the length of an array
 * [lock_and_run.hpp](lock_and_run.hpp): function which takes a mutex, a function and its parameters. Creates a scoped lock for the mutex and runs the function.
 * [macro_as_string.hpp](macro_as_string.hpp): returns the value of a macro as a string
 * [MagicaVoxel.hpp](MagicaVoxel.hpp): structure declarations for the [MagicaVoxel format](https://ephtracy.github.io/)
