@@ -1,6 +1,6 @@
 file(GLOB pseSrc *.cpp *.hpp)
-add_library(pse STATIC ${pseSrc})
-target_include_directories(pse PUBLIC .)
+add_library(putils_pse STATIC ${pseSrc})
+target_include_directories(putils_pse PUBLIC .)
 
 putils_conan(
     sfml/2.5.1@bincrafters/stable
@@ -9,4 +9,4 @@ putils_conan(
         sfml:graphics=True
         sfml:window=True
 )
-target_link_libraries(pse PUBLIC putils CONAN_PKG::sfml)
+target_link_libraries(putils_pse PUBLIC putils CONAN_PKG::sfml)

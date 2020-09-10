@@ -1,5 +1,5 @@
-add_library(pluginManager INTERFACE)
-target_include_directories(pluginManager INTERFACE .)
+add_library(putils_pluginManager INTERFACE)
+target_include_directories(putils_pluginManager INTERFACE .)
 if(UNIX)
-    target_link_libraries(pluginManager INTERFACE dl)
+    target_link_libraries(putils_pluginManager INTERFACE dl)
 endif()
