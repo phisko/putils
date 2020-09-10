@@ -80,4 +80,10 @@ namespace putils::vulkan {
 		queue.submit(submitInfo, nullptr);
 		queue.waitIdle();
 	}
+
+	void fillBuffer(vk::Device & device, const vk::DeviceMemory & dst, const void * src, size_t size) {
+		const auto data = device.mapMemory(dst, 0, size);
+		memcpy(data, src, size);
+		device.unmapMemory(dst);
+	}
 }
