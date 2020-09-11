@@ -1,8 +1,15 @@
 #pragma once
 
 #include <vulkan/vulkan.hpp>
+#include "with.hpp"
 
 namespace putils::vulkan {
+    uint32_t findMemoryType(vk::PhysicalDevice physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags properties);
+
+    void fillMemory(vk::Device device, vk::DeviceMemory dst, const void * src, size_t size);
+    template<typename T>
+    void fillMemory(vk::Device device, vk::DeviceMemory dst, const T & src) { fillMemory(device, dst, &src, sizeof(src)); }
+
 	struct VertexDescription {
 		vk::VertexInputBindingDescription binding;
 		std::vector<vk::VertexInputAttributeDescription> attributes;
@@ -74,6 +81,4 @@ namespace putils::vulkan {
 
 		return desc;
 	}
-
-
 }
