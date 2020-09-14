@@ -12,9 +12,15 @@ namespace putils::vulkan {
 		if (!pixels)
 			return {};
 
-		const Vector2ds size = { (vk::DeviceSize)texWidth, (vk::DeviceSize)texHeight };
+		auto ret = loadTexture(commandBuffer, device, physicalDevice, pixels, (size_t)texWidth, (size_t)texHeight, (size_t)texChannels);
+		stbi_image_free(pixels);
+		return ret;
+	}
 
-		const auto imageSize = size.x * size.y * 4;
+	Texture loadTexture(vk::CommandBuffer commandBuffer, vk::Device device, vk::PhysicalDevice physicalDevice, const void * data, size_t width, size_t height, size_t components) {
+		const Vector2ds size = { (vk::DeviceSize)width, (vk::DeviceSize)height };
+
+		const auto imageSize = size.x * size.y * components;
 
 		const auto stagingBuffer = createBuffer(
 			device,
@@ -24,9 +30,7 @@ namespace putils::vulkan {
 			vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent
 		);
 
-		fillMemory(device, *stagingBuffer.memory, pixels, (size_t)imageSize);
-
-		stbi_image_free(pixels);
+		fillMemory(device, *stagingBuffer.memory, data, (size_t)imageSize);
 
 		const auto format = vk::Format::eR8G8B8A8Srgb;
 
@@ -44,6 +48,7 @@ namespace putils::vulkan {
 		transitionImageLayout(commandBuffer, *ret.image, format, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
 		return ret;
+	
 	}
 
 	Texture loadTexture(const putils::vulkan::ImmediateCommandBuffer::Params & params, vk::Device device, vk::PhysicalDevice physicalDevice, const char * file) {
@@ -52,9 +57,15 @@ namespace putils::vulkan {
 		if (!pixels)
 			return {};
 
-		const Vector2ds size = { (vk::DeviceSize)texWidth, (vk::DeviceSize)texHeight };
+		auto ret = loadTexture(params, device, physicalDevice, pixels, (size_t)texWidth, (size_t)texHeight, (size_t)texChannels);
+		stbi_image_free(pixels);
+		return ret;
+	}
 
-		const auto imageSize = size.x * size.y * 4;
+	Texture loadTexture(const putils::vulkan::ImmediateCommandBuffer::Params & params, vk::Device device, vk::PhysicalDevice physicalDevice, const void * data, size_t width, size_t height, size_t components) {
+		const Vector2ds size = { (vk::DeviceSize)width, (vk::DeviceSize)height };
+
+		const auto imageSize = size.x * size.y * components;
 
 		const auto stagingBuffer = createBuffer(
 			device,
@@ -64,9 +75,7 @@ namespace putils::vulkan {
 			vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent
 		);
 
-		fillMemory(device, *stagingBuffer.memory, pixels, (size_t)imageSize);
-
-		stbi_image_free(pixels);
+		fillMemory(device, *stagingBuffer.memory, data, (size_t)imageSize);
 
 		const auto format = vk::Format::eR8G8B8A8Srgb;
 
@@ -95,8 +104,8 @@ namespace putils::vulkan {
 		}
 
 		return ret;
+	
 	}
-
 
 	Texture createTexture(vk::Device device, vk::PhysicalDevice physicalDevice, const Vector2ds & size, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties) {
 		Texture ret;
