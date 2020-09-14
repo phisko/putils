@@ -1,10 +1,12 @@
 #pragma once
 
+#include <span>
 #include <vulkan/vulkan.hpp>
 #include "with.hpp"
 
 namespace putils::vulkan {
     uint32_t findMemoryType(vk::PhysicalDevice physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags properties);
+	vk::Format findSupportedFormat(vk::PhysicalDevice physicalDevice, std::span<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features);
 
     void fillMemory(vk::Device device, vk::DeviceMemory dst, const void * src, size_t size);
     template<typename T>

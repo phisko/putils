@@ -23,4 +23,20 @@ namespace putils::vulkan {
 		memcpy(data, src, size);
 		device.unmapMemory(dst);
 	}
+
+	vk::Format findSupportedFormat(vk::PhysicalDevice physicalDevice, std::span<vk::Format> candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features) {
+		const auto propsFeatures =
+			tiling == vk::ImageTiling::eLinear ?
+			&vk::FormatProperties::linearTilingFeatures :
+			&vk::FormatProperties::optimalTilingFeatures;
+
+		for (const auto format : candidates) {
+			const auto props = physicalDevice.getFormatProperties(format);
+			if ((props.*propsFeatures & features) == features)
+				return format;
+		}
+
+		assert(false);
+		return (vk::Format)~0;
+	}
 }
