@@ -2,6 +2,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeModule
 include(cmake_helper)
 include(conan_helper)
 
+set(CMAKE_CXX_STANDARD 20)
+
 if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNOMINMAX")
 endif()
