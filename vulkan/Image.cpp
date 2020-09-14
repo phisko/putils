@@ -30,7 +30,7 @@ namespace putils::vulkan {
 
 		const auto format = vk::Format::eR8G8B8A8Srgb;
 
-		auto ret = createImage(
+		auto ret = createTexture(
 			device, physicalDevice,
 			size,
 			format,
@@ -70,7 +70,7 @@ namespace putils::vulkan {
 
 		const auto format = vk::Format::eR8G8B8A8Srgb;
 
-		auto ret = createImage(
+		auto ret = createTexture(
 			device, physicalDevice,
 			size,
 			format,
@@ -98,7 +98,7 @@ namespace putils::vulkan {
 	}
 
 
-	Texture createImage(vk::Device device, vk::PhysicalDevice physicalDevice, const Vector2ds & size, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties) {
+	Texture createTexture(vk::Device device, vk::PhysicalDevice physicalDevice, const Vector2ds & size, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties) {
 		Texture ret;
 
 		vk::ImageCreateInfo imageInfo; {
@@ -130,12 +130,16 @@ namespace putils::vulkan {
 		ret.memory = device.allocateMemoryUnique(allocInfo);
 		device.bindImageMemory(*ret.image, *ret.memory, 0);
 
-		ret.view = createImageView(device, *ret.image, format);
+		const auto aspectFlags =
+			usage & vk::ImageUsageFlagBits::eDepthStencilAttachment ?
+			vk::ImageAspectFlagBits::eDepth :
+			vk::ImageAspectFlagBits::eColor;
+		ret.view = createImageView(device, *ret.image, format, aspectFlags);
 
 		return ret;
 	}
 
-	vk::UniqueImageView createImageView(vk::Device device, vk::Image image, vk::Format format) {
+	vk::UniqueImageView createImageView(vk::Device device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags) {
 		vk::ImageViewCreateInfo viewInfo; {
 			putils_with(viewInfo);
 			_.image = image;
@@ -143,7 +147,7 @@ namespace putils::vulkan {
 			_.format = format;
 			{
 				putils_with(_.subresourceRange);
-				_.aspectMask = vk::ImageAspectFlagBits::eColor;
+				_.aspectMask = aspectFlags;
 				_.baseMipLevel = 0;
 				_.levelCount = 1;
 				_.baseArrayLayer = 0;
@@ -191,7 +195,6 @@ namespace putils::vulkan {
 
 			{
 				putils_with(_.subresourceRange);
-				_.aspectMask = vk::ImageAspectFlagBits::eColor;
 				_.baseMipLevel = 0;
 				_.levelCount = 1;
 				_.baseArrayLayer = 0;
@@ -202,18 +205,75 @@ namespace putils::vulkan {
 			_.dstAccessMask = (vk::AccessFlags)0;
 		}
 
-		if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eTransferDstOptimal) {
-			barrier.srcAccessMask = (vk::AccessFlags)0;
-			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
-			sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
-			destinationStage = vk::PipelineStageFlagBits::eTransfer;
+		if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+			barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
+
+			if (format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint)
+				barrier.subresourceRange.aspectMask |= vk::ImageAspectFlagBits::eStencil;
 		}
-		else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
-			barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
-			barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
-			sourceStage = vk::PipelineStageFlagBits::eTransfer;
-			destinationStage = vk::PipelineStageFlagBits::eFragmentShader;
+		else
+			barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+
+		struct LayoutTransition {
+			vk::ImageLayout oldLayout;
+			vk::ImageLayout newLayout;
+		};
+
+		struct Transition {
+			struct State {
+				vk::ImageLayout layout;
+				vk::AccessFlags accessMask;
+				vk::PipelineStageFlags stage;
+			};
+
+			State src;
+			State dst;
+		};
+
+		static const struct {
+			Transition::State undefined = {
+				vk::ImageLayout::eUndefined,
+				(vk::AccessFlags)0,
+				vk::PipelineStageFlagBits::eTopOfPipe
+			};
+
+			Transition::State transferDst = {
+				vk::ImageLayout::eTransferDstOptimal,
+				vk::AccessFlagBits::eTransferWrite,
+				vk::PipelineStageFlagBits::eTransfer
+			};
+
+			Transition::State shaderRead = {
+				vk::ImageLayout::eShaderReadOnlyOptimal,
+				vk::AccessFlagBits::eShaderRead,
+				vk::PipelineStageFlagBits::eFragmentShader
+			};
+
+			Transition::State depthAttachment = {
+				vk::ImageLayout::eDepthStencilAttachmentOptimal,
+				vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite,
+				vk::PipelineStageFlagBits::eEarlyFragmentTests
+			};
+		} states;
+
+		static const Transition transitions[] = {
+			{ states.undefined, states.transferDst },
+			{ states.transferDst, states.shaderRead },
+			{ states.undefined, states.depthAttachment }
+		};
+
+		const auto it = std::find_if(std::begin(transitions), std::end(transitions),
+			[=](const auto & transition) { return transition.src.layout == oldLayout && transition.dst.layout == newLayout; }
+		);
+		if (it == std::end(transitions)) {
+			assert(false);
+			return;
 		}
+
+		barrier.srcAccessMask = it->src.accessMask;
+		barrier.dstAccessMask = it->dst.accessMask;
+		sourceStage = it->src.stage;
+		destinationStage = it->dst.stage;
 
 		commandBuffer.pipelineBarrier(
 			sourceStage, destinationStage,
