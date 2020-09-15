@@ -47,6 +47,11 @@ if (PUTILS_BUILD_PSE)
     target_link_libraries(putils PUBLIC putils_pse)
 endif ()
 
+if (PUTILS_BUILD_OPENGL)
+    add_subdirectory(opengl)
+    target_link_libraries(putils PUBLIC putils_opengl)
+endif ()
+
 if (PUTILS_BUILD_VULKAN)
     add_subdirectory(vulkan)
     target_link_libraries(putils PUBLIC putils_vulkan)
