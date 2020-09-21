@@ -1,6 +1,6 @@
-prefix=C:/Program Files (x86)/vulkan_playground
+prefix=C:/Program Files (x86)/painter
 exec_prefix=${prefix}
-libdir=C:/Program Files (x86)/vulkan_playground/lib
+libdir=C:/Program Files (x86)/painter/lib
 includedir=${prefix}/include
 
 Name: glew
