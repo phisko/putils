@@ -1,112 +1,104 @@
 #pragma once
 
-#include <functional>
 #include <type_traits>
+#include <utility>
 #include "fwd.hpp"
 
 namespace putils {
-    template<typename T, bool = std::is_scalar<T>()>
+    template<typename T, void (*Dtor)(T &), bool = std::is_scalar<T>()>
     class RAII;
 
     //
     // RAII template
     // Create one by giving it a resource and a function to release that resource
-    // Can be used just like the resource by using the implicit conversion operators
     //
-    template<typename T>
-    class RAII<T, false> {
+    template<typename T, void (*Dtor)(T &)>
+    class RAII<T, Dtor, false> {
     public:
-        RAII(T && res, std::function<void(T &)> && dtor = [](T &) {})
-                : _res(std::forward<T>(res)), _dtor(std::move(dtor)) {}
+		explicit RAII(T && res)
+			: _res(std::forward<T>(res))
+        {}
 
     public:
-        RAII(RAII<T> && other)
-                : _res(std::move(other._res)), _dtor(std::move(other._dtor)) {
+        RAII(RAII && other)
+			: _res(std::move(other._res)) {
             other._release = false;
         }
 
-        RAII & operator=(RAII<T> && other) {
-            _res = std::move(other._res);
-            _dtor = std::move(other._dtor);
-            other._release = false;
+        RAII & operator=(RAII && other) {
+            std::swap(_res, other._res);
+            std::swap(_release, other._release);
+            return *this;
+        }
+
+        RAII & operator=(T && other) {
+            if (_release)
+                Dtor(_res);
+            _res = std::move(other);
+            _release = true;
             return *this;
         }
 
     public:
-        RAII(const RAII<T> &) = delete;
-
-        RAII<T> & operator=(const RAII<T> &) = delete;
+        RAII(const RAII &) = delete;
+        RAII & operator=(const RAII &) = delete;
 
     public:
         ~RAII() {
             if (_release)
-                _dtor(_res);
+                Ddtor(_res);
         }
 
     public:
         T & get() noexcept { return _res; }
-
         const T & get() const noexcept { return _res; }
-
-        operator T &() { return _res; }
-
-        operator const T &() const { return _res; }
-
-    public:
-        template<typename Val>
-        void operator=(Val && val) { _res = FWD(val); }
 
     private:
         T _res;
         bool _release { true };
-        std::function<void(T &)> _dtor;
     };
 
-    template<typename T>
-    class RAII<T, true> {
+    template<typename T, void (*Dtor)(T &)>
+    class RAII<T, Dtor, true> {
     public:
-        RAII(T res, std::function<void(T)> && dtor = [](T) {})
-                : _res(res), _dtor(std::move(dtor)) {}
+        explicit RAII(T res) : _res(res){}
 
     public:
-        RAII(RAII<T> && other)
-                : _res(other._res), _dtor(std::move(other._dtor)) {
+        RAII(RAII && other)
+			: _res(other._res) {
             other._release = false;
         }
 
-        RAII & operator=(RAII<T> && other) {
-            _res = other._res;
-            _dtor = std::move(other._dtor);
-            other._release = false;
+        RAII & operator=(RAII && other) {
+            std::swap(_res, other._res);
+            std::swap(_release, other._release);
+            return *this;
+        }
+
+        RAII & operator=(T other) {
+            if (_release)
+                Dtor(_res);
+            _res = other;
+            _release = true;
             return *this;
         }
 
     public:
         ~RAII() {
             if (_release)
-                _dtor(_res);
+                Dtor(_res);
         }
 
     public:
-        RAII(const RAII<T> &) = delete;
-
-        RAII<T> & operator=(const RAII<T> &) = delete;
+        RAII(const RAII &) = delete;
+        RAII & operator=(const RAII &) = delete;
 
     public:
         T & get() noexcept { return _res; }
-
         const T & get() const noexcept { return _res; }
-
-        operator T() { return _res; }
-
-        operator const T() const { return _res; }
-
-    public:
-        void operator=(T val) { _res = val; }
 
     private:
         T _res;
         bool _release { true };
-        std::function<void(T)> _dtor;
     };
 }
