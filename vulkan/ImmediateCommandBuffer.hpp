@@ -16,7 +16,7 @@ namespace putils::vulkan {
 		~ImmediateCommandBuffer();
 
 		auto operator*() const { return *_commandBuffer; }
-		auto operator->() const { return *_commandBuffer; }
+		auto & operator->() const { return _commandBuffer; }
 
 	private:
 		vk::UniqueCommandBuffer _commandBuffer;
