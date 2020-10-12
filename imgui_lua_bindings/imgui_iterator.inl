@@ -29,40 +29,40 @@ END_IMGUI_FUNC
 //    IMGUI_API ImDrawData*   GetDrawData();                              // valid after Render() and until the next call to NewFrame(). this is what you have to render.
 // Unsupported return type ImDrawData*
 //    IMGUI_API void          ShowDemoWindow(bool* p_open = NULL);        // create Demo window (previously called ShowTestWindow). demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!
-IMGUI_FUNCTION(ShowDemoWindow)
-OPTIONAL_BOOL_POINTER_ARG(p_open)
-CALL_FUNCTION_NO_RET(ShowDemoWindow, p_open)
-END_BOOL_POINTER(p_open)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowDemoWindow)
+// OPTIONAL_BOOL_POINTER_ARG(p_open)
+// CALL_FUNCTION_NO_RET(ShowDemoWindow, p_open)
+// END_BOOL_POINTER(p_open)
+// END_IMGUI_FUNC
 //    IMGUI_API void          ShowAboutWindow(bool* p_open = NULL);       // create About window. display Dear ImGui version, credits and build/system information.
-IMGUI_FUNCTION(ShowAboutWindow)
-OPTIONAL_BOOL_POINTER_ARG(p_open)
-CALL_FUNCTION_NO_RET(ShowAboutWindow, p_open)
-END_BOOL_POINTER(p_open)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowAboutWindow)
+// OPTIONAL_BOOL_POINTER_ARG(p_open)
+// CALL_FUNCTION_NO_RET(ShowAboutWindow, p_open)
+// END_BOOL_POINTER(p_open)
+// END_IMGUI_FUNC
 //    IMGUI_API void          ShowMetricsWindow(bool* p_open = NULL);     // create Debug/Metrics window. display Dear ImGui internals: draw commands (with individual draw calls and vertices), window list, basic internal state, etc.
-IMGUI_FUNCTION(ShowMetricsWindow)
-OPTIONAL_BOOL_POINTER_ARG(p_open)
-CALL_FUNCTION_NO_RET(ShowMetricsWindow, p_open)
-END_BOOL_POINTER(p_open)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowMetricsWindow)
+// OPTIONAL_BOOL_POINTER_ARG(p_open)
+// CALL_FUNCTION_NO_RET(ShowMetricsWindow, p_open)
+// END_BOOL_POINTER(p_open)
+// END_IMGUI_FUNC
 //    IMGUI_API void          ShowStyleEditor(ImGuiStyle* ref = NULL);    // add style editor block (not a window). you can pass in a reference ImGuiStyle structure to compare to, revert to and save to (else it uses the default style)
 // Unsupported arg type ImGuiStyle* ref = NULL
 //    IMGUI_API bool          ShowStyleSelector(const char* label);       // add style selector block (not a window), essentially a combo listing the default styles.
-IMGUI_FUNCTION(ShowStyleSelector)
-LABEL_ARG(label)
-CALL_FUNCTION(ShowStyleSelector, bool, label)
-PUSH_BOOL(ret)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowStyleSelector)
+// LABEL_ARG(label)
+// CALL_FUNCTION(ShowStyleSelector, bool, label)
+// PUSH_BOOL(ret)
+// END_IMGUI_FUNC
 //    IMGUI_API void          ShowFontSelector(const char* label);        // add font selector block (not a window), essentially a combo listing the loaded fonts.
-IMGUI_FUNCTION(ShowFontSelector)
-LABEL_ARG(label)
-CALL_FUNCTION_NO_RET(ShowFontSelector, label)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowFontSelector)
+// LABEL_ARG(label)
+// CALL_FUNCTION_NO_RET(ShowFontSelector, label)
+// END_IMGUI_FUNC
 //    IMGUI_API void          ShowUserGuide();                            // add basic help/info block (not a window): how to manipulate ImGui as a end-user (mouse/keyboard controls).
-IMGUI_FUNCTION(ShowUserGuide)
-CALL_FUNCTION_NO_RET(ShowUserGuide)
-END_IMGUI_FUNC
+// IMGUI_FUNCTION(ShowUserGuide)
+// CALL_FUNCTION_NO_RET(ShowUserGuide)
+// END_IMGUI_FUNC
 //    IMGUI_API const char*   GetVersion();                               // get the compiled version string e.g. "1.23" (essentially the compiled value for IMGUI_VERSION)
 IMGUI_FUNCTION(GetVersion)
 CALL_FUNCTION(GetVersion, const char*)
