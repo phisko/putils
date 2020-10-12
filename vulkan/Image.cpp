@@ -8,7 +8,7 @@
 namespace putils::vulkan {
 	Texture loadTexture(vk::CommandBuffer commandBuffer, vk::Device device, vk::PhysicalDevice physicalDevice, const char * file) {
 		int texWidth, texHeight, texChannels;
-		const auto pixels = stbi_load("resources/koala.png", &texWidth, &texHeight, &texChannels, 4);
+		const auto pixels = stbi_load(file, &texWidth, &texHeight, &texChannels, 4);
 		if (!pixels)
 			return {};
 
@@ -48,12 +48,11 @@ namespace putils::vulkan {
 		transitionImageLayout(commandBuffer, *ret.image, format, vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
 		return ret;
-	
 	}
 
 	Texture loadTexture(const putils::vulkan::ImmediateCommandBuffer::Params & params, vk::Device device, vk::PhysicalDevice physicalDevice, const char * file) {
 		int texWidth, texHeight, texChannels;
-		const auto pixels = stbi_load("resources/koala.png", &texWidth, &texHeight, &texChannels, 4);
+		const auto pixels = stbi_load(file, &texWidth, &texHeight, &texChannels, 4);
 		if (!pixels)
 			return {};
 
