@@ -3,6 +3,9 @@
 #include <span>
 #include <vulkan/vulkan.hpp>
 #include "with.hpp"
+#include "traits.hpp"
+#include "members.hpp"
+#include "meta/type.hpp"
 
 namespace putils::vulkan {
     uint32_t findMemoryType(vk::PhysicalDevice physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags properties);
@@ -23,6 +26,10 @@ namespace putils::vulkan {
 
 // Impl
 namespace putils::vulkan {
+	namespace detail {
+		putils_nested_type_detector(DataType);
+	}
+
 	template<typename MemberPtr>
 	vk::VertexInputAttributeDescription getVertexAttributeDescription(uint32_t location, MemberPtr member, uint32_t offset = 0) {
 		vk::VertexInputAttributeDescription attribute;
@@ -34,7 +41,7 @@ namespace putils::vulkan {
 		using Member = putils::MemberType<MemberPtr>;
 
 		const auto setFormat = [&](const vk::Format(&formats)[4]) {
-			constexpr auto length = putils::lengthof<Member>();
+			constexpr auto length = sizeof(Member) / sizeof(std::remove_all_extents_t<Member>);
 			attribute.format = formats[length - 1];
 		};
 
@@ -80,7 +87,7 @@ namespace putils::vulkan {
 		desc.binding.stride = sizeof(T);
 		desc.binding.inputRate = vk::VertexInputRate::eVertex;
 
-		static constexpr bool isPolyVoxType = ::detail::has_nested_type_DataType<T>{};
+		static constexpr bool isPolyVoxType = putils::vulkan::detail::has_nested_type_DataType<T>{};
 
 		uint32_t location = 0;
 		if constexpr (isPolyVoxType) {
