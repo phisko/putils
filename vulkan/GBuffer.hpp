@@ -8,10 +8,9 @@ namespace putils::vulkan {
 		vk::UniqueRenderPass renderPass;
 		vk::UniqueFramebuffer framebuffer;
 		std::vector<putils::vulkan::Texture> textures;
-
-		struct {
-			putils::vulkan::Texture texture;
-			vk::Format format;
-		} depth;
+		putils::vulkan::Texture depth;
 	};
+
+	struct Context;
+	GBuffer createGBuffer(const Context & context, size_t attachments);
 }
