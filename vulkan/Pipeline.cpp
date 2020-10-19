@@ -58,6 +58,8 @@ namespace putils::vulkan {
 
 	vk::UniqueShaderModule createShaderModule(const Context & context, const char * fileName) {
 		const auto code = readFile(fileName);
+		if (code.empty())
+			return {};
 
 		vk::ShaderModuleCreateInfo createInfo;
 		createInfo.codeSize = code.size();
