@@ -305,8 +305,8 @@ namespace putils::vulkan {
 				_.layerCount = 1;
 			}
 
-			_.imageOffset = { 0, 0, 0 };
-			_.imageExtent = { (uint32_t)size.x, (uint32_t)size.y, 1 };
+			_.imageOffset = vk::Offset3D{ 0, 0, 0 };
+			_.imageExtent = vk::Extent3D{ (uint32_t)size.x, (uint32_t)size.y, 1 };
 		}
 
 		commandBuffer.copyBufferToImage(src, dst, vk::ImageLayout::eTransferDstOptimal, region);

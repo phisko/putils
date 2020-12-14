@@ -19,7 +19,7 @@ namespace putils {
 		putils_member_detector(end);
 
 		template<typename T>
-		void registerType(py::module & m) {
+		void registerType(py::module_ & m) {
 			py::class_<T> type(m, putils::reflection::get_class_name<T>(), py::dynamic_attr());
 			putils::reflection::for_each_attribute<T>([&type](auto name, auto member) {
 				using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(member))>;

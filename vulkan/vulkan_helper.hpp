@@ -6,6 +6,7 @@
 #include "traits.hpp"
 #include "members.hpp"
 #include "meta/type.hpp"
+#include "reflection.hpp"
 
 namespace putils::vulkan {
     uint32_t findMemoryType(vk::PhysicalDevice physicalDevice, uint32_t typeFilter, vk::MemoryPropertyFlags properties);

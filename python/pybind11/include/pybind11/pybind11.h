@@ -698,7 +698,7 @@ protected:
                        "Did you forget to `#include <pybind11/stl.h>`? Or <pybind11/complex.h>,\n"
                        "<pybind11/functional.h>, <pybind11/chrono.h>, etc. Some automatic\n"
                        "conversions are optional and require extra headers to be included\n"
-                       "when compiling your pybind11 module.";
+                       "when compiling your pybind11 module_.";
             }
         };
 
@@ -780,12 +780,12 @@ protected:
 };
 
 /// Wrapper for Python extension modules
-class module : public object {
+class module_ : public object {
 public:
-    PYBIND11_OBJECT_DEFAULT(module, object, PyModule_Check)
+    PYBIND11_OBJECT_DEFAULT(module_, object, PyModule_Check)
 
-    /// Create a new top-level Python module with the given name and docstring
-    explicit module(const char *name, const char *doc = nullptr) {
+    /// Create a new top-level Python module_ with the given name and docstring
+    explicit module_(const char *name, const char *doc = nullptr) {
         if (!options::show_user_defined_docstrings()) doc = nullptr;
 #if PY_MAJOR_VERSION >= 3
         PyModuleDef *def = new PyModuleDef();
@@ -799,17 +799,17 @@ public:
         m_ptr = Py_InitModule3(name, nullptr, doc);
 #endif
         if (m_ptr == nullptr)
-            pybind11_fail("Internal error in module::module()");
+            pybind11_fail("Internal error in module_::module_()");
         inc_ref();
     }
 
     /** \rst
-        Create Python binding for a new function within the module scope. ``Func``
+        Create Python binding for a new function within the module_ scope. ``Func``
         can be a plain C++ function, a function pointer, or a lambda function. For
         details on the ``Extra&& ... extra`` argument, see section :ref:`extras`.
     \endrst */
     template <typename Func, typename... Extra>
-    module &def(const char *name_, Func &&f, const Extra& ... extra) {
+    module_ &def(const char *name_, Func &&f, const Extra& ... extra) {
         cpp_function func(std::forward<Func>(f), name(name_), scope(*this),
                           sibling(getattr(*this, name_, none())), extra...);
         // NB: allow overwriting here because cpp_function sets up a chain with the intention of
@@ -824,37 +824,37 @@ public:
 
         .. code-block:: cpp
 
-            py::module m("example", "pybind11 example plugin");
-            py::module m2 = m.def_submodule("sub", "A submodule of 'example'");
-            py::module m3 = m2.def_submodule("subsub", "A submodule of 'example.sub'");
+            py::module_ m("example", "pybind11 example plugin");
+            py::module_ m2 = m.def_submodule("sub", "A submodule of 'example'");
+            py::module_ m3 = m2.def_submodule("subsub", "A submodule of 'example.sub'");
     \endrst */
-    module def_submodule(const char *name, const char *doc = nullptr) {
+    module_ def_submodule(const char *name, const char *doc = nullptr) {
         std::string full_name = std::string(PyModule_GetName(m_ptr))
             + std::string(".") + std::string(name);
-        auto result = reinterpret_borrow<module>(PyImport_AddModule(full_name.c_str()));
+        auto result = reinterpret_borrow<module_>(PyImport_AddModule(full_name.c_str()));
         if (doc && options::show_user_defined_docstrings())
             result.attr("__doc__") = pybind11::str(doc);
         attr(name) = result;
         return result;
     }
 
-    /// Import and return a module or throws `error_already_set`.
-    static module import(const char *name) {
+    /// Import and return a module_ or throws `error_already_set`.
+    static module_ import(const char *name) {
         PyObject *obj = PyImport_ImportModule(name);
         if (!obj)
             throw error_already_set();
-        return reinterpret_steal<module>(obj);
+        return reinterpret_steal<module_>(obj);
     }
 
-    /// Reload the module or throws `error_already_set`.
+    /// Reload the module_ or throws `error_already_set`.
     void reload() {
         PyObject *obj = PyImport_ReloadModule(ptr());
         if (!obj)
             throw error_already_set();
-        *this = reinterpret_steal<module>(obj);
+        *this = reinterpret_steal<module_>(obj);
     }
 
-    // Adds an object to the module using the given name.  Throws if an object with the given name
+    // Adds an object to the module_ using the given name.  Throws if an object with the given name
     // already exists.
     //
     // overwrite should almost always be false: attempting to overwrite objects that pybind11 has
@@ -873,7 +873,7 @@ public:
 /// or ``__main__.__dict__`` if there is no frame (usually when the interpreter is embedded).
 inline dict globals() {
     PyObject *p = PyEval_GetGlobals();
-    return reinterpret_borrow<dict>(p ? p : module::import("__main__").attr("__dict__").ptr());
+    return reinterpret_borrow<dict>(p ? p : module_::import("__main__").attr("__dict__").ptr());
 }
 
 NAMESPACE_BEGIN(detail)
@@ -1160,7 +1160,7 @@ public:
     class_ &def_readwrite(const char *name, D C::*pm, const Extra&... extra) {
         static_assert(std::is_base_of<C, type>::value, "def_readwrite() requires a class member (or base class member)");
         cpp_function fget([pm](const type &c) -> const D &{ return c.*pm; }, is_method(*this)),
-                     fset([pm](type &c, const D &value) { c.*pm = value; }, is_method(*this));
+                     fset([pm](type &&c, const D &value) { c.*pm = value; }, is_method(*this));
         def_property(name, fget, fset, return_value_policy::reference_internal, extra...);
         return *this;
     }
@@ -1420,7 +1420,7 @@ public:
             }
         }
         def("__hash__", [](const Type &value) { return (Scalar) value; });
-        // Pickling and unpickling -- needed for use with the 'multiprocessing' module
+        // Pickling and unpickling -- needed for use with the 'multiprocessing' module_
         def(pickle([](const Type &value) { return pybind11::make_tuple((Scalar) value); },
                    [](tuple t) { return static_cast<Type>(t[0].cast<Scalar>()); }));
     }
@@ -1694,7 +1694,7 @@ PYBIND11_NOINLINE inline void print(tuple args, dict kwargs) {
         file = kwargs["file"].cast<object>();
     } else {
         try {
-            file = module::import("sys").attr("stdout");
+            file = module_::import("sys").attr("stdout");
         } catch (const error_already_set &) {
             /* If print() is called from code that is executed as
                part of garbage collection during interpreter shutdown,

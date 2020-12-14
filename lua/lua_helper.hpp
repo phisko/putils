@@ -3,6 +3,7 @@
 #include "sol.hpp"
 #include "traits.hpp"
 #include "function.hpp"
+#include "to_string.hpp"
 
 namespace sol {
 	namespace detail {

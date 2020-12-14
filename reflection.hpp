@@ -102,6 +102,122 @@ putils_reflection_info_template{
 
 
 namespace putils::reflection {
+#pragma region impl
+	namespace detail {
+		inline static const auto emptyTuple = putils::make_table();
+	}
+
+#pragma region macros
+#define putils_impl_reflection_member_detector(NAME) \
+	namespace detail {\
+		putils_member_detector(NAME);\
+	}\
+	template<typename T>\
+	constexpr bool has_##NAME() {\
+		return detail::has_member_##NAME<type_info<T>>();\
+	}
+
+#define putils_impl_reflection_member_detector_with_parents(NAME) \
+	namespace detail {\
+		putils_member_detector(NAME);\
+	}\
+	template<typename T>\
+	constexpr bool has_##NAME() {\
+		if constexpr (detail::has_member_##NAME<type_info<T>>())\
+			return true;\
+		bool ret = false;\
+		for_each_parent<T>([&](const auto parent) {\
+			using Parent = putils_wrapped_type(parent);\
+			if constexpr (detail::has_member_##NAME<type_info<Parent>>())\
+				ret = true;\
+		});\
+		return ret;\
+	}
+
+#define putils_impl_reflection_member_get_single(NAME, defaultValue) \
+	namespace detail{\
+		template<typename T>\
+		constexpr const auto & get_single_##NAME() {\
+			if constexpr (detail::has_member_##NAME<type_info<T>>())\
+				return type_info<T>::##NAME;\
+			else\
+				return defaultValue;\
+		}\
+	}
+
+#define putils_impl_reflection_member_get_all(NAME) \
+	namespace detail {\
+		template<typename T, typename ... Ts>\
+		constexpr auto get_all_##NAME() {\
+			if constexpr (sizeof...(Ts) == 0)\
+				return get_single_##NAME<T>();\
+			else\
+				return std::tuple_cat(get_single_##NAME<T>(), get_all_##NAME<Ts...>());\
+		}\
+\
+		template<typename T, typename ... Parents>\
+		constexpr auto get_all_##NAME(const std::tuple<putils::meta::type<Parents>...> &) {\
+			return get_all_##NAME<T, Parents...>();\
+		}\
+	}
+#pragma endregion
+
+#pragma region parents
+	putils_impl_reflection_member_detector(parents);
+	putils_impl_reflection_member_get_single(parents, detail::emptyTuple);
+	namespace detail {
+		template<typename T>
+		constexpr auto get_all_parents();
+
+		template<typename ... Ts>
+		constexpr auto get_all_parents(const std::tuple<putils::meta::type<Ts>...> &) {
+			return std::tuple_cat(get_all_parents<Ts>()...);
+		}
+
+		template<typename T>
+		constexpr auto get_all_parents() {
+			if constexpr (has_parents<T>())
+				return std::tuple_cat(get_single_parents<T>(), get_all_parents(get_single_parents<T>()));
+			else
+				return get_single_parents<T>();
+		}
+	}
+#pragma endregion
+
+#pragma region class_name
+	putils_impl_reflection_member_detector(class_name);
+	putils_impl_reflection_member_get_single(class_name, typeid(T).name());
+#pragma endregion
+
+#define putils_impl_reflection_member(NAME) \
+	putils_impl_reflection_member_detector_with_parents(NAME) \
+	putils_impl_reflection_member_get_single(NAME, detail::emptyTuple) \
+	putils_impl_reflection_member_get_all(NAME)
+
+	putils_impl_reflection_member(attributes);
+	putils_impl_reflection_member(methods);
+	putils_impl_reflection_member(used_types);
+
+	namespace detail {
+		template<typename T>
+		struct type_info_with_parents {
+			static constexpr auto class_name = has_member_class_name<type_info<T>>() ? get_single_class_name<T>() : nullptr;
+			static constexpr auto parents = get_all_parents<T>();
+			static constexpr auto attributes = get_all_attributes<T>(parents);
+			static constexpr auto methods = get_all_methods<T>(parents);
+			static constexpr auto used_types = get_all_used_types<T>(parents);
+		};
+
+		template<typename Attributes, typename Func>
+		constexpr void for_each_member_table(Attributes && attributes, Func && func) {
+			putils::tuple_for_each(attributes, [&func](auto && p) {
+				func(p.first, p.second);
+				});
+		}
+	}
+
+#pragma endregion
+
 	template<typename T>
 	constexpr auto get_class_name() {
 		if constexpr (detail::type_info_with_parents<T>::class_name != nullptr)
@@ -213,121 +329,6 @@ namespace putils::reflection {
 		if (!member)
 			return ReturnType(std::nullopt);
 		return ReturnType(ret);
-	}
-#pragma endregion
-
-#pragma region impl
-	namespace detail {
-		inline static const auto emptyTuple = putils::make_table();
-	}
-
-#pragma region macros
-#define putils_impl_reflection_member_detector(NAME) \
-	namespace detail {\
-		putils_member_detector(NAME);\
-	}\
-	template<typename T>\
-	constexpr bool has_##NAME() {\
-		return detail::has_member_##NAME<type_info<T>>();\
-	}
-
-#define putils_impl_reflection_member_detector_with_parents(NAME) \
-	namespace detail {\
-		putils_member_detector(NAME);\
-	}\
-	template<typename T>\
-	constexpr bool has_##NAME() {\
-		if constexpr (detail::has_member_##NAME<type_info<T>>())\
-			return true;\
-		bool ret = false;\
-		for_each_parent<T>([&](const auto parent) {\
-			using Parent = putils_wrapped_type(parent);\
-			if constexpr (detail::has_member_##NAME<type_info<Parent>>())\
-				ret = true;\
-		});\
-		return ret;\
-	}
-
-#define putils_impl_reflection_member_get_single(NAME, defaultValue) \
-	namespace detail{\
-		template<typename T>\
-		constexpr const auto & get_single_##NAME() {\
-			if constexpr (detail::has_member_##NAME<type_info<T>>())\
-				return type_info<T>::##NAME;\
-			else\
-				return defaultValue;\
-		}\
-	}
-
-#define putils_impl_reflection_member_get_all(NAME) \
-	namespace detail {\
-		template<typename T, typename ... Ts>\
-		constexpr auto get_all_##NAME() {\
-			if constexpr (sizeof...(Ts) == 0)\
-				return get_single_##NAME<T>();\
-			else\
-				return std::tuple_cat(get_single_##NAME<T>(), get_all_##NAME<Ts...>());\
-		}\
-\
-		template<typename T, typename ... Parents>\
-		constexpr auto get_all_##NAME(const std::tuple<putils::meta::type<Parents>...> &) {\
-			return get_all_##NAME<T, Parents...>();\
-		}\
-	}
-#pragma endregion
-
-#pragma region parents
-	putils_impl_reflection_member_detector(parents);
-	putils_impl_reflection_member_get_single(parents, detail::emptyTuple);
-	namespace detail {
-		template<typename T>
-		constexpr auto get_all_parents();
-
-		template<typename ... Ts>
-		constexpr auto get_all_parents(const std::tuple<putils::meta::type<Ts>...> &) {
-			return std::tuple_cat(get_all_parents<Ts>()...);
-		}
-	
-		template<typename T>
-		constexpr auto get_all_parents() {
-			if constexpr (has_parents<T>())
-				return std::tuple_cat(get_single_parents<T>(), get_all_parents(get_single_parents<T>()));
-			else
-				return get_single_parents<T>();
-		}
-	}
-#pragma endregion
-
-#pragma region class_name
-	putils_impl_reflection_member_detector(class_name);
-	putils_impl_reflection_member_get_single(class_name, typeid(T).name());
-#pragma endregion
-
-#define putils_impl_reflection_member(NAME) \
-	putils_impl_reflection_member_detector_with_parents(NAME) \
-	putils_impl_reflection_member_get_single(NAME, detail::emptyTuple) \
-	putils_impl_reflection_member_get_all(NAME)
-
-	putils_impl_reflection_member(attributes);
-	putils_impl_reflection_member(methods);
-	putils_impl_reflection_member(used_types);
-
-	namespace detail {
-		template<typename T>
-		struct type_info_with_parents {
-			static constexpr auto class_name = has_member_class_name<type_info<T>>() ? get_single_class_name<T>() : nullptr;
-			static constexpr auto parents = get_all_parents<T>();
-			static constexpr auto attributes = get_all_attributes<T>(parents);
-			static constexpr auto methods = get_all_methods<T>(parents);
-			static constexpr auto used_types = get_all_used_types<T>(parents);
-		};
-
-		template<typename Attributes, typename Func>
-		constexpr void for_each_member_table(Attributes && attributes, Func && func) {
-			putils::tuple_for_each(attributes, [&func](auto && p) {
-				func(p.first, p.second);
-			});
-		}
 	}
 #pragma endregion
 }

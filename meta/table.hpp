@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <tuple>
 #include "fwd.hpp"
 #include "type.hpp"
@@ -58,12 +59,12 @@ namespace putils {
 
     template<typename Table, typename Key, typename Func>
     constexpr void get_value(Table && table, Key && key, Func && func) {
-        detail::get_value<detail::KeyPos, detail::ValuePos>(FWD(key), _tuple, FWD(func));
+        detail::get_value<detail::KeyPos, detail::ValuePos>(FWD(key), table, FWD(func));
     }
 
     template<typename Table, typename Value, typename Func>
     constexpr void get_key(Table && table, Value && value, Func && func) {
-        detail::get_value<detail::ValuePos, detail::KeyPos>(FWD(value), _tuple, FWD(func));
+        detail::get_value<detail::ValuePos, detail::KeyPos>(FWD(value), table, FWD(func));
     }
 
     /*
