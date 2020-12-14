@@ -53,7 +53,7 @@ namespace putils {
 #elif defined(_WIN32)
             static std::regex		end(R"(^.*\.dll$)");
 
-            const auto toLoad = std::regex_match(name, end) ? name : string(name) + ".dll";
+            const auto toLoad = std::regex_match(name, end) ? std::string(name) : string(name) + ".dll";
             auto lib = std::make_unique<WindowsLibrary>(toLoad);
             _register.emplace(name, std::move(lib));
 #elif defined(__unix__)

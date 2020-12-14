@@ -1528,8 +1528,8 @@ iterator make_iterator(Iterator first, Sentinel last, Extra &&... extra) {
 
     if (!detail::get_type_info(typeid(state), false)) {
         class_<state>(handle(), "iterator", pybind11::module_local())
-            .def("__iter__", [](state &s) -> state& { return s; })
-            .def("__next__", [](state &s) -> ValueType {
+            .def("__iter__", [](state &&s) -> state& { return s; })
+            .def("__next__", [](state &&s) -> ValueType {
                 if (!s.first_or_done)
                     ++s.it;
                 else

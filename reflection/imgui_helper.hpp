@@ -57,6 +57,100 @@ namespace putils::reflection {
 		}
 
 		template<typename MemberRef>
+		void editAttribute(const char * name, MemberRef && member);
+
+		template<typename Member>
+		static void displayAttribute(const char * name, const Member & member) {
+			const auto id = getID(name, member);
+			const auto nameWithID = getNameWithID(name, member);
+
+			if constexpr (detail::imgui::has_member_c_str<Member>()) {
+				displayInColumns(name, [&] {
+					ImGui::Text(member.c_str());
+				});
+			}
+			// else if constexpr (std::is_same_v<Member, const char *>::value)
+			// 	ImGui::LabelText(name, member);
+
+			else if constexpr (putils::is_iterable<Member>()) {
+				if (ImGui::TreeNode(nameWithID)) {
+					int i = 0;
+					for (const auto & val : member)
+						displayAttribute(putils::string<64>("%d", i++), val);
+					ImGui::TreePop();
+				}
+			}
+
+			else if constexpr (std::is_same_v<Member, putils::Color>) {
+				displayInColumns(name, [&] {
+					const auto normalized = putils::toNormalizedColor(member);
+					const ImVec4 col = { normalized.r, normalized.g, normalized.b, normalized.a };
+					ImGui::ColorButton(id, col);
+				});
+			}
+			else if constexpr (std::is_same_v<Member, putils::NormalizedColor>) {
+				displayInColumns(name, [&] {
+					const ImVec4 col = { member.r, member.g, member.b, member.a };
+					ImGui::ColorButton(id, col);
+				});
+			}
+
+			else if constexpr (putils::reflection::has_attributes<Member>()) {
+				if (ImGui::TreeNode(nameWithID)) {
+					putils::reflection::for_each_attribute(member, UNIVERSAL_FUNCTOR(displayAttribute));
+					ImGui::TreePop();
+				}
+			}
+
+			else if constexpr (putils::is_function<Member>()) {
+				if (member == nullptr)
+					return;
+
+				using Args = putils::function_arguments<Member>;
+
+				if constexpr (std::is_default_constructible<Args>()) {
+					if (ImGui::TreeNode(nameWithID)) {
+						static Args args;
+
+						if (ImGui::Button("Call"))
+							std::apply(member, args);
+
+						size_t i = 0;
+						putils::tuple_for_each(args, [&](auto & arg) {
+							editAttribute(putils::string<64>("Arg %zu", i), arg);
+							++i;
+						});
+
+						using Ret = putils::function_return_type<Member>;
+						if constexpr (!std::is_same<Ret, void>() && std::is_default_constructible<Ret>()) {
+							static Ret ret;
+							displayAttribute("Return value", ret);
+						}
+
+						ImGui::TreePop();
+					}
+				}
+			}
+
+			else {
+				displayInColumns(name, [&] {
+					if constexpr (std::is_enum_v<Member>)
+						ImGui::Text(putils::magic_enum::enum_name(member).data());
+					else if constexpr (std::is_same_v<Member, bool>)
+						ImGui::Text(member ? "true" : "false");
+					else if constexpr (std::is_same_v<Member, int>)
+						ImGui::Text("%d", member);
+					else if constexpr (std::is_same_v<Member, unsigned int> || std::is_same_v<Member, size_t>)
+						ImGui::Text("%zu", member);
+					else if constexpr (std::is_same_v<Member, float>)
+						ImGui::Text("%f", member);
+					else if constexpr (std::is_same_v<Member, double>)
+						ImGui::Text("%d", member);
+				});
+			}
+		}
+
+		template<typename MemberRef>
 		void editAttribute(const char * name, MemberRef && member) {
 			using Member = std::remove_reference_t<MemberRef>;
 			const auto id = getID(name, member);
@@ -179,96 +273,6 @@ namespace putils::reflection {
 			}
 		}
 
-		template<typename Member>
-		static void displayAttribute(const char * name, const Member & member) {
-			const auto id = getID(name, member);
-			const auto nameWithID = getNameWithID(name, member);
-
-			if constexpr (detail::imgui::has_member_c_str<Member>()) {
-				displayInColumns(name, [&] {
-					ImGui::Text(member.c_str());
-				});
-			}
-			// else if constexpr (std::is_same_v<Member, const char *>::value)
-			// 	ImGui::LabelText(name, member);
-
-			else if constexpr (putils::is_iterable<Member>()) {
-				if (ImGui::TreeNode(nameWithID)) {
-					int i = 0;
-					for (const auto & val : member)
-						displayAttribute(putils::string<64>("%d", i++), val);
-					ImGui::TreePop();
-				}
-			}
-
-			else if constexpr (std::is_same_v<Member, putils::Color>) {
-				displayInColumns(name, [&] {
-					const auto normalized = putils::toNormalizedColor(member);
-					const ImVec4 col = { normalized.r, normalized.g, normalized.b, normalized.a };
-					ImGui::ColorButton(id, col);
-				});
-			}
-			else if constexpr (std::is_same_v<Member, putils::NormalizedColor>) {
-				displayInColumns(name, [&] {
-					const ImVec4 col = { member.r, member.g, member.b, member.a };
-					ImGui::ColorButton(id, col);
-				});
-			}
-
-			else if constexpr (putils::reflection::has_attributes<Member>()) {
-				if (ImGui::TreeNode(nameWithID)) {
-					putils::reflection::for_each_attribute(member, UNIVERSAL_FUNCTOR(displayAttribute));
-					ImGui::TreePop();
-				}
-			}
-
-			else if constexpr (putils::is_function<Member>()) {
-				if (member == nullptr)
-					return;
-
-				using Args = putils::function_arguments<Member>;
-
-				if constexpr (std::is_default_constructible<Args>()) {
-					if (ImGui::TreeNode(nameWithID)) {
-						static Args args;
-
-						if (ImGui::Button("Call"))
-							std::apply(member, args);
-
-						size_t i = 0;
-						putils::tuple_for_each(args, [&](auto & arg) {
-							editAttribute(putils::string<64>("Arg %zu", i), arg);
-							++i;
-						});
-
-						using Ret = putils::function_return_type<Member>;
-						if constexpr (!std::is_same<Ret, void>() && std::is_default_constructible<Ret>()) {
-							static Ret ret;
-							displayAttribute("Return value", ret);
-						}
-
-						ImGui::TreePop();
-					}
-				}
-			}
-
-			else {
-				displayInColumns(name, [&] {
-					if constexpr (std::is_enum_v<Member>)
-						ImGui::Text(putils::magic_enum::enum_name(member).data());
-					else if constexpr (std::is_same_v<Member, bool>)
-						ImGui::Text(member ? "true" : "false");
-					else if constexpr (std::is_same_v<Member, int>)
-						ImGui::Text("%d", member);
-					else if constexpr (std::is_same_v<Member, unsigned int> || std::is_same_v<Member, size_t>)
-						ImGui::Text("%zu", member);
-					else if constexpr (std::is_same_v<Member, float>)
-						ImGui::Text("%f", member);
-					else if constexpr (std::is_same_v<Member, double>)
-						ImGui::Text("%d", member);
-				});
-			}
-		}
 	}
 
 	template<typename T>
