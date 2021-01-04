@@ -9,16 +9,14 @@ namespace putils {
     // Interface for shared libraries
     //
     class Library {
-        // Constructor
     public:
         template<typename String>
-        Library(String && name) noexcept : _name(std::forward<String>(name)) {}
-
-        // Destructor
-    public:
+        Library(String && name) noexcept;
         virtual ~Library() noexcept = default;
 
-        // Load a symbol
+        Library(const Library &) = delete;
+        Library & operator=(const Library &) = delete;
+
     protected:
         virtual void * loadSymbol(const std::string & name) noexcept = 0;
 
@@ -26,28 +24,15 @@ namespace putils {
         // Uses pseudo-flyweight to avoid reloading symbols
     public:
         template<typename T, typename ...P>
-        // T: return, P: param
-        T (* loadMethod(const std::string & name))(P ...) {
-            if (_symbols.find(name) == _symbols.end()) {
-                void * symbol = loadSymbol(name);
-                if (!symbol)
-                    return NULL;
-                _symbols[name] = symbol;
-            }
+        using Func = T(*)(P...);
 
-            auto ret = reinterpret_cast<T(*)(P ...)>(_symbols[name]);
-            if (ret == nullptr)
-                std::cerr << _name << ": Failed to load method '" << name << "'" << std::endl;
-
-            return ret;
-        }
+        template<typename T, typename ...P>
+        Func<T, P...> loadMethod(const std::string & name) noexcept;
 
         // Executes the [name] function of the library, returning a T and taking P as parameters
     public:
         template<typename T, typename ...P>
-        T execute(const std::string & name, P && ...args) {
-            return (loadMethod<T, P...>(name))(std::forward<P>(args)...);
-        }
+        T execute(const std::string & name, P && ...args) noexcept;
 
         // Name getter
     public:
@@ -57,10 +42,7 @@ namespace putils {
     private:
         std::string _name;
         std::unordered_map<std::string, void *> _symbols;
-
-    public:
-        Library(const Library &) = delete;
-
-        Library & operator=(const Library &) = delete;
     };
 }
+
+#include "Library.inl"

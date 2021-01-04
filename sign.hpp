@@ -2,5 +2,5 @@
 
 namespace putils {
     template<typename T>
-    int sign(T a) { return a < 0 ? -1 : a > 0 ? 1 : 0; }
+    int sign(T a) noexcept { return a < 0 ? -1 : a > 0 ? 1 : 0; }
 }

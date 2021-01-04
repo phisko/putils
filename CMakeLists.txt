@@ -42,11 +42,6 @@ if(PUTILS_BUILD_PYTHON)
     target_link_libraries(putils PUBLIC putils_python)
 endif()
 
-if (PUTILS_BUILD_PSE)
-    add_subdirectory(pse)
-    target_link_libraries(putils PUBLIC putils_pse)
-endif ()
-
 if (PUTILS_BUILD_OPENGL)
     add_subdirectory(opengl)
     target_link_libraries(putils PUBLIC putils_opengl)

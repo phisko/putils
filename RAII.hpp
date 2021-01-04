@@ -15,39 +15,15 @@ namespace putils {
     template<typename T, void (*Dtor)(T &)>
     class RAII<T, Dtor, false> {
     public:
-		explicit RAII(T && res)
-			: _res(std::forward<T>(res))
-        {}
+        explicit RAII(T && res) noexcept;
+        RAII(RAII && other) noexcept;
+        RAII & operator=(RAII && other) noexcept;
+        RAII & operator=(T && other) noexcept;
 
-    public:
-        RAII(RAII && other)
-			: _res(std::move(other._res)) {
-            other._release = false;
-        }
-
-        RAII & operator=(RAII && other) {
-            std::swap(_res, other._res);
-            std::swap(_release, other._release);
-            return *this;
-        }
-
-        RAII & operator=(T && other) {
-            if (_release)
-                Dtor(_res);
-            _res = std::move(other);
-            _release = true;
-            return *this;
-        }
-
-    public:
         RAII(const RAII &) = delete;
         RAII & operator=(const RAII &) = delete;
 
-    public:
-        ~RAII() {
-            if (_release)
-                Ddtor(_res);
-        }
+        ~RAII() noexcept;
 
     public:
         T & get() noexcept { return _res; }
@@ -61,35 +37,13 @@ namespace putils {
     template<typename T, void (*Dtor)(T &)>
     class RAII<T, Dtor, true> {
     public:
-        explicit RAII(T res) : _res(res){}
+        explicit RAII(T res) noexcept;
+        RAII(RAII && other) noexcept;
+        RAII & operator=(RAII && other) noexcept;
+        RAII & operator=(T other) noexcept;
 
-    public:
-        RAII(RAII && other)
-			: _res(other._res) {
-            other._release = false;
-        }
+        ~RAII() noexcept;
 
-        RAII & operator=(RAII && other) {
-            std::swap(_res, other._res);
-            std::swap(_release, other._release);
-            return *this;
-        }
-
-        RAII & operator=(T other) {
-            if (_release)
-                Dtor(_res);
-            _res = other;
-            _release = true;
-            return *this;
-        }
-
-    public:
-        ~RAII() {
-            if (_release)
-                Dtor(_res);
-        }
-
-    public:
         RAII(const RAII &) = delete;
         RAII & operator=(const RAII &) = delete;
 
@@ -102,3 +56,5 @@ namespace putils {
         bool _release { true };
     };
 }
+
+#include "RAII.inl"

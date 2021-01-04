@@ -11,5 +11,5 @@ namespace putils::gl {
 		GLenum indexType = GL_UNSIGNED_INT;
 	};
 
-	void draw(const Mesh & mesh);
+	void draw(const Mesh & mesh) noexcept;
 }

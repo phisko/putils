@@ -2,11 +2,11 @@
 #include "curl.hpp"
 
 namespace putils::curl {
-	void downloadFile(const std::string & url, const std::string & outputLocation) {
+	void downloadFile(const std::string & url, const std::string & outputLocation) noexcept {
 		system((buildCurlCommand(url) + " > " + outputLocation).c_str());
 	}
 
-	std::string buildCurlCommand(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) {
+	std::string buildCurlCommand(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) noexcept {
 		std::string ret = baseURL;
 
 		if (!params.empty())
@@ -26,7 +26,7 @@ namespace putils::curl {
 		return "curl -s \"" + ret + '"';
 	}
 
-	std::string httpRequest(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) {
+	std::string httpRequest(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) noexcept {
 		std::string s;
 
 		const auto pipe = _popen(buildCurlCommand(baseURL, params).c_str(), "r");

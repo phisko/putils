@@ -44,23 +44,23 @@ union {
 ### toColor, toNormalizedColor
 
 ```cpp
-Color toColor(const NormalizedColor & normalized);
-NormalizedColor toNormalizedColor(const Color & color);
+Color toColor(const NormalizedColor & normalized) noexcept;
+NormalizedColor toNormalizedColor(const Color & color) noexcept;
 ```
 
 ### toRGBA, fromRGBA
 
 ```cpp
-unsigned int toRGBA(const NormalizedColor & color);
-NormalizedColor fromRGBA(unsigned int color);
+unsigned int toRGBA(const NormalizedColor & color) noexcept;
+NormalizedColor fromRGBA(unsigned int color) noexcept;
 ```
 
 ### toARGB, fromARGB
 
 ```cpp
-unsigned int toARGB(const Color & color);
-unsigned int toARGB(const NormalizedColor & color);
-Color fromARGB(unsigned int color);
+unsigned int toARGB(const Color & color) noexcept;
+unsigned int toARGB(const NormalizedColor & color) noexcept;
+Color fromARGB(unsigned int color) noexcept;
 ```
 
 Multiplication and division operators are also defined between color types and `float`s.

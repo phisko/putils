@@ -7,13 +7,13 @@ namespace putils {
     static constexpr auto pi = 3.14159265359f;
 
 	// constrains in [-PI, PI)
-	float constrainAngle(float angle);
+	float constrainAngle(float angle) noexcept;
 
-	float getYawFromNormalizedDirection(const Vector3f & dir);
-	float getPitchFromNormalizedDirection(const Vector3f & dir);
+	float getYawFromNormalizedDirection(const Vector3f & dir) noexcept;
+	float getPitchFromNormalizedDirection(const Vector3f & dir) noexcept;
 
-	float get2DAngleFromNormalizedDirection(const Vector2f & dir);
+	float get2DAngleFromNormalizedDirection(const Vector2f & dir) noexcept;
 
-	float toDegrees(float rads);
-	float toRadians(float degs);
+	float toDegrees(float rads) noexcept;
+	float toRadians(float degs) noexcept;
 }

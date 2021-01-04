@@ -506,6 +506,9 @@ template <class T, template<class> class... Predicates> using satisfies_none_of 
 template <typename T> struct remove_class { };
 template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...)> { typedef R type(A...); };
 template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...) const> { typedef R type(A...); };
+template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...) noexcept> { typedef R type(A...); };
+template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...) const noexcept> { typedef R type(A...); };
+
 
 /// Helper template to strip away type modifiers
 template <typename T> struct intrinsic_type                       { typedef T type; };

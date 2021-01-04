@@ -36,7 +36,7 @@ namespace putils::MagicaVoxel {
 	};
 
 	namespace detail {
-		static auto buildMesh(PolyVox::RawVolume<VertexData> & volume) {
+		static auto buildMesh(PolyVox::RawVolume<VertexData> & volume) noexcept {
 			const auto encodedMesh = PolyVox::extractCubicMesh(&volume, volume.getEnclosingRegion());
 			const auto mesh = PolyVox::decodeMesh(encodedMesh);
 			return mesh;
@@ -44,22 +44,22 @@ namespace putils::MagicaVoxel {
 
 		using MeshType = decltype(buildMesh(PolyVox::RawVolume<VertexData>{ {} }));
 
-		static bool idMatches(const char * s1, const char * s2) {
+		static bool idMatches(const char * s1, const char * s2) noexcept {
 			return strncmp(s1, s2, 4) == 0;
 		}
 
 		template<typename T>
-		static void readFromStream(T & header, std::istream & s, unsigned int size) {
+		static void readFromStream(T & header, std::istream & s, unsigned int size) noexcept {
 			s.read((char *)&header, size);
 			assert(s.gcount() == size);
 		}
 
 		template<typename T>
-		static void readFromStream(T & header, std::istream & s) {
+		static void readFromStream(T & header, std::istream & s) noexcept {
 			readFromStream(header, s, sizeof(header));
 		}
 
-		static void checkHeader(std::istream & s) {
+		static void checkHeader(std::istream & s) noexcept {
 			MagicaVoxel::FileHeader header;
 			readFromStream(header, s);
 			assert(idMatches(header.id, "VOX "));
@@ -67,7 +67,7 @@ namespace putils::MagicaVoxel {
 		}
 	}
 
-	static auto loadVoxFile(const char * f, putils::Point3i * outSize = nullptr) {
+	static auto loadVoxFile(const char * f, putils::Point3i * outSize = nullptr) noexcept {
 #ifndef KENGINE_NDEBUG
 		std::cout << putils::termcolor::green << "[MagicaVoxel] Loading " << putils::termcolor::cyan << f << putils::termcolor::green << "..." << putils::termcolor::reset;
 #endif

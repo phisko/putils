@@ -1,8 +1,12 @@
 #pragma once
 
 #include <vector>
-#include <functional>
 #include <algorithm>
+#include "function.hpp"
+
+#ifndef PUTILS_OBSERVER_SIZE
+# define PUTILS_OBSERVER_SIZE 64
+#endif
 
 namespace putils {
     //
@@ -14,58 +18,32 @@ namespace putils {
     // in undefined behavior if it has been deleted)
     //
 
-    template<typename ...Args>
+    template<typename ... Args>
     class Observable {
-        // Constructor
     public:
+        using Observer = putils::function<void(const Args & ...), PUTILS_OBSERVER_SIZE>;
+
         Observable() noexcept = default;
-
-        // Coplien
-        // Not default as observers shouldn't be copied
-    public:
-        Observable(const Observable &) noexcept {}
-
-        Observable & operator=(const Observable &) noexcept { return *this; }
-
-        // Move
-    public:
-        Observable(Observable &&) noexcept = default;
-
-        Observable & operator=(Observable &&) noexcept = default;
-
-        // Destructor
-    public:
         ~Observable() noexcept = default;
 
-        // Add an observer, a simple function returning void
-    public:
-        intptr_t addObserver(const std::function<void(const Args & ...)> & observer) noexcept {
-            auto id = (intptr_t) &observer;
-            _observers.push_back({ id, observer });
-            return id;
-        }
-        Observable & operator+=(const std::function<void()> & observer) noexcept {
-            addObserver(observer);
-            return *this;
-        }
+        Observable(const Observable &) noexcept;
+        Observable & operator=(const Observable &) noexcept;
+        Observable(Observable &&) noexcept = default;
+        Observable & operator=(Observable &&) noexcept = default;
 
     public:
-        void removeObserver(intptr_t id) noexcept {
-            _observers.erase(std::find_if(_observers.begin(), _observers.end(),
-                                          [id](const auto & p) { return p.first == id; })
-            );
-        }
+        intptr_t addObserver(const Observer & observer) noexcept;
+        Observable & operator+=(const Observer & observer) noexcept;
 
-        // Notify observers that the observable has changed
+        void removeObserver(intptr_t id) noexcept;
+
     public:
-        void changed(const Args & ...args) noexcept {
-            for (const auto & [_, func] : _observers)
-                func(args...);
-        }
-        void operator()(const Args & ...args) noexcept { changed(args...); }
+        void changed(const Args & ...args) noexcept;
+        void operator()(const Args & ...args) noexcept;
 
-        // Attributes
     private:
-        std::vector<std::pair<intptr_t, std::function<void(const Args & ...)>>> _observers;
+        std::vector<std::pair<intptr_t, Observer>> _observers;
     };
 }
+
+#include "Observable.inl"

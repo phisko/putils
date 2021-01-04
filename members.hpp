@@ -33,7 +33,7 @@ namespace putils {
 	using ObjectType = typename detail::ObjectTypeWrapper<std::decay_t<MemberPtr>>::type;
 
 	template<typename T, typename U>
-	std::ptrdiff_t member_offset(U T::* member) {
+	constexpr std::ptrdiff_t member_offset(U T::* member) noexcept {
 		return (ptrdiff_t)&(reinterpret_cast<T const volatile*>(NULL)->*member);
 	}
 }

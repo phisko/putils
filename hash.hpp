@@ -13,7 +13,7 @@ namespace putils {
 
     // Template to combine two hashes (to use pairs as map keys, for instance)
     template<class T>
-    inline void hash_combine(std::size_t & seed, const T & v) noexcept {
+    void hash_combine(std::size_t & seed, const T & v) noexcept {
         std::hash<T> hasher;
         seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
     }

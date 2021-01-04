@@ -21,103 +21,64 @@ namespace putils {
 		using const_iterator = const T *;
 
 	public:
-		constexpr vector() = default;
+		constexpr vector() noexcept = default;
 
 		template<size_t N>
-		constexpr vector(const T(&arr)[N]) {
-			for (const T & elem : arr)
-				_buff[_size++] = elem;
-		}
+		constexpr vector(const T(&arr)[N]) noexcept;
 
-		constexpr vector(std::initializer_list<T> arr) {
-			for (const T & elem : arr)
-				_buff[_size++] = elem;
-		}
+		constexpr vector(std::initializer_list<T> arr) noexcept;
 
 		template<typename Val>
-		constexpr T & push_back(Val && val) {
-			assert(!full());
-			_buff[_size] = FWD(val);
-			return _buff[_size++];
-		}
+		constexpr T & push_back(Val && val) noexcept;
 
 		template<typename Val>
-		constexpr void try_push_back(Val && val) {
-			if (!full())
-				push_back(FWD(val));
-		}
+		constexpr void try_push_back(Val && val) noexcept;
 
 		template<typename ... Args>
-		constexpr T & emplace_back(Args && ...args) {
-			assert(!full());
-			_buff[_size] = T(FWD(args)...);
-			return _buff[_size++];
-		}
+		constexpr T & emplace_back(Args && ...args) noexcept;
 
 		template<typename ... Args>
-		constexpr void try_emplace_back(Args && ...args) {
-			if (!full())
-				emplace_back(FWD(args)...);
-		}
+		constexpr void try_emplace_back(Args && ...args) noexcept;
 
 		// Reflectible (no templates/overloads)
-		constexpr T & add(const T & val) { return push_back(val); }
-		constexpr void try_add(const T & val) { try_push_back(val); }
+		constexpr T & add(const T & val) noexcept;
+		constexpr void try_add(const T & val) noexcept;
 
-		constexpr T & back() { assert(_size > 0); return _buff[_size - 1]; }
+		constexpr T & back() noexcept;
 
-		constexpr T & operator[](size_t index) {
-			assert(index < _size);
-			return _buff[index];
-		}
-		constexpr T & at(size_t index) { return (*this)[index]; }
-
-		constexpr const T & operator[](size_t index) const {
-			assert(index < _size);
-			return _buff[index];
-		}
-		constexpr const T & at(size_t index) const { return (*this)[index]; }
+		constexpr T & operator[](size_t index) noexcept;
+		constexpr const T & operator[](size_t index) const noexcept;
+		constexpr T & at(size_t index) noexcept;
+		constexpr const T & at(size_t index) const noexcept;
 
 		// Reflectible (no templates/overloads)
-		constexpr T & get(size_t index) { return at(index); }
+		constexpr T & get(size_t index) noexcept;
 
-		constexpr void erase(T * ptr) {
-			assert(ptr > _buff && ptr < _buff + _size);
-			std::swap(*ptr, back());
-			--_size;
-		}
-
-		constexpr void erase(T * start, T * until) {
-			assert(start > _buff && until <= _buff + _size);
-			while (start < until) {
-				std::swap(*start, back());
-				--_size;
-				++start;
-			}
-		}
+		constexpr void erase(T * ptr) noexcept;
+		constexpr void erase(T * start, T * until) noexcept;
 
 		// Reflectible (no templates/overloads)
-		constexpr void remove(T * ptr) { erase(ptr); }
+		constexpr void remove(T * ptr) noexcept;
 
-		constexpr auto size() const { return _size; }
-		constexpr bool empty() const { return _size == 0; }
-		constexpr bool full() const { return _size >= MaxSize; }
+		constexpr auto size() const noexcept;
+		constexpr bool empty() const noexcept;
+		constexpr bool full() const;
 
-		constexpr auto begin() const { return _buff; }
-		constexpr auto end() const { return _buff + _size; }
+		constexpr auto begin() const noexcept;
+		constexpr auto end() const noexcept;
 
-		constexpr auto begin() { return _buff; }
-		constexpr auto end() { return _buff + _size; }
+		constexpr auto begin() noexcept;
+		constexpr auto end() noexcept;
 
-		constexpr auto data() const { return _buff; }
-		constexpr auto data() { return _buff; }
+		constexpr auto data() const noexcept;
+		constexpr auto data() noexcept;
 
-		constexpr void clear() { _size = 0; }
-		constexpr void resize(size_t size) { _size = size; }
-		constexpr size_t capacity() const { return MaxSize; }
+		constexpr void clear() noexcept;
+		constexpr void resize(size_t size) noexcept;
+		constexpr size_t capacity() const noexcept;
 
-		constexpr operator std::span<const T>() const { return { _buff, _size }; }
-		constexpr operator std::span<T>() { return { _buff, _size }; }
+		constexpr operator std::span<const T>() const noexcept;
+		constexpr operator std::span<T>() noexcept;
 
 	private:
 		T _buff[MaxSize] = {};
@@ -125,14 +86,12 @@ namespace putils {
 	};
 
 	template<typename T, size_t Size, const char * Name>
-	constexpr auto begin(const vector<T, Size, Name> & v) { return v.begin(); }
+	constexpr auto begin(const vector<T, Size, Name> & v) noexcept;
 	template<typename T, size_t Size, const char * Name>
-	constexpr auto end(const vector<T, Size, Name> & v) { return v.end(); }
+	constexpr auto end(const vector<T, Size, Name> & v) noexcept;
 
 	template<typename ... Args>
-	constexpr auto make_vector(Args && ... args) -> vector<std::common_type_t<Args...>, sizeof...(Args)> {
-		return { FWD(args)... };
-	}
+	constexpr auto make_vector(Args && ... args) noexcept -> vector<std::common_type_t<Args...>, sizeof...(Args)>;
 
 	template<typename>
 	struct is_vector : std::false_type {};
@@ -158,3 +117,5 @@ putils_reflection_info_template{
 	);
 };
 #undef refltype
+
+#include "vector.inl"

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <functional>
-#include <memory>
 #include <vector>
 #include "string.hpp"
 
@@ -41,7 +38,7 @@ namespace putils {
         std::vector<File> getFiles() noexcept {
             std::vector<File> ret;
 
-            for_each([&ret](const File & f) {
+            for_each([&ret](const File & f) noexcept {
                 ret.push_back(std::move(f));
             });
 
