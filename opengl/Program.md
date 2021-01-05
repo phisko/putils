@@ -1,6 +1,6 @@
 # [Program](Program.hpp)
 
-Encapsulation of an OpenGL shader.
+Encapsulation of an OpenGL shader. Requires the GLM library, and its presence to be specified by defining `PUTILS_GLM`.
 
 Automatically manages `uniform` locations and vertex attribute locations. Provides functions to expose a set of textures to debug.
 
@@ -16,6 +16,32 @@ Program(bool usesGBuffer = false, const char * name = "");
 
 `usesGBuffer` specifies whether this shader will *read* from the GBuffer. `name` is only used for debug purposes.
 
+### init
+
+```cpp
+virtual void init(size_t firstTextureID) noexcept = 0;
+```
+
+Called once the OpenGL context and GBuffer have been properly initialized.
+
+### run
+
+```cpp
+struct Parameters {
+    glm::mat4 view;
+    glm::mat4 proj;
+    glm::vec3 camPos;
+    float camFOV;
+    putils::Rect2i viewport;
+    float nearPlane;
+    float farPlane;
+    size_t viewportID;
+};
+virtual void run(const Parameters & params) noexcept = 0;
+```
+
+Called each frame.
+
 ### use
 
 ```cpp
@@ -23,15 +49,6 @@ void use();
 ```
 
 Must be called before performing any drawing operations to enable this particular shader.
-
-### drawObjects
-
-```cpp
-std::function<void(GLint modelLocation)> drawObjects;
-```
-
-Function provided externally to draw all objects.
-`modelLocation` is the location of the model matrix `uniform` in this shader.
 
 ### initWithShaders
 

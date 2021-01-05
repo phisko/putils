@@ -1,4 +1,4 @@
-file(GLOB src *.cpp *.hpp)
+file(GLOB src *.cpp *.hpp *.inl)
 add_library(putils_pluginManager STATIC ${src})
 target_include_directories(putils_pluginManager PUBLIC .)
 target_link_libraries(putils_pluginManager PUBLIC putils)

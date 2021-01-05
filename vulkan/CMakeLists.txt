@@ -1,4 +1,4 @@
-file(GLOB src *.cpp *.hpp)
+file(GLOB src *.cpp *.hpp *.inl)
 add_library(putils_vulkan STATIC ${src})
 
 find_package(Vulkan REQUIRED)

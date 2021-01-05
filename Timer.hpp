@@ -14,7 +14,7 @@ namespace putils {
 
     public:
         Timer() noexcept = default;
-        Timer(const t_duration & duration) noexcept;
+        Timer(const seconds & duration) noexcept;
 
         Timer(const Timer & other) noexcept = default;
         Timer & operator=(const Timer & other) noexcept = default;
@@ -24,23 +24,23 @@ namespace putils {
         float getTimesDone() const noexcept;
 
         // How long ago did I start the timer
-        t_duration getTimeSinceStart() const noexcept;
-        t_duration getTimeSinceDone() const noexcept;
+        seconds getTimeSinceStart() const noexcept;
+        seconds getTimeSinceDone() const noexcept;
 
         // How long until it rings
-        t_duration getTimeLeft() const noexcept;
+        seconds getTimeLeft() const noexcept;
 
         // Restart the timer
         void restart() noexcept;
         void setStart(t_clock::time_point start) noexcept;
 
         const t_clock::time_point & getStart() const noexcept;
-        const t_duration & getDuration() const noexcept;
-        void setDuration(const t_duration & duration) noexcept;
+        const seconds & getDuration() const noexcept;
+        void setDuration(const seconds & duration) noexcept;
 
         // Attributes
     private:
-        t_duration _duration{ 0 };
+        seconds _duration{ 0 };
         t_clock::time_point _start = t_clock::now();
     };
 }

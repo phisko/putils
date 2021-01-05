@@ -7,7 +7,7 @@ Simple timer class based on std::chrono.
 ### Constructor
 
 ```cpp
-Timer(Duration &&duration);
+Timer(const t_duration & duration) noexcept;
 ```
 
 Sets the time before the timer "beeps".
@@ -15,23 +15,39 @@ Sets the time before the timer "beeps".
 ### isDone
 
 ```cpp
-bool isDone() const;
+bool isDone() const noexcept;
 ```
 
 Is the timer ringing?
 
+### getTimesDone
+
+```cpp
+float getTimesDone() const noexcept;
+```
+
+How many times has the timer ringed?
+
 ### getTimeSinceStart
 
 ```cpp
-t_duration getTimeSinceStart() const;
+seconds getTimeSinceStart() const noexcept;
 ```
 
 How long ago did I start the timer?
 
+### getTimeSinceDone
+
+```cpp
+seconds getTimeSinceDone() const noexcept;
+```
+
+How long ago did the timer beep?
+
 ### getTimeLeft
 
 ```cpp
-t_duration getTimeLeft() const;
+seconds getTimeLeft() const noexcept;
 ```
 
 How long until it rings?
@@ -39,18 +55,21 @@ How long until it rings?
 ### restart
 
 ```cpp
-void restart();
+void restart() noexcept;
 ```
 
-### Duration getters and setters
+### Start getter and setter
 
 ```cpp
-const t_duration &getDuration() const noexcept { return _duration; }
+const t_clock::time_point & getStart() const noexcept;
+void setStart(t_clock::time_point start) noexcept;
+```
 
-template<typename Duration>
-void setDuration(Duration &&duration) noexcept { _duration = duration; }
+### Duration getter and setter
 
-void setDuration(double duration) noexcept { _duration = t_duration(duration); }
+```cpp
+const seconds &getDuration() const noexcept;
+void setDuration(const seconds & duration) noexcept;
 ```
 
 ### Helper types
@@ -58,4 +77,5 @@ void setDuration(double duration) noexcept { _duration = t_duration(duration); }
 ```cpp
 using t_duration = std::chrono::duration<double>;
 using t_clock = std::chrono::system_clock;
+using seconds = t_duration;
 ```

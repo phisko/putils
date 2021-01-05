@@ -1,5 +1,11 @@
 #include "reflection.hpp"
 
+#include "meta/table.hpp"
+#include "meta/nameof.hpp"
+#include "meta/for_each.hpp"
+#include "traits.hpp"
+#include "members.hpp"
+
 // Define a type_info for a templated type, like C in the example above
 #define putils_reflection_info_template struct putils::reflection::type_info<refltype>
 

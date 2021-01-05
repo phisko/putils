@@ -2,13 +2,6 @@
 
 #include <string_view>
 #include <optional>
-#include "meta/table.hpp"
-#include "meta/nameof.hpp"
-#include "meta/for_each.hpp"
-#include "traits.hpp"
-#include "members.hpp"
-
-// type_info template, specialized for each reflectible type
 
 namespace putils::reflection {
 	template<typename T>

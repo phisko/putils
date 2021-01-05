@@ -34,11 +34,11 @@ namespace putils::gl {
 	};
 
 	struct FrameBuffer : UIntSwapper {
-		~FrameBuffer() {
+		~FrameBuffer() noexcept {
 			glDeleteFramebuffers(1, &res);
 		}
 
-		void generate() { glGenFramebuffers(1, &res); }
+		void generate() noexcept { glGenFramebuffers(1, &res); }
 
 		FrameBuffer() noexcept = default;
 		FrameBuffer(FrameBuffer &&) noexcept = default;
@@ -46,11 +46,11 @@ namespace putils::gl {
 	};
 
 	struct Texture : UIntSwapper {
-		~Texture() {
+		~Texture() noexcept {
 			glDeleteTextures(1, &res);
 		}
 
-		void generate() { glGenTextures(1, &res); }
+		void generate() noexcept { glGenTextures(1, &res); }
 
 		Texture() noexcept = default;
 		Texture(Texture &&) noexcept = default;
@@ -58,11 +58,11 @@ namespace putils::gl {
 	};
 
 	struct Buffer : UIntSwapper {
-		~Buffer() {
+		~Buffer() noexcept {
 			glDeleteBuffers(1, &res);
 		}
 
-		void generate() { glGenBuffers(1, &res); }
+		void generate() noexcept { glGenBuffers(1, &res); }
 
 		Buffer() noexcept = default;
 		Buffer(Buffer &&) noexcept = default;
@@ -70,11 +70,11 @@ namespace putils::gl {
 	};
 
 	struct VertexArray : UIntSwapper {
-		~VertexArray() {
+		~VertexArray() noexcept {
 			glDeleteVertexArrays(1, &res);
 		}
 
-		void generate() { glGenVertexArrays(1, &res); }
+		void generate() noexcept { glGenVertexArrays(1, &res); }
 
 		VertexArray() noexcept = default;
 		VertexArray(VertexArray &&) noexcept = default;

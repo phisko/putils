@@ -259,19 +259,19 @@ The following functions are defined to let client code check whether a given typ
 ```cpp
 namespace putils::reflection {
     template<typename T>
-    constexpr bool has_class_name();
+    constexpr bool has_class_name() noexcept;
 
     template<typename T>
-    constexpr bool has_attributes();
+    constexpr bool has_attributes() noexcept;
 
     template<typename T>
-    constexpr bool has_methods();
+    constexpr bool has_methods() noexcept;
 
     template<typename T>
-    constexpr bool has_parents();
+    constexpr bool has_parents() noexcept;
 
     template<typename T>
-    constexpr bool has_used_types();
+    constexpr bool has_used_types() noexcept;
 }
 ```
 
@@ -284,10 +284,10 @@ Once a type is declared reflectible, iterating over any of its reflectible prope
 ```cpp
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
-    void for_each_attribute(Func && func);
+    void for_each_attribute(Func && func) noexcept;
 
     template<typename T, typename Func> // Func: void(const char * name, Member && member)
-    void for_each_attribute(T && obj, Func && func);
+    void for_each_attribute(T && obj, Func && func) noexcept;
 }
 ```
 
@@ -298,9 +298,10 @@ Lets client code iterate over the attributes for a given type.
 ```cpp
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, MemberPointer ptr)
-    void for_each_method(Func && func);
+    void for_each_method(Func && func) noexcept;
 
     template<typename T, typename Func> // Func: void(const char * name, const Functor & functor)
+    void for_each_method(T && obj, Func && func) noexcept;
 }
 ```
 
@@ -311,7 +312,7 @@ Lets client code iterate over the methods for a given type.
 ```cpp
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, TypeObject type)
-    void for_each_parent(Func && func);
+    void for_each_parent(Func && func) noexcept;
 }
 ```
 
@@ -322,7 +323,7 @@ Lets client code iterate over the parents for a given type.
 ```cpp
 namespace putils::reflection {
     template<typename T, typename Func> // Func: void(const char * name, TypeObject type)
-    void for_each_used_type(Func && func);
+    void for_each_used_type(Func && func) noexcept;
 }
 ```
 
@@ -334,10 +335,10 @@ Lets client code iterate over the types used by a given type.
 
 ```cpp
 template<typename Member, typename T>
-std::optional<Member T::*> get_attribute(std::string_view name);
+std::optional<Member T::*> get_attribute(std::string_view name) noexcept;
 
 template<typename Member, typename T>
-Member * get_attribute(T && obj, std::string_view name);
+Member * get_attribute(T && obj, std::string_view name) noexcept;
 ```
 
 Returns the attribute called `name` if there is one.
@@ -348,10 +349,10 @@ Returns the attribute called `name` if there is one.
 
 ```cpp
 template<typename Signature, typename T>
-std::optional<Signature T::*> get_method(std::string_view name);
+std::optional<Signature T::*> get_method(std::string_view name) noexcept;
 
 template<typename Signature, typename T>
-std::optional<Functor> get_method(T && obj, std::string_view name);
+std::optional<Functor> get_method(T && obj, std::string_view name) noexcept;
 ```
 
 Returns the method called `name` if there is one.

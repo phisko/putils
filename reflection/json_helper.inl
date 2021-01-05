@@ -6,7 +6,7 @@ namespace putils::reflection {
 	}
 
 	template<typename TRef>
-	void fromJSON(const putils::json & object, TRef && val) {
+	void fromJSON(const putils::json & object, TRef && val) noexcept {
 		using T = std::remove_reference_t<TRef>;
 
 		if constexpr (detail::json::has_member_c_str<T>())
@@ -29,7 +29,7 @@ namespace putils::reflection {
 			}
 		}
 		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
-			putils::reflection::for_each_attribute(val, [&](const char * name, auto && attr) {
+			putils::reflection::for_each_attribute(val, [&](const char * name, auto && attr) noexcept {
 				const auto attrJSON = object.find(name);
 				if (attrJSON != object.end())
 					fromJSON(*attrJSON, attr);
@@ -45,7 +45,7 @@ namespace putils::reflection {
 	}
 
 	template<typename T>
-	putils::json toJSON(const T & obj) {
+	putils::json toJSON(const T & obj) noexcept {
 		putils::json ret;
 
 		if constexpr (detail::json::has_member_c_str<T>())
@@ -54,7 +54,7 @@ namespace putils::reflection {
 			for (const auto & it : obj)
 				ret.push_back(toJSON(it));
 		else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>())
-			putils::reflection::for_each_attribute(obj, [&](const char * name, auto && attr) {
+			putils::reflection::for_each_attribute(obj, [&](const char * name, auto && attr) noexcept {
 				ret[name] = toJSON(attr);
 			});
 		else if constexpr (std::is_enum<T>())

@@ -39,7 +39,7 @@ namespace putils {
 
 			const auto key = putils::chop(line.substr(0, index));
 			const auto value = putils::chop(line.substr(index + 1));
-			currentSection->values[key] = value;
+			currentSection->values[std::string(key)] = value;
 		}
 
 		return ret;
