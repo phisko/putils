@@ -50,10 +50,6 @@ namespace putils {
 
 		void runTask(function && f) noexcept;
 
-		void completeTasks() const noexcept {
-			while (_jobsLeft > 0);
-		}
-
 		size_t getThreadCount() const noexcept {
 			return _workers.size();
 		}
@@ -61,7 +57,6 @@ namespace putils {
 	private:
 		std::vector<std::thread> _workers;
 		std::vector<function> _tasks;
-		std::atomic_int _jobsLeft = 0;
 
 		std::mutex _queueMutex;
 		std::condition_variable _condition;

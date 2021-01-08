@@ -22,7 +22,6 @@ namespace putils {
 					}
 
 					task();
-					--_jobsLeft;
 				}
 			});
 	}
@@ -40,7 +39,6 @@ namespace putils {
 			// don't allow enqueueing after stopping the pool
 			assert("Enqueue on stopped ThreadPool" && !_stop);
 			_tasks.emplace_back(std::move(f));
-			++_jobsLeft;
 		}
 
 		_condition.notify_one();
