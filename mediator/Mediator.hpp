@@ -12,7 +12,7 @@ namespace putils
     class Mediator {
     public:
 		Mediator(size_t threads = 0) : _threadPool(threads) {}
-        ~Mediator() { running = false; completeTasks(); }
+        ~Mediator() { running = false; }
 
     public:
         void addModule(BaseModule &m);
@@ -30,14 +30,7 @@ namespace putils
     public:
 		template<typename F>
         void runTask(F && f) {
-			if (_threadPool.getThreadCount() > 0)
-				_threadPool.enqueue(FWD(f));
-			else
-				f();
-		}
-
-        void completeTasks() const {
-			_threadPool.complete();
+            _threadPool.runTask(FWD(f));
         }
 
     public:

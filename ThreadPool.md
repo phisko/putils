@@ -20,14 +20,6 @@ void runTask(function && f) noexcept;
 
 Queues a task to be run by a worker thread.
 
-### completeTasks
-
-```cpp
-void completeTasks() const noexcept;
-```
-
-Waits until all queued tasks have been completed.
-
 ### getThreadCount
 
 ```cpp
