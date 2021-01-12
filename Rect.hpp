@@ -5,8 +5,10 @@
 namespace putils {
     template<typename Precision, size_t Dimensions>
 	struct Rect {
-		Point<Precision, Dimensions> position;
-		Point<Precision, Dimensions> size;
+		using Point = Point<Precision, Dimensions>;
+
+		Point position;
+		Point size;
 	};
 
 	template<typename T, size_t D>
@@ -17,6 +19,10 @@ namespace putils {
 		putils_reflection_attributes(
 			putils_reflection_attribute(position),
 			putils_reflection_attribute(size)
+		);
+
+		putils_reflection_used_types(
+			putils_reflection_type(refltype::Point)
 		);
 	};
 #undef refltype
