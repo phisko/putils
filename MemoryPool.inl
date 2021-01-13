@@ -21,7 +21,6 @@
  */
 
 #include "MemoryPool.hpp"
-#include <iostream>
 
 namespace putils {
     template <typename T, size_t BlockSize>
@@ -54,6 +53,9 @@ namespace putils {
     inline typename MemoryPool<T, BlockSize>::pointer
         MemoryPool<T, BlockSize>::allocate(size_type n, const_pointer hint)
     {
+        if (n > 1)
+            return (pointer)operator new(n * sizeof(T));
+
         if (freeSlots_ != nullptr) {
             const auto result = (pointer)freeSlots_;
             freeSlots_ = freeSlots_->next;
@@ -72,6 +74,9 @@ namespace putils {
     inline void
         MemoryPool<T, BlockSize>::deallocate(pointer p, size_type n)
     {
+        if (n > 1)
+            operator delete((void *)p);
+
         if (p != nullptr) {
             const auto slot = (slot_pointer_)p;
             slot->next = freeSlots_;
