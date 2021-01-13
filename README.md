@@ -56,6 +56,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [erase](erase.md): function taking a container and a value and erasing the value from the container.
 * [file_extension](file_extension.md): functions for working with file extensions
 * [fwd](fwd.md): macro which calls `std::forward` for the correct type
+* [get_call_stack](get_call_stack.md): function which returns a formatted call-stack
 * [get_current_dir](get_current_dir.md): function which returns the current working directory as a string
 * [get_last_error_as_string](get_last_error_as_string.md): function for Windows
 * [go_to_bin_dir](go_to_bin_dir.md): function which takes `argv[0]` as parameter and changes the current working directory to that containing the executed file.
