@@ -66,6 +66,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [MagicaVoxel](MagicaVoxel.md): structure declarations for the [MagicaVoxel format](https://ephtracy.github.io/)
 * [MagicaVoxelToPolyvoxLoader](MagicaVoxelToPolyvoxLoader.md): conversion functions to parse the MagicaVoxel format into [PolyVox](https://bitbucket.org/volumesoffun/polyvox/src/develop/) objects
 * [members](members.md): help with class members
+* [on_scope_exit](on_scope_exit.md): returns an object that calls a function in its dtor
 * [rand](rand.md): function using C++ 11's random number generation facilities
 * [read_stream](read_stream.md): function which extracts an entire std::istream to a std::string
 * [regex](regex.md): utilities to easily construct and match regexes through literal operators
