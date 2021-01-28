@@ -44,4 +44,15 @@ namespace putils {
 
 		return ret;
 	}
+
+	std::ostream & operator<<(std::ostream & s, const IniFile & ini) noexcept {
+		for (const auto & [name, section] : ini.sections) {
+			s << '[' << name << "]\n";
+			for (const auto & [key, value] : section.values)
+				s << key << '=' << value << '\n';
+			s << '\n';
+		}
+
+		return s;
+	}
 }
