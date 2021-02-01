@@ -164,8 +164,25 @@ namespace putils::reflection {
 						editAttribute(putils::string<64>("%d", i++), val);
 
 					if constexpr (detail::imgui::has_member_emplace_back<Member>())
+					{
 						if (ImGui::MenuItem("Add"))
 							member.emplace_back();
+						static int removeIndex = 0;
+						ImGui::Columns(2);
+						if (ImGui::Button("Remove")) {
+							int i = 0;
+							for (auto it = member.begin(); it != member.end(); ++it) {
+								if (i == removeIndex) {
+									member.erase(it);
+									break;
+								}
+								++i;
+							}
+						}
+						ImGui::NextColumn();
+						ImGui::InputInt("##index", &removeIndex);
+						ImGui::Columns();
+					}
 					ImGui::TreePop();
 				}
 			}
