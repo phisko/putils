@@ -169,7 +169,7 @@ namespace putils::reflection {
 							member.emplace_back();
 						static int removeIndex = 0;
 						ImGui::Columns(2);
-						if (ImGui::Button("Remove")) {
+						if (ImGui::MenuItem("Remove")) {
 							int i = 0;
 							for (auto it = member.begin(); it != member.end(); ++it) {
 								if (i == removeIndex) {
