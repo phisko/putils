@@ -11,13 +11,6 @@
 #include "vector.hpp"
 
 namespace putils {
-    //
-    // PluginManager which either loads all libraries in a folder
-    // or loads libraries contained in a CSV config file
-    // Offers functions to execute a given function in all libraries,
-    // in all libraries of certain categories, with or without
-    // return values
-    //
     class PluginManager {
         // Constructor
     public:
