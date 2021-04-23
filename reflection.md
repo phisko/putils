@@ -6,7 +6,7 @@ This provides an API that you can implement for any type so that you can introsp
 
 The "used types" concept can refer to anything really, but one interesting use case is when registering a type with scripting languages. If you're going to be accessing a type's attributes through a scripting language, chances are you also want to register those attributes' types.
 
-An example use case for this API is the [registerType](../lua/README.md) function provided for lua, that inspects a type and registers all its attributes and methods to a lua state.
+An example use case for this API is the [registerType](lua/README.md) function provided for lua, that inspects a type and registers all its attributes and methods to a lua state.
 
 ## Overview
 
