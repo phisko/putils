@@ -1,7 +1,7 @@
 #pragma once
 
 #include "sol.hpp"
-#include "traits.hpp"
+#include "meta/traits.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
 

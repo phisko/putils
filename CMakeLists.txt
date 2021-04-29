@@ -11,6 +11,7 @@ endif()
 file(GLOB src *.cpp *.hpp)
 add_library(putils STATIC ${src})
 target_include_directories(putils PUBLIC .)
+target_include_directories(putils PUBLIC reflection)
 
 add_subdirectory(pluginManager)
 target_link_libraries(putils PUBLIC putils_pluginManager)

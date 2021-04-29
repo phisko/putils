@@ -6,10 +6,8 @@
 #include "pybind11/cast.h"
 #include "pybind11/iostream.h"
 #include "pybind11/embed.h"
-#include "traits.hpp"
 #include "reflection.hpp"
 #include "to_string.hpp"
-#include "members.hpp"
 
 namespace putils::python {
 	putils_member_detector(begin);
