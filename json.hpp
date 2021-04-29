@@ -83,6 +83,8 @@ SOFTWARE.
 #include <cstdint> // uint8_t
 #include <string> // string
 
+#undef snprintf
+
 namespace nlohmann
 {
 namespace detail
