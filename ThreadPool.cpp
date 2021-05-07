@@ -1,4 +1,6 @@
 #include "ThreadPool.hpp"
+#include <cassert>
+#include "thread_name.hpp"
 
 namespace putils {
 	// the constructor just launches some amount of workers

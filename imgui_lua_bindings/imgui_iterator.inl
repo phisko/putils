@@ -1656,10 +1656,6 @@ MAKE_ENUM(ImGuiInputTextFlags_CharsScientific,CharsScientific)
 MAKE_ENUM(ImGuiInputTextFlags_CallbackResize,CallbackResize)
 //    ImGuiInputTextFlags_CallbackEdit        = 1 << 19,  // Callback on any edit (note that InputText() already returns true on edit, the callback is useful mainly to manipulate the underlying buffer while focus is active)
 MAKE_ENUM(ImGuiInputTextFlags_CallbackEdit,CallbackEdit)
-//    ImGuiInputTextFlags_Multiline           = 1 << 20,  // For internal use by InputTextMultiline()
-MAKE_ENUM(ImGuiInputTextFlags_Multiline,Multiline)
-//    ImGuiInputTextFlags_NoMarkEdited        = 1 << 21   // For internal use by functions using InputText() before reformatting data
-MAKE_ENUM(ImGuiInputTextFlags_NoMarkEdited,NoMarkEdited)
 END_ENUM(InputTextFlags)
 //enum ImGuiTreeNodeFlags_
 

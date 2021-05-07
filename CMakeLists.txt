@@ -16,7 +16,7 @@ target_include_directories(putils PUBLIC reflection)
 add_subdirectory(pluginManager)
 target_link_libraries(putils PUBLIC putils_pluginManager)
 
-set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp)
+set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp)
 add_library(putils_imgui STATIC ${imguiSrc})
 target_include_directories(putils_imgui PUBLIC imgui)
 target_link_libraries(putils PUBLIC putils_imgui)

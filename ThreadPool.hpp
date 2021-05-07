@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-Copyright(c) 2012 Jakob Progsch, Václav Zeman
+Copyright(c) 2012 Jakob Progsch, VÃ¡clav Zeman
 
 This software is provided 'as-is', without any express or implied
 warranty.In no event will the authors be held liable for any damages
@@ -29,15 +29,11 @@ distribution.
 # define PUTILS_THREADPOOL_FUNCTION_SIZE 128
 #endif
 
-#include <atomic>
-#include <cassert>
 #include <vector>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include "fwd.hpp"
 #include "function.hpp"
-#include "set_thread_name.hpp"
 
 namespace putils {
 	class ThreadPool {
