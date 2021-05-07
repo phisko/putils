@@ -3,9 +3,6 @@
 #ifndef PUTILS_GLM
 static_assert(false, "putils::gl::Program requires GLM");
 #else
-#include <iostream>
-#include <functional>
-#include <fstream>
 #include "opengl/Uniform.hpp"
 
 #include "glm/glm.hpp"

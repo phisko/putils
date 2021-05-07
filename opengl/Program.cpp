@@ -1,12 +1,7 @@
 #ifdef PUTILS_GLM
 
-#include <assert.h>
-
 #include "Program.hpp"
 #include "reflection.hpp"
-#include "members.hpp"
-#include "lengthof.hpp"
-#include "read_stream.hpp"
 #include "termcolor.hpp"
 
 namespace putils::gl {
