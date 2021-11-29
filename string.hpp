@@ -69,6 +69,7 @@ namespace putils {
 
 		constexpr size_t find(const char * substr, size_t pos = 0) const noexcept;
 		constexpr size_t find(char c, size_t pos = 0) const noexcept;
+		constexpr size_t find(std::string_view substr, size_t pos = 0) const noexcept;
 
 		constexpr char at(size_t i) const noexcept;
 

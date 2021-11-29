@@ -182,6 +182,16 @@ namespace putils {
 	}
 
 	TemplateDecl
+	constexpr size_t TString::find(std::string_view substr, size_t pos) const noexcept {
+		for (; pos < _size; ++pos) {
+			const auto remainingSize = _size - pos;
+			if (strncmp(_buff + pos, substr.data(), std::min(remainingSize, substr.size())) == 0)
+				return pos;
+		}
+		return npos;
+	}
+
+	TemplateDecl
 	constexpr char TString::at(size_t i) const noexcept {
 		return _buff[i];
 	}
