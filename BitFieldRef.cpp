@@ -1,17 +1,22 @@
 #include "BitFieldRef.hpp"
 
 namespace putils {
-	BitFieldRef::BitFieldRef(void * data) noexcept
-	: data((char *)data)
+	ConstBitFieldRef::ConstBitFieldRef(const void * data) noexcept
+	: data((const char *)data)
 	{}
 
-	bool BitFieldRef::get(size_t index) const noexcept {
+	bool ConstBitFieldRef::get(size_t index) const noexcept {
 		return get(index / 8, index % 8);
 	}
 
-	bool BitFieldRef::get(size_t byteIndex, size_t bitIndex) const noexcept {
+	bool ConstBitFieldRef::get(size_t byteIndex, size_t bitIndex) const noexcept {
 		return (data[byteIndex] >> bitIndex) & 1;
 	}
+
+	BitFieldRef::BitFieldRef(void * data) noexcept
+	: ConstBitFieldRef(data)
+	, data((char *)data)
+	{}
 
 	void BitFieldRef::set(size_t index, bool value) noexcept {
 		set(index / 8, index % 8, value);
