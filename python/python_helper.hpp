@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pybind11/pybind11.h"
+#include "pybind11_putils_function.hpp"
 
 namespace py = pybind11;
 

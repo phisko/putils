@@ -7,7 +7,7 @@
 
 namespace putils {
     template<typename ... Args>
-    std::string concat(Args && ... args) noexcept;
+    std::string concatenate(Args && ... args) noexcept;
 }
 
-#include "concat.inl"
+#include "concatenate.inl"

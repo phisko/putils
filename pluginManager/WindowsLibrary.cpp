@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "get_last_error_as_string.hpp"
-#include "concat.hpp"
+#include "concatenate.hpp"
 #include "get_current_dir.hpp"
 
 namespace putils {
