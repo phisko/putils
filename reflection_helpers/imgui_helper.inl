@@ -6,6 +6,10 @@
 #include "magic_enum.hpp"
 #include "lengthof.hpp"
 #include "universal_functor.hpp"
+#include "meta/traits/is_iterable.hpp"
+#include "meta/traits/is_function.hpp"
+#include "meta/traits/function_return_type.hpp"
+#include "meta/traits/function_arguments.hpp"
 
 namespace putils::reflection {
 	template<typename E>

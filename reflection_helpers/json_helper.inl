@@ -1,4 +1,5 @@
 #include "json_helper.hpp"
+#include "meta/traits/is_specialization.hpp"
 
 namespace putils::reflection {
 	namespace detail::json {

@@ -8,6 +8,8 @@
 #include "pybind11/embed.h"
 #include "reflection.hpp"
 #include "to_string.hpp"
+#include "meta/traits/is_streamable.hpp"
+#include "meta/traits/member_function_return_type.hpp"
 
 namespace putils::python {
 	putils_member_detector(begin);

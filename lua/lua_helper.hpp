@@ -1,9 +1,9 @@
 #pragma once
 
 #include "sol.hpp"
-#include "meta/traits.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
+#include "meta/traits/is_streamable.hpp"
 
 namespace sol {
 	namespace detail {
