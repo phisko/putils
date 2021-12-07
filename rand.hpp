@@ -4,7 +4,7 @@
 
 namespace putils {
     template<typename T>
-    T rand(T start = 0, T end = std::numeric_limits<T>::max) noexcept;
+    T rand(T start = 0, T end = std::numeric_limits<T>::max()) noexcept;
 }
 
 #include "rand.inl"
