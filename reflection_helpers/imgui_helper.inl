@@ -163,8 +163,7 @@ namespace putils::reflection {
 					for (auto & val : member)
 						editAttribute(putils::string<64>("%d", i++), val);
 
-					if constexpr (detail::imgui::has_member_emplace_back<Member>())
-					{
+					if constexpr (detail::imgui::has_member_emplace_back<Member>()) {
 						if (ImGui::MenuItem("Add"))
 							member.emplace_back();
 						static int removeIndex = 0;
