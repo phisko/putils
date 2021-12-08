@@ -6,19 +6,26 @@ Helper functions for manipulating reflectible types in `ImGui`.
 
 ```cpp
 template<typename T>
-void imguiEdit(T & obj);
-```
+void imguiEdit(T && obj);
 
-For each reflectible attribute in `obj`, displays it in an editable box (or a colorpicker for colors).
-
-## imguiDisplay
-
-```cpp
 template<typename T>
-void imguiDisplay(const T & obj);
+void imguiEdit(const char * label, T && obj);
 ```
 
-For each reflectible attribute in `obj`, displays it.
+Displays `obj`, in an editable way if `obj` is not const.
+
+Currently supported types:
+* all [reflectible](../reflection/README.md) types
+* strings (both `std::string` and [putils::string](../string.md))
+* iterable containers
+* [putils::Color & putils::NormalizedColor](../Color.md)
+* functors, with editable arguments
+* enums
+* bool
+* int
+* unsigned int
+* float
+* double
 
 ## imguiEnumCombo
 
