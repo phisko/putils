@@ -115,6 +115,39 @@ namespace putils::reflection {
 		
 		// else if constexpr (std::is_same_v<T, const char *>::value)
 		// 	ImGui::LabelText(name, obj);
+
+		else if constexpr (putils::is_specialization<T, std::map>() || putils::is_specialization<T, std::unordered_map>()) {
+			if (obj.empty()) {
+				detail::imgui::displayInColumns(name, [] {
+					ImGui::Text("empty");
+				});
+			}
+			else if (ImGui::TreeNode(nameWithID)) {
+				for (auto && [key, value] : obj) {
+					// If we can use the key as the treenode title, do so
+					if constexpr (putils::is_streamable<std::stringstream, putils_typeof(key)>()) {
+						const auto keyString = putils::toString(key);
+						if (ImGui::TreeNode(detail::imgui::getNameWithID(keyString.c_str(), key))) {
+							imguiEdit(value);
+							ImGui::TreePop();
+						}
+					}
+					// Otherwise, display two treenodes for the key and value
+					else {
+						if (ImGui::TreeNode(detail::imgui::getNameWithID("key", key))) {
+							imguiEdit(key);
+							ImGui::TreePop();
+						}
+					
+						if (ImGui::TreeNode(detail::imgui::getNameWithID("value", value))) {
+							imguiEdit(value);
+							ImGui::TreePop();
+						}
+					}
+				}
+				ImGui::TreePop();
+			}
+		}
 		
 		else if constexpr (putils::is_iterable<T>()) {
 			if (ImGui::TreeNode(nameWithID)) {
