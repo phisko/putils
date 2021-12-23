@@ -8,7 +8,7 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNOMINMAX")
 endif()
 
-file(GLOB src *.cpp *.hpp)
+file(GLOB src *.cpp *.hpp reflection_helpers/*.cpp reflection_helpers/*.hpp)
 add_library(putils STATIC ${src})
 target_include_directories(putils PUBLIC .)
 target_include_directories(putils PUBLIC reflection)

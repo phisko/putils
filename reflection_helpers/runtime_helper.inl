@@ -1,4 +1,4 @@
-#include "attributes_helper.hpp"
+#include "runtime_helper.hpp"
 
 #include <map>
 #include <unordered_map>
@@ -10,7 +10,7 @@
 #include "meta/traits/indexed_type.hpp"
 #include "meta/traits/is_specialization.hpp"
 
-namespace putils::reflection {
+namespace putils::reflection::runtime {
     namespace impl {
 		putils_member_detector(size);
 
@@ -114,12 +114,17 @@ namespace putils::reflection {
     }
 
     template<typename T>
-    const Attributes & getRuntimeAttributes() noexcept {
+    const Attributes & getAttributes() noexcept {
         static const Attributes attributes = [] {
             Attributes ret;
             impl::fillAttributes<T>(ret.map);
             return ret;
         }();
         return attributes;
+    }
+
+	template<typename T>
+	const AttributeInfo * findAttribute(std::string_view path, std::string_view separator) noexcept {
+	    return findAttribute(getRuntimeAttributes<T>(), path, separator);
     }
 }
