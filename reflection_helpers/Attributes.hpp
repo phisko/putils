@@ -30,7 +30,7 @@ namespace putils::reflection {
 			
 			// using Iterator = putils::function<void(void * element), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
 			using Iterator = std::function<void(void * element)>;
-			using ForEachSignature = void(const Iterator & callback);
+			using ForEachSignature = void(void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
 			AttributeMap elementAttributes;
@@ -46,7 +46,7 @@ namespace putils::reflection {
 
 			// using Iterator = putils::function<void(const void * key, void * value), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
 			using Iterator = std::function<void(const void * key, void * value)>;
-			using ForEachSignature = void(const Iterator & callback);
+			using ForEachSignature = void(void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
 			AttributeMap keyAttributes;

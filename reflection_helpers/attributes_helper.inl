@@ -1,5 +1,8 @@
 #include "attributes_helper.hpp"
 
+#include <map>
+#include <unordered_map>
+
 #include "to_string.hpp"
 #include "lengthof.hpp"
 #include "vector.hpp"
@@ -26,8 +29,8 @@ namespace putils::reflection {
 					auto & element = (*array)[index];
 					return &element;
 				},
-				.forEach = [](const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
-					auto * array = (MemberType *)ATTRIBUTE_SECURITY_INFORMATION;
+				.forEach = [](void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
+					auto * array = (MemberType *)attribute;
 					for (auto & element : *array)
 						iterator(&element);
 				}
@@ -71,8 +74,8 @@ namespace putils::reflection {
 						return &*it;
 					return nullptr;
 				},
-				.forEach = [](const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
-					auto * map = (MemberType *)ATTRIBUTE_SECURITY_INFORMATION;
+				.forEach = [](void * attribute, const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
+					auto * map = (MemberType *)attribute;
 
 					for (auto & [key, value] : *map)
 						iterator(&key, &value);
