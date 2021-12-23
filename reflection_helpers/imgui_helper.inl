@@ -30,6 +30,7 @@ namespace putils::reflection {
 	namespace detail::imgui {
 		putils_member_detector(c_str);
 		putils_member_detector(emplace_back);
+		putils_member_detector(empty)
 
 		template<typename F>
 		void displayInColumns(const char * name, F && f) noexcept {
@@ -150,6 +151,15 @@ namespace putils::reflection {
 		}
 		
 		else if constexpr (putils::is_iterable<T>()) {
+			if constexpr (detail::imgui::has_member_empty<T>()) {
+				if (obj.empty()) {
+					detail::imgui::displayInColumns(name, [] {
+						ImGui::Text("empty");
+					});
+					return;
+				}
+			}
+
 			if (ImGui::TreeNode(nameWithID)) {
 				int i = 0;
 				for (auto && val : obj)
