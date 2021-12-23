@@ -152,7 +152,7 @@ namespace putils::reflection {
 		else if constexpr (putils::is_iterable<T>()) {
 			if (ImGui::TreeNode(nameWithID)) {
 				int i = 0;
-				for (auto&& val : obj) // TODO: check this works with const
+				for (auto && val : obj)
 					imguiEdit(putils::string<64>("%d", i++), val);
 				
 				if constexpr (!isConst && detail::imgui::has_member_emplace_back<T>()) {
