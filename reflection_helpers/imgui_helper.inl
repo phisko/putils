@@ -277,65 +277,59 @@ namespace putils::reflection {
 			});
 		}
 
-		else if constexpr (std::is_same_v<T, int>) {
-			detail::imgui::displayInColumns(name, [&]() noexcept {
-				if constexpr (isConst)
-					ImGui::Text("%d", obj);
-				else {
-					ImGui::PushItemWidth(-1.f);
-					auto val = obj;
-					if (ImGui::InputInt(id, &val, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue))
-						obj = val;
-					ImGui::PopItemWidth();
-				}
-			});
+		else if constexpr (std::is_scalar_v<T> || std::is_same_v<T, std::ptrdiff_t>) {
+			if constexpr (isConst) {
+				detail::imgui::displayInColumns(name, [&] {
+					constexpr auto format =
+						std::is_same_v<T, int> ? "%d" :
+						std::is_same_v<T, std::ptrdiff_t> ? "%d" :
+						std::is_same_v<T, unsigned int> ? "%zu" :
+						std::is_same_v<T, size_t> ? "%zu" :
+						std::is_same_v<T, float> ? "%f" :
+						std::is_same_v<T, double> ? "%d" :
+						"<unknown type>";	
+					ImGui::Text(format, obj);
+				});
+			}
+			else {
+				ImGui::PushItemWidth(-1.f);
+				constexpr auto dataType = [] {
+					if constexpr (std::is_integral_v<T>) {
+						if constexpr (std::is_signed_v<T>) {
+							switch (sizeof(T)) {
+								case 1: return ImGuiDataType_S8;
+								case 2: return ImGuiDataType_S16;
+								case 4: return ImGuiDataType_S32;
+								case 8: return ImGuiDataType_S64;
+								default: assert(false);
+							}
+						}
+						else {
+							switch (sizeof(T)) {
+								case 1: return ImGuiDataType_U8;
+								case 2: return ImGuiDataType_U16;
+								case 4: return ImGuiDataType_U32;
+								case 8: return ImGuiDataType_U64;
+								default: assert(false);
+							}
+						}
+					}
+					else if constexpr (std::is_same_v<T, double>)
+						return ImGuiDataType_Double;
+					else if constexpr (std::is_same_v<T, float>)
+						return ImGuiDataType_Float;
+					else
+						assert(false);
+				}();
+				auto val = obj;
+				if (ImGui::InputScalar(id, dataType, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue))
+					obj = val;
+				ImGui::PopItemWidth();
+			}
 		}
-
-		else if constexpr (std::is_same_v<T, unsigned int> || std::is_same_v<T, size_t>) {
-			detail::imgui::displayInColumns(name, [&]() noexcept {
-				if constexpr (isConst)
-					ImGui::Text("%zu", obj);
-				else {
-					ImGui::PushItemWidth(-1.f);
-					auto val = obj;
-					if (ImGui::InputScalar(id, sizeof(T) == 64 ? ImGuiDataType_U64 : ImGuiDataType_U32, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue))
-						obj = val;
-					ImGui::PopItemWidth();
-				}
-			});
-		}
-
-		else if constexpr (std::is_same_v<T, float>) {
-			detail::imgui::displayInColumns(name, [&]() noexcept {
-				if constexpr (isConst)
-					ImGui::Text("%f", obj);
-				else {
-					ImGui::PushItemWidth(-1.f);
-					auto val = obj;
-					if (ImGui::InputFloat(id, &val, 0.f, 0.f, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
-						obj = val;
-					ImGui::PopItemWidth();
-				}
-			});
-		}
-		
-		else if constexpr (std::is_same_v<T, double>) {
-			detail::imgui::displayInColumns(name, [&]() noexcept {
-				if constexpr (isConst)
-					ImGui::Text("%d", obj);
-				else {
-					ImGui::PushItemWidth(-1.f);
-					auto val = obj;
-					if (ImGui::InputDouble(id, &val, 0.0, 0.0, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
-						obj = val;
-					ImGui::PopItemWidth();
-				}
-			});
-		}
-		
 		else {
-			detail::imgui::displayInColumns(name, [&]() noexcept {
-				ImGui::Text("Unknown type");
+			detail::imgui::displayInColumns(name, [] {
+				ImGui::Text("unknown type");
 			});
 		}
 	}
