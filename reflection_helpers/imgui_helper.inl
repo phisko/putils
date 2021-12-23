@@ -8,6 +8,7 @@
 #include "universal_functor.hpp"
 #include "meta/traits/is_iterable.hpp"
 #include "meta/traits/is_function.hpp"
+#include "meta/traits/is_specialization.hpp"
 #include "meta/traits/function_return_type.hpp"
 #include "meta/traits/function_arguments.hpp"
 
@@ -82,6 +83,19 @@ namespace putils::reflection {
 				putils::reflection::for_each_attribute(obj, UNIVERSAL_FUNCTOR(imguiEdit));
 				ImGui::TreePop();
 			}
+		}
+
+		else if constexpr (std::is_pointer<T>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>()) {
+			if (obj) {
+				if constexpr (std::is_same<std::remove_pointer_t<T>, void>())
+					ImGui::Text("%p", obj);
+				else
+					imguiEdit(name, *obj);
+			}
+			else
+				detail::imgui::displayInColumns(name, []() noexcept {
+					ImGui::Text("null");
+				});
 		}
 	
 		else if constexpr (detail::imgui::has_member_c_str<T>()) {
