@@ -1,0 +1,122 @@
+#include "attributes_helper.hpp"
+
+#include "to_string.hpp"
+#include "lengthof.hpp"
+#include "vector.hpp"
+#include "meta/traits/is_indexable.hpp"
+#include "meta/traits/indexed_type.hpp"
+#include "meta/traits/is_specialization.hpp"
+
+namespace putils::reflection {
+    namespace impl {
+		putils_member_detector(size);
+
+		template<typename MemberType>
+		static AttributeInfo::ArrayHelper makeArrayHelperImpl() noexcept {
+			AttributeInfo::ArrayHelper helper{
+				.getSize = [](void * attribute) noexcept {
+					auto * array = (MemberType *)attribute;
+					if constexpr (std::is_array<MemberType>())
+						return putils::lengthof(*array);
+					else
+						return array->size();
+				},
+				.getElement = [](void * attribute, size_t index) noexcept -> void * {
+					auto * array = (MemberType *)attribute;
+					auto & element = (*array)[index];
+					return &element;
+				},
+				.forEach = [](const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
+					auto * array = (MemberType *)ATTRIBUTE_SECURITY_INFORMATION;
+					for (auto & element : *array)
+						iterator(&element);
+				}
+			};
+
+			using IndexedType = putils::indexed_type<MemberType>;
+			fillAttributes<std::decay_t<IndexedType>>(helper.elementAttributes);
+
+			return helper;
+		}
+
+    	template<typename MemberType>
+    	static std::optional<AttributeInfo::ArrayHelper> makeArrayHelper() noexcept {
+			if constexpr (std::is_array<MemberType>())
+				return makeArrayHelperImpl<MemberType>();
+
+			if constexpr (putils::is_indexable<MemberType>() && has_member_size<MemberType>())
+				if constexpr (std::is_reference<putils::indexed_type<MemberType>>()) // Need this in a nested if, as putils::is_indexable has to be checked first and there is no early-exit for if constexpr
+					return makeArrayHelperImpl<MemberType>();
+
+    		return std::nullopt;
+    	}
+
+		template<typename MemberType>
+		static AttributeInfo::MapHelper makeMapHelperImpl() noexcept {
+			using KeyType = typename MemberType::key_type;
+			using ValueType = typename MemberType::value_type;
+
+			AttributeInfo::MapHelper helper{
+				.getSize = [](void * attribute) noexcept {
+					auto * map = (MemberType *)attribute;
+					return map->size();
+				},
+				.getValue = [](void * attribute, const char * keyString) noexcept -> void * {
+					auto * map = (MemberType *)attribute;
+
+					const auto key = putils::parse<KeyType>(keyString);
+
+					const auto it = map->find(key);
+					if (it != map->end())
+						return &*it;
+					return nullptr;
+				},
+				.forEach = [](const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
+					auto * map = (MemberType *)ATTRIBUTE_SECURITY_INFORMATION;
+
+					for (auto & [key, value] : *map)
+						iterator(&key, &value);
+				}
+			};
+
+			fillAttributes<KeyType>(helper.keyAttributes);
+			fillAttributes<ValueType>(helper.valueAttributes);
+
+			return helper;
+		}
+
+    	template<typename MemberType>
+    	static std::optional<AttributeInfo::MapHelper> makeMapHelper() noexcept {
+			if constexpr (putils::is_specialization<MemberType, std::map>() || putils::is_specialization<MemberType, std::unordered_map>())
+				return makeMapHelperImpl<MemberType>();
+
+			return std::nullopt;
+		}
+
+		template<typename T>
+		static void fillAttributes(AttributeMap & attributes) noexcept {
+			putils::reflection::for_each_attribute<T>([&](std::string_view name, const auto member) noexcept {
+				using MemberType = putils::MemberType<decltype(member)>;
+
+				auto & attr = attributes[std::string(name)];
+				attr.size = sizeof(MemberType);
+				attr.offset = putils::member_offset(member);
+				attr.arrayHelper = makeArrayHelper<MemberType>();
+				attr.mapHelper = makeMapHelper<MemberType>();
+
+				fillAttributes<MemberType>(attr.attributes);
+			});
+		}
+        
+    }
+
+    template<typename T>
+    const Attributes & getRuntimeAttributes() noexcept {
+        static const Attributes attributes = [] {
+            Attributes ret;
+            impl::fillAttributes<T>(ret.map);
+            return ret;
+        }();
+        return attributes;
+    }
+}
