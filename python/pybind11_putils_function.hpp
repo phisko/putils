@@ -1,6 +1,7 @@
 #pragma once
 
 #include "function.hpp"
+#include "pybind11/pybind11.h"
 
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
