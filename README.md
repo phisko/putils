@@ -51,6 +51,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [casts](casts.md): static and dynamic casts for std::unique_ptr
 * [chop](chop.md): function removing any whitespace from the end of a string
 * [clamp](clamp.md): function that clamps a value between two bounds
+* [command_line_arguments](command_line_arguments.md): function that parses command-line arguments into a struct
 * [concatenate](concatenate.md): function taking any number of parameters and concatenating them into a string
 * [curl](curl.md): function that runs a `curl` request over CLI (to avoid having to install curl packages. This is NOT the optimal way to do an HTTP request)
 * [epsilon](epsilon.md): approximate comparison of floating point types
