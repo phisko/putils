@@ -34,6 +34,6 @@ namespace putils {
 	}
 
 	void BitFieldRef::toggle(size_t byteIndex, size_t bitIndex) noexcept {
-		data[byteIndex] ^= get(byteIndex, bitIndex);
+		data[byteIndex] ^= (1 << bitIndex);
 	}
 }
