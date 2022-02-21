@@ -98,16 +98,16 @@ namespace putils::reflection::runtime {
 
 		template<typename T>
 		static void fillAttributes(AttributeMap & attributes) noexcept {
-			putils::reflection::for_each_attribute<T>([&](std::string_view name, const auto member) noexcept {
-				using MemberType = putils::MemberType<decltype(member)>;
+			putils::reflection::for_each_attribute<T>([&](const auto & attr) noexcept {
+				using MemberType = putils::MemberType<decltype(attr.ptr)>;
 
-				auto & attr = attributes[std::string(name)];
-				attr.size = sizeof(MemberType);
-				attr.offset = putils::member_offset(member);
-				attr.arrayHelper = makeArrayHelper<MemberType>();
-				attr.mapHelper = makeMapHelper<MemberType>();
+				auto & runtimeAttr = attributes[std::string(attr.name)];
+				runtimeAttr.size = sizeof(MemberType);
+				runtimeAttr.offset = putils::member_offset(attr.ptr);
+				runtimeAttr.arrayHelper = makeArrayHelper<MemberType>();
+				runtimeAttr.mapHelper = makeMapHelper<MemberType>();
 
-				fillAttributes<MemberType>(attr.attributes);
+				fillAttributes<MemberType>(runtimeAttr.attributes);
 			});
 		}
         

@@ -63,15 +63,15 @@ namespace putils::reflection {
 
 			else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
 				if constexpr (serialize) {
-					putils::reflection::for_each_attribute(obj, [&](const char * name, auto && attr) noexcept {
-						jsonObject[name] = toJSON(attr);
+					putils::reflection::for_each_attribute(obj, [&](const auto & attr) noexcept {
+						jsonObject[attr.name] = toJSON(attr.member);
 					});
 				}
 				else {
-					putils::reflection::for_each_attribute(obj, [&](const char * name, auto && attr) noexcept {
-						const auto attrJSON = jsonObject.find(name);
+					putils::reflection::for_each_attribute(obj, [&](const auto & attr) noexcept {
+						const auto attrJSON = jsonObject.find(attr.name);
 						if (attrJSON != jsonObject.end())
-							fromJSON(*attrJSON, attr);
+							fromJSON(*attrJSON, attr.member);
 					});
 				}
 			}

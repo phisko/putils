@@ -56,9 +56,9 @@ namespace putils::vulkan {
 			const auto uniqueIndices = [&] {
 				const auto indices = findQueueFamilies(context);
 				std::unordered_set<uint32_t> set;
-				putils::reflection::for_each_attribute(indices, [&](const char * name, const auto & member) {
-					set.insert(*member.index);
-					});
+				putils::reflection::for_each_attribute(indices, [&](const auto & attr) {
+					set.insert(*attr.member.index);
+				});
 				return std::vector<uint32_t>(set.begin(), set.end());
 			}();
 

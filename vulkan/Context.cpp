@@ -22,11 +22,11 @@ namespace putils::vulkan {
 			context.device = createLogicalDevice(context, params);
 
 			const auto queueFamilies = findQueueFamilies(context);
-			reflection::for_each_attribute(context.queues, [&](const char * name, auto && member) {
-				const auto queueFamiliesMember = reflection::get_attribute<QueueFamilyIndices::QueueFamily>(queueFamilies, name);
+			reflection::for_each_attribute(context.queues, [&](const auto & attr) {
+				const auto queueFamiliesMember = reflection::get_attribute<QueueFamilyIndices::QueueFamily>(queueFamilies, attr.name);
 				assert(queueFamiliesMember != nullptr);
-				member = context.device->getQueue(queueFamiliesMember->index.value(), 0);
-				});
+				attr.member = context.device->getQueue(queueFamiliesMember->index.value(), 0);
+			});
 
 			context.commandPool = createCommandPool(context);
 			init(context.swapChain, context, params.windowSize);
@@ -118,8 +118,8 @@ namespace putils::vulkan {
 			const auto queueFamilies = putils::vulkan::findQueueFamilies(context);
 
 			std::unordered_set<uint32_t> uniqueQueueFamilies;
-			putils::reflection::for_each_attribute(queueFamilies, [&](const char * name, auto && member) {
-				uniqueQueueFamilies.insert(*member.index);
+			putils::reflection::for_each_attribute(queueFamilies, [&](const auto & attr) {
+				uniqueQueueFamilies.insert(*attr.member.index);
 				});
 
 			std::vector<vk::DeviceQueueCreateInfo> queueInfos;

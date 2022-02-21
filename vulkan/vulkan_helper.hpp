@@ -105,13 +105,13 @@ namespace putils::vulkan {
 
 			using Data = typename T::DataType;
 			const auto dataOffset = offsetof(T, data);
-			putils::reflection::for_each_attribute<Data>([&](const char * name, const auto member) {
-				desc.attributes.push_back(getVertexAttributeDescription(location++, member, (uint32_t)dataOffset));
+			putils::reflection::for_each_attribute<Data>([&](const auto & attr) {
+				desc.attributes.push_back(getVertexAttributeDescription(location++, attr.member, (uint32_t)dataOffset));
 			});
 		}
 		else {
-			putils::reflection::for_each_attribute<T>([&](const char * name, const auto member) {
-				desc.attributes.push_back(getVertexAttributeDescription(location++, member));
+			putils::reflection::for_each_attribute<T>([&](const auto & attr) {
+				desc.attributes.push_back(getVertexAttributeDescription(location++, attr.member));
 			});
 		}
 

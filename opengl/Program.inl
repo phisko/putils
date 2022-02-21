@@ -25,11 +25,11 @@ namespace putils::gl {
 	template<typename T>
 	void setVertexType() noexcept {
 		size_t location = 0;
-		putils::reflection::for_each_attribute<T>([&](const char *, auto member) noexcept {
-			using Member = putils::MemberType<putils_typeof(member)>;
+		putils::reflection::for_each_attribute<T>([&](const auto & attr) noexcept {
+			using Member = putils::MemberType<putils_typeof(attr.ptr)>;
 
 			constexpr auto length = putils::lengthof<Member>();
-			setAttrib<T, Member>(location++, length, putils::member_offset(member));
+			setAttrib<T, Member>(location++, length, putils::member_offset(attr.ptr));
 		});
 	}
 
@@ -44,16 +44,16 @@ namespace putils::gl {
 		if constexpr (putils::reflection::has_attributes<Data>()) {
 			const auto dataOffset = offsetof(VertexType, data);
 
-			putils::reflection::for_each_attribute<Data>([&](const char *, auto member) noexcept {
-				using Ptr = decltype(member);
+			putils::reflection::for_each_attribute<Data>([&](const auto & attr) noexcept {
+				using Ptr = decltype(attr.ptr);
 				using Member = std::remove_reference_t<decltype(std::declval<Data>().*(std::declval<Ptr>()))>;
 
 				size_t length = 1;
 				if constexpr (std::is_array_v<Member>)
 					length = lengthof<Member>();
 
-				setAttrib<VertexType, Member>(location++, length, dataOffset + putils::member_offset(member));
-				});
+				setAttrib<VertexType, Member>(location++, length, dataOffset + putils::member_offset(attr.ptr));
+			});
 		}
 	}
 
@@ -82,7 +82,9 @@ namespace putils::gl {
 #endif
 		glUseProgram(_handle);
 
-		putils::reflection::for_each_attribute(static_cast<CRTP &>(*this), [&](const char * name, auto && uniformLocation) {
+		putils::reflection::for_each_attribute(static_cast<CRTP &>(*this), [&](const auto & attr) {
+			const auto & uniformLocation = attr.member;
+
 			static const auto setLocation = [this](GLint & loc, const char * name) noexcept {
 				loc = glGetUniformLocation(_handle, name);
 #if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
@@ -99,15 +101,15 @@ namespace putils::gl {
 				for (size_t i = 0; i < lengthof(uniformLocation); ++i) {
 					using SubType = std::remove_reference_t<decltype(uniformLocation[i])>;
 					if constexpr (std::is_same_v<SubType, GLint>)
-						setLocation(uniformLocation[i], putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", name, i));
+						setLocation(uniformLocation[i], putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", attr.name, i));
 					else // should be putils::gl::Uniform<T>
-						setLocation(uniformLocation[i].location, putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", name, i));
+						setLocation(uniformLocation[i].location, putils::string<PUTILS_UNIFORM_NAME_MAX_LENGTH>("%s[%d]", attr.name, i));
 				}
 			}
 			else if constexpr (std::is_same_v<putils_typeof(uniformLocation), GLint>)
-				setLocation(uniformLocation, name);
+				setLocation(uniformLocation, attr.name);
 			else // should be putils::gl::Uniform<T>
-				setLocation(uniformLocation.location, name);
+				setLocation(uniformLocation.location, attr.name);
 			});
 	}
 

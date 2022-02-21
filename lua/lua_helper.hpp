@@ -81,16 +81,15 @@ namespace putils {
 			static_assert(putils::reflection::has_class_name<T>());
 
 			auto type = state.new_usertype<T>(putils::reflection::get_class_name<T>());
-			putils::reflection::for_each_attribute<T>([&](const char * name, const auto member) {
-				type[name] = member;
+			putils::reflection::for_each_attribute<T>([&](const auto & attr) {
+				type[attr.name] = attr.ptr;
 			});
-			putils::reflection::for_each_method<T>([&](const char * name, const auto member) {
-				type[name] = member;
+			putils::reflection::for_each_method<T>([&](const auto & attr) {
+				type[attr.name] = attr.ptr;
 			});
 
 			if constexpr (putils::is_streamable<std::ostream, T>())
-                type[sol::meta_function::to_string] =
-                        [](const T & obj) { return putils::toString(obj); };
+                type[sol::meta_function::to_string] = [](const T & obj) { return putils::toString(obj); };
         }
     }
 }

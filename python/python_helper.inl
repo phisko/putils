@@ -19,22 +19,22 @@ namespace putils::python {
 	void registerType(py::module_ & m) noexcept {
 		try {
 			py::class_<T> type(m, putils::reflection::get_class_name<T>(), py::dynamic_attr());
-			putils::reflection::for_each_attribute<T>([&type](auto name, auto member) noexcept {
-				using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(member))>;
+			putils::reflection::for_each_attribute<T>([&type](const auto & attr) noexcept {
+				using MemberType = std::remove_reference_t<decltype(std::declval<T>().*(attr.ptr))>;
 				if constexpr (std::is_const<MemberType>() || !std::is_assignable<MemberType, MemberType>())
-					type.def_readonly(name, member);
+					type.def_readonly(attr.name, attr.ptr);
 				else
-					type.def_readwrite(name, member);
-				});
+					type.def_readwrite(attr.name, attr.ptr);
+			});
 
-			putils::reflection::for_each_method<T>([&type](auto name, auto member) noexcept {
-				using Ret = putils::member_function_return_type<decltype(member)>;
+			putils::reflection::for_each_method<T>([&type](const auto & attr) noexcept {
+				using Ret = putils::member_function_return_type<decltype(attr.ptr)>;
 
 				if constexpr (std::is_reference<Ret>())
-					type.def(name, member, py::return_value_policy::reference);
+					type.def(attr.name, attr.ptr, py::return_value_policy::reference);
 				else
-					type.def(name, member);
-				});
+					type.def(attr.name, attr.ptr);
+			});
 
 			if constexpr (putils::is_streamable<std::ostringstream, T>())
 				type.def("__str__", [](const T & obj) { return putils::toString(obj); });

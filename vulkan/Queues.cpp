@@ -10,10 +10,10 @@ namespace putils::vulkan {
 
 		uint32_t i = 0;
 		for (const auto & queueFamily : device.getQueueFamilyProperties()) {
-			putils::reflection::for_each_attribute(indices, [&](const char * name, auto && member) {
-				if (member.condition(device, i, queueFamily))
-					member.index = i;
-				});
+			putils::reflection::for_each_attribute(indices, [&](const auto & attr) {
+				if (attr.member.condition(device, i, queueFamily))
+					attr.member.index = i;
+			});
 			if (isComplete(indices))
 				break;
 			++i;
@@ -24,9 +24,9 @@ namespace putils::vulkan {
 
 	bool isComplete(const QueueFamilyIndices & indices) {
 		bool good = true;
-		putils::reflection::for_each_attribute(indices, [&](const char * name, auto && member) {
-			good &= member.index.has_value();
-			});
+		putils::reflection::for_each_attribute(indices, [&](const auto & attr) {
+			good &= attr.member.index.has_value();
+		});
 		return good;
 	}
 

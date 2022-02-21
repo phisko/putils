@@ -81,7 +81,9 @@ namespace putils::reflection {
 		
 		if constexpr (putils::reflection::has_attributes<T>()) {
 			if (ImGui::TreeNode(nameWithID)) {
-				putils::reflection::for_each_attribute(obj, UNIVERSAL_FUNCTOR(imguiEdit));
+				putils::reflection::for_each_attribute(obj, [](const auto & attr) noexcept {
+					imguiEdit(attr.name, attr.member);
+				});
 				ImGui::TreePop();
 			}
 		}
