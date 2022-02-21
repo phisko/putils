@@ -1,6 +1,5 @@
 #pragma once
 
-#include <assert.h>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -10,7 +9,7 @@
 
 namespace putils {
 	namespace detail_string {
-		static constexpr char defaultClassName[] = "putils_string";
+        extern const char defaultClassName[32];
 	}
 
 	template<size_t MaxSize, const char * ClassName = detail_string::defaultClassName>
@@ -55,10 +54,8 @@ namespace putils {
 
 		constexpr string & operator+=(size_t rhs) noexcept;
 
-#if defined(_MSC_VER) && _MSC_VER > 1920 // MSVC 2019
 		constexpr string & operator+=(unsigned int rhs) noexcept;
 		constexpr string & operator+=(intptr_t rhs) noexcept;
-#endif
 
 		template<typename T>
 		constexpr string operator+(T rhs) const noexcept;
@@ -104,7 +101,7 @@ namespace putils {
 
 	private:
 		size_t _size = 0;
-		Buffer _buff;
+		Buffer _buff = "";
 	};
 
 	template<size_t MaxSize, const char * ClassName>

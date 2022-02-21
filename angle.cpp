@@ -1,4 +1,6 @@
 #include "angle.hpp"
+
+#include <cmath>
 #include "Point.hpp"
 
 namespace putils {
@@ -10,15 +12,15 @@ namespace putils {
 	}
 
 	float getYawFromNormalizedDirection(const Vector3f & dir) noexcept {
-		return -std::atan2f(dir.z, dir.x) + pi / 2.f;
+		return -atan2f(dir.z, dir.x) + pi / 2.f;
 	}
 
 	float getPitchFromNormalizedDirection(const Vector3f & dir) noexcept {
-		return -std::asinf(dir.y);
+		return -asinf(dir.y);
 	}
 
 	float get2DAngleFromNormalizedDirection(const Vector2f & dir) noexcept {
-		return -std::atan2f(dir.y, dir.x) + pi / 2.f;
+		return -atan2f(dir.y, dir.x) + pi / 2.f;
 	}
 
 	float toDegrees(float rads) noexcept {

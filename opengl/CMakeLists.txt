@@ -5,9 +5,7 @@ set(BUILD_UTILS FALSE)
 set(GLEW_PATH libs/glew)
 add_subdirectory(${GLEW_PATH}/build/cmake)
 
-putils_conan(
-	glm/0.9.9.5@g-truc/stable
-)
+putils_conan(glm/0.9.9.8)
 
 target_include_directories(putils_opengl PUBLIC ${GLEW_PATH}/include)
 target_link_libraries(putils_opengl putils glew CONAN_PKG::glm)

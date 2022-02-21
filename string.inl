@@ -1,4 +1,6 @@
 #include "string.hpp"
+#include <cstring>
+#include <cassert>
 
 #define TemplateDecl template<size_t MaxSize, const char * ClassName>
 #define TString string<MaxSize, ClassName>
@@ -82,7 +84,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString & TString::operator+=(const char * pRhs) noexcept {
-		strncat_s(_buff, pRhs, MaxSize - _size);
+		strncat_s(_buff, MaxSize, pRhs, MaxSize - _size);
 		_size += strlen(pRhs);
 		assert(_size < MaxSize);
 		return *this;
@@ -128,7 +130,6 @@ namespace putils {
 		return *this;
 	}
 
-#if defined(_MSC_VER) && _MSC_VER > 1920 // MSVC 2019
 	TemplateDecl
 	constexpr TString & TString::operator+=(unsigned int rhs) noexcept {
 		_size += snprintf(_buff + _size, MaxSize - _size, "%zu", rhs);
@@ -140,13 +141,13 @@ namespace putils {
 		_size += snprintf(_buff + _size, MaxSize - _size, "%zu", rhs);
 		return *this;
 	}
-#endif
 
 	TemplateDecl
 	template<typename T>
 	constexpr TString TString::operator+(T rhs) const noexcept {
 		string ret(_buff);
-		return ret += rhs;
+        ret += rhs;
+		return ret;
 	}
 
 	TemplateDecl
@@ -198,12 +199,12 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString::operator const typename TString::Buffer & () const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr TString::operator typename TString::Buffer & () noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
@@ -213,7 +214,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr char TString::operator[](size_t i) const noexcept {
-		return _buff[i]; 
+		return _buff[i];
 	}
 
 	TemplateDecl
@@ -223,17 +224,17 @@ namespace putils {
 
 	TemplateDecl
 	constexpr std::string TString::str() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr const typename TString::Buffer & TString::data() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr const typename TString::Buffer & TString::c_str() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
@@ -243,32 +244,32 @@ namespace putils {
 
 	TemplateDecl
 	constexpr size_t TString::length() const noexcept {
-		return _size; 
+		return _size;
 	}
 
 	TemplateDecl
 	constexpr bool TString::empty() const noexcept {
-		return _size == 0; 
+		return _size == 0;
 	}
 
 	TemplateDecl
 	constexpr bool TString::full() const noexcept {
-		return _size >= MaxSize; 
+		return _size >= MaxSize;
 	}
 
 	TemplateDecl
 	constexpr const char * TString::begin() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr const char * TString::end() const noexcept {
-		return _buff + _size; 
+		return _buff + _size;
 	}
 
 	TemplateDecl
 	constexpr char * TString::begin() noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
@@ -278,7 +279,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString::operator std::span<const char>() const noexcept {
-		return { _buff, _size }; 
+		return { _buff, _size };
 	}
 
 	TemplateDecl
@@ -288,37 +289,37 @@ namespace putils {
 
 	TemplateDecl
 	constexpr auto begin(const TString & s) noexcept {
-		return s.begin(); 
+		return s.begin();
 	}
 
 	TemplateDecl
 	constexpr auto end(const TString & s) noexcept {
-		return s.end(); 
+		return s.end();
 	}
 
 	TemplateDecl
 	constexpr bool operator==(const TString & lhs, const char * rhs) noexcept {
-		return strcmp(lhs.c_str(), rhs) == 0; 
+		return strcmp(lhs.c_str(), rhs) == 0;
 	}
 
 	TemplateDecl
 	constexpr bool operator!=(const TString & lhs, const char * rhs) noexcept {
-		return strcmp(lhs.c_str(), rhs) != 0; 
+		return strcmp(lhs.c_str(), rhs) != 0;
 	}
 
 	TemplateDecl
 	constexpr bool operator==(const TString & lhs, const std::string & rhs) noexcept {
-		return lhs == rhs.c_str(); 
+		return lhs == rhs.c_str();
 	}
 
 	TemplateDecl
 	constexpr bool operator!=(const TString & lhs, const std::string & rhs) noexcept {
-		return lhs != rhs.c_str(); 
+		return lhs != rhs.c_str();
 	}
 
 	TemplateDecl
 	constexpr bool operator==(const TString & lhs, const TString & rhs) noexcept {
-		return lhs == rhs.c_str(); 
+		return lhs == rhs.c_str();
 	}
 
 	template<size_t S1, const char * N1, size_t S2, const char * N2>
@@ -333,27 +334,27 @@ namespace putils {
 
 	TemplateDecl
 	constexpr bool operator!=(const TString & lhs, const TString & rhs) noexcept {
-		return lhs != rhs.c_str(); 
+		return lhs != rhs.c_str();
 	}
 
 	TemplateDecl
 	constexpr inline bool operator==(const char * lhs, const TString & rhs) noexcept {
-		return rhs == lhs; 
+		return rhs == lhs;
 	}
 
 	TemplateDecl
 	constexpr inline bool operator!=(const char * lhs, const TString & rhs) noexcept {
-		return rhs != lhs; 
+		return rhs != lhs;
 	}
 
 	TemplateDecl
 	constexpr inline bool operator==(const std::string & lhs, const TString & rhs) noexcept {
-		return rhs == lhs; 
+		return rhs == lhs;
 	}
 
 	TemplateDecl
 	constexpr inline bool operator!=(const std::string & lhs, const TString & rhs) noexcept {
-		return rhs != lhs; 
+		return rhs != lhs;
 	}
 
 	TemplateDecl

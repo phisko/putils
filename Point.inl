@@ -1,5 +1,6 @@
 #include "Point.hpp"
 
+#include <cmath>
 
 namespace putils {
 #define TemplateDecl template<typename Precision>
@@ -196,7 +197,7 @@ namespace putils {
 
 	TemplateDecl
 	float getLength(const TPoint & p) noexcept {
-		return std::sqrtf((float)getLengthSquared(p));
+		return sqrtf((float)getLengthSquared(p));
 	}
 
 	TemplateDecl

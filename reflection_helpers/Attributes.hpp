@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 #include <optional>
+#include <memory>
 
 #include "reflection.hpp"
 
@@ -11,15 +12,11 @@ namespace putils::reflection {
 	struct AttributeInfo;
 	using AttributeMap = std::unordered_map<std::string, AttributeInfo>;
 
-    struct Attributes {
-		AttributeMap map;
-    };    
-
 	struct AttributeInfo {
-		std::ptrdiff_t offset;
-		size_t size;
+		std::ptrdiff_t offset = 0;
+		size_t size = 0;
 
-		AttributeMap attributes;
+		std::unique_ptr<AttributeMap> attributes;
 		
 		struct ArrayHelper {
 			using GetSizeSignature = size_t(void * attribute);
@@ -33,7 +30,7 @@ namespace putils::reflection {
 			using ForEachSignature = void(void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
-			AttributeMap elementAttributes;
+			std::unique_ptr<AttributeMap> elementAttributes;
 		};
 		std::optional<ArrayHelper> arrayHelper;
 
@@ -49,11 +46,15 @@ namespace putils::reflection {
 			using ForEachSignature = void(void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
-			AttributeMap keyAttributes;
-			AttributeMap valueAttributes;
+			std::unique_ptr<AttributeMap> keyAttributes;
+			std::unique_ptr<AttributeMap> valueAttributes;
 		};
 		std::optional<MapHelper> mapHelper;
 	};
+
+    struct Attributes {
+        AttributeMap map;
+    };
 }
 
 #define refltype putils::reflection::Attributes

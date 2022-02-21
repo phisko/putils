@@ -1,4 +1,5 @@
 #include "to_string.hpp"
+#include <cstring>
 
 namespace putils {
     std::string toString(bool v) noexcept {

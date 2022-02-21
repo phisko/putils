@@ -22,7 +22,7 @@ namespace putils {
 		);
 
 		putils_reflection_used_types(
-			putils_reflection_type(refltype::Point)
+			putils_reflection_type(typename refltype::Point)
 		);
 	};
 #undef refltype

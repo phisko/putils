@@ -125,6 +125,6 @@ namespace putils::reflection::runtime {
 
 	template<typename T>
 	const AttributeInfo * findAttribute(std::string_view path, std::string_view separator) noexcept {
-	    return findAttribute(getRuntimeAttributes<T>(), path, separator);
+	    return findAttribute(getAttributes<T>(), path, separator);
     }
 }
