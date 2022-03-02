@@ -2,11 +2,11 @@
 
 namespace putils {
 	Color toColor(const NormalizedColor & normalized) noexcept {
-		return { (unsigned char)(normalized.r * 255.f), (unsigned char)(normalized.g * 255.f), (unsigned char)(normalized.b * 255.f), (unsigned char)(normalized.a * 255.f) };
+		return Color{ (unsigned char)(normalized.r * 255.f), (unsigned char)(normalized.g * 255.f), (unsigned char)(normalized.b * 255.f), (unsigned char)(normalized.a * 255.f) };
 	}
 
 	NormalizedColor toNormalizedColor(const Color & color) noexcept {
-		return { (float)color.r / 255.f, (float)color.g / 255.f, (float)color.b / 255.f, (float)color.a / 255.f };
+		return NormalizedColor{ (float)color.r / 255.f, (float)color.g / 255.f, (float)color.b / 255.f, (float)color.a / 255.f };
 	}
 
 	unsigned int toRGBA(const NormalizedColor & color) noexcept {
@@ -16,7 +16,7 @@ namespace putils {
 	NormalizedColor fromRGBA(unsigned int color) noexcept {
 		Color c;
 		c.rgba = color;
-		return toNormalizedColor(color);
+		return toNormalizedColor(c);
 	}
 
 	unsigned int toARGB(const Color & color) noexcept {
@@ -44,11 +44,11 @@ namespace putils {
 	*/
 
 	Color operator*(const Color & color, float factor) noexcept {
-		return { (unsigned char)(color.r * factor), (unsigned char)(color.g * factor), (unsigned char)(color.b * factor), color.a };
+		return Color{ (unsigned char)(color.r * factor), (unsigned char)(color.g * factor), (unsigned char)(color.b * factor), color.a };
 	}
 
 	Color operator*(float factor, const Color & color) noexcept {
-		return { (unsigned char)(color.r * factor), (unsigned char)(color.g * factor), (unsigned char)(color.b * factor), color.a };
+		return Color{ (unsigned char)(color.r * factor), (unsigned char)(color.g * factor), (unsigned char)(color.b * factor), color.a };
 	}
 
 	Color & operator*=(Color & lhs, float factor) noexcept {
@@ -63,7 +63,7 @@ namespace putils {
 	*/
 
 	Color operator/(const Color & color, float factor) noexcept {
-		return { (unsigned char)(color.r / factor), (unsigned char)(color.g / factor), (unsigned char)(color.b / factor), color.a };
+		return Color{ (unsigned char)(color.r / factor), (unsigned char)(color.g / factor), (unsigned char)(color.b / factor), color.a };
 	}
 
 	Color & operator/=(Color & lhs, float factor) noexcept {
@@ -78,11 +78,11 @@ namespace putils {
 	*/
 
 	NormalizedColor operator*(const NormalizedColor & color, float factor) noexcept {
-		return { color.r * factor, color.g * factor, color.b * factor, color.a };
+		return NormalizedColor{ color.r * factor, color.g * factor, color.b * factor, color.a };
 	}
 
 	NormalizedColor operator*(float factor, const NormalizedColor & color) noexcept {
-		return { color.r * factor, color.g * factor, color.b * factor, color.a };
+		return NormalizedColor{ color.r * factor, color.g * factor, color.b * factor, color.a };
 	}
 
 	NormalizedColor & operator*=(NormalizedColor & lhs, float factor) noexcept {
@@ -95,7 +95,7 @@ namespace putils {
 	*/
 
 	NormalizedColor operator/(const NormalizedColor & color, float factor) noexcept {
-		return { color.r / factor, color.g / factor, color.b / factor, color.a };
+		return NormalizedColor{ color.r / factor, color.g / factor, color.b / factor, color.a };
 	}
 
 	NormalizedColor & operator/=(NormalizedColor & lhs, float factor) noexcept {
@@ -108,7 +108,7 @@ namespace putils {
 	*/
 
 	NormalizedColor operator*(const NormalizedColor & color, const NormalizedColor & rhs) noexcept {
-		return { color.r * rhs.r, color.g * rhs.g, color.b * rhs.b, color.a * rhs.a };
+		return NormalizedColor{ color.r * rhs.r, color.g * rhs.g, color.b * rhs.b, color.a * rhs.a };
 	}
 
 	NormalizedColor & operator*=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept {
@@ -121,7 +121,7 @@ namespace putils {
 	*/
 
 	NormalizedColor operator/(const NormalizedColor & color, const NormalizedColor & rhs) noexcept {
-		return { color.r / rhs.r, color.g / rhs.g, color.b / rhs.b, color.a / rhs.a };
+		return NormalizedColor{ color.r / rhs.r, color.g / rhs.g, color.b / rhs.b, color.a / rhs.a };
 	}
 
 	NormalizedColor & operator/=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept {

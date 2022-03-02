@@ -7,15 +7,16 @@ namespace putils {
 		union {
 			unsigned char attributes[4];
 			struct {
+                unsigned char a;
+                unsigned char b;
+                unsigned char g;
 				unsigned char r;
-				unsigned char g;
-				unsigned char b;
-				unsigned char a;
 			};
 			unsigned int rgba;
+            static_assert(sizeof(rgba) == sizeof(attributes));
 		};
 
-		Color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 255) noexcept : r(r), g(g), b(b), a(a) {}
+		explicit Color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 255) noexcept : r(r), g(g), b(b), a(a) {}
 		Color(const Color & rhs) noexcept = default;
 		Color & operator=(const Color & rhs) noexcept = default;
 	};
@@ -43,7 +44,7 @@ namespace putils {
 			};
 		};
 
-		NormalizedColor(float r = 1.f, float g = 1.f, float b = 1.f, float a = 1.f) noexcept : r(r), g(g), b(b), a(a) {}
+		explicit NormalizedColor(float r = 1.f, float g = 1.f, float b = 1.f, float a = 1.f) noexcept : r(r), g(g), b(b), a(a) {}
 		NormalizedColor(const NormalizedColor & rhs) noexcept = default;
 		NormalizedColor & operator=(const NormalizedColor & rhs) noexcept = default;
 	};
