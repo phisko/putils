@@ -49,7 +49,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [angle](angle.md): helper functions when manipulating angles
 * [anonymous_variable](anonymous_variable.md): macro to define an anonymous variable
 * [casts](casts.md): static and dynamic casts for std::unique_ptr
-* [chop](chop.md): function removing any whitespace from the end of a string
+* [chop](chop.md): function removing any initial or trailing whitespace, as well as surrounding quotes, from a string
 * [clamp](clamp.md): function that clamps a value between two bounds
 * [command_line_arguments](command_line_arguments.md): function that parses command-line arguments into a struct
 * [concatenate](concatenate.md): function taking any number of parameters and concatenating them into a string
