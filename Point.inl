@@ -111,7 +111,11 @@ namespace putils {
 
 	TemplateDecl
 	bool operator==(const Point1 & lhs, const Point2 & rhs) noexcept {
-		return lhs.x == (P1)rhs.x && lhs.y == (P1)rhs.y;
+        for (size_t i = 0; i < D; ++i) {
+            if (lhs[i] != rhs[i])
+                return false;
+        }
+        return true;
 	}
 
 	TemplateDecl
@@ -142,7 +146,7 @@ namespace putils {
 
 	TemplateDecl
 	P1 dot(const Point1 & lhs, const Point2 & rhs) noexcept {
-		P1 ret;
+		P1 ret = 0;
 		for (size_t i = 0; i < D; ++i)
 			ret += lhs.raw[i] * rhs.raw[i];
 		return ret;
