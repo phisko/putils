@@ -8,7 +8,8 @@ Representation of a parsed `.ini` file (sections containing key-value pairs).
 
 ```cpp
 struct Section {
-    std::unordered_map<std::string, std::string> values;
+    std::map<std::string, std::string> values;
+    std::map<std::string, Section> sections;
 };
 ```
 
@@ -17,17 +18,7 @@ Structure representing a section.
 ### sections
 
 ```cpp
-std::unordered_map<std::string, Section> sections;
+std::map<std::string, Section> sections;
 ```
 
 Maps a section's name to its content.
-
-## Helper function
-
-### parseIniFile
-
-```cpp
-IniFile parseIniFile(const char * file) noexcept;
-```
-
-Opens `file` and parses it.
