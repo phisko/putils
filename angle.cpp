@@ -16,7 +16,7 @@ namespace putils {
 	}
 
 	float getPitchFromNormalizedDirection(const Vector3f & dir) noexcept {
-		return -asinf(dir.y);
+		return asinf(dir.y);
 	}
 
 	float get2DAngleFromNormalizedDirection(const Vector2f & dir) noexcept {
