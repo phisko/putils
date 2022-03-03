@@ -18,7 +18,7 @@ namespace putils {
 	std::string_view get_directory(const char * file) noexcept {
 		const auto slash = std::string_view(file).find_last_of("\\/");
 		if (slash == std::string_view::npos)
-			return file;
+			return "";
 		return std::string_view(file, slash);
 	}
 
