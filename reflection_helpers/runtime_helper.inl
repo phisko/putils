@@ -36,8 +36,11 @@ namespace putils::reflection::runtime {
 				}
 			};
 
-			using IndexedType = putils::indexed_type<MemberType>;
-			fillAttributes<std::decay_t<IndexedType>>(helper.elementAttributes);
+			using IndexedType = std::decay_t<putils::indexed_type<MemberType>>;
+            if constexpr (putils::reflection::has_attributes<IndexedType>()) {
+                helper.elementAttributes = std::make_unique<AttributeMap>();
+                fillAttributes<IndexedType>(*helper.elementAttributes);
+            }
 
 			return helper;
 		}
@@ -57,7 +60,7 @@ namespace putils::reflection::runtime {
 		template<typename MemberType>
 		static AttributeInfo::MapHelper makeMapHelperImpl() noexcept {
 			using KeyType = typename MemberType::key_type;
-			using ValueType = typename MemberType::value_type;
+			using ValueType = typename MemberType::mapped_type;
 
 			AttributeInfo::MapHelper helper{
 				.getSize = [](const void * attribute) noexcept {
@@ -82,8 +85,15 @@ namespace putils::reflection::runtime {
 				}
 			};
 
-			fillAttributes<KeyType>(helper.keyAttributes);
-			fillAttributes<ValueType>(helper.valueAttributes);
+            if constexpr (putils::reflection::has_attributes<KeyType>()) {
+                helper.keyAttributes = std::make_unique<AttributeMap>();
+                fillAttributes<KeyType>(*helper.keyAttributes);
+            }
+
+            if constexpr (putils::reflection::has_attributes<ValueType>()) {
+                helper.valueAttributes = std::make_unique<AttributeMap>();
+                fillAttributes<ValueType>(*helper.valueAttributes);
+            }
 
 			return helper;
 		}
@@ -104,10 +114,15 @@ namespace putils::reflection::runtime {
 				auto & runtimeAttr = attributes[std::string(attr.name)];
 				runtimeAttr.size = sizeof(MemberType);
 				runtimeAttr.offset = putils::member_offset(attr.ptr);
-				runtimeAttr.arrayHelper = makeArrayHelper<MemberType>();
+                runtimeAttr.type = putils::meta::type<MemberType>::index;
 				runtimeAttr.mapHelper = makeMapHelper<MemberType>();
+                if (runtimeAttr.mapHelper == std::nullopt) // avoid having arrayHelper for std::map<int, ...>
+                    runtimeAttr.arrayHelper = makeArrayHelper<MemberType>();
 
-				fillAttributes<MemberType>(runtimeAttr.attributes);
+                if (putils::reflection::has_attributes<MemberType>()) {
+                    runtimeAttr.attributes = std::make_unique<AttributeMap>();
+                    fillAttributes<MemberType>(*runtimeAttr.attributes);
+                }
 			});
 		}
         

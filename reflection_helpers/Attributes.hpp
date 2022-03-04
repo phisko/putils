@@ -15,6 +15,7 @@ namespace putils::reflection {
 	struct AttributeInfo {
 		std::ptrdiff_t offset = 0;
 		size_t size = 0;
+        putils::meta::type_index type = 0;
 
 		std::unique_ptr<AttributeMap> attributes;
 		
