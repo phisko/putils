@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
 #include "reflection_helpers/json_helper.hpp"
 
-struct Reflectible {
-    int i = 42;
-    std::string s = "hello";
-};
+namespace {
+    struct Reflectible {
+        int i = 42;
+        std::string s = "hello";
+    };
+}
 
 #define refltype Reflectible
 putils_reflection_info {
