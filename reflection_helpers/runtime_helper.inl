@@ -17,19 +17,19 @@ namespace putils::reflection::runtime {
 		template<typename MemberType>
 		static AttributeInfo::ArrayHelper makeArrayHelperImpl() noexcept {
 			AttributeInfo::ArrayHelper helper{
-				.getSize = [](void * attribute) noexcept {
+				.getSize = [](const void * attribute) noexcept {
 					auto * array = (MemberType *)attribute;
 					if constexpr (std::is_array<MemberType>())
 						return putils::lengthof(*array);
 					else
 						return array->size();
 				},
-				.getElement = [](void * attribute, size_t index) noexcept -> void * {
+				.getElement = [](const void * attribute, size_t index) noexcept -> void * {
 					auto * array = (MemberType *)attribute;
 					auto & element = (*array)[index];
 					return &element;
 				},
-				.forEach = [](void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
+				.forEach = [](const void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
 					auto * array = (MemberType *)attribute;
 					for (auto & element : *array)
 						iterator(&element);
@@ -60,21 +60,21 @@ namespace putils::reflection::runtime {
 			using ValueType = typename MemberType::value_type;
 
 			AttributeInfo::MapHelper helper{
-				.getSize = [](void * attribute) noexcept {
+				.getSize = [](const void * attribute) noexcept {
 					auto * map = (MemberType *)attribute;
 					return map->size();
 				},
-				.getValue = [](void * attribute, const char * keyString) noexcept -> void * {
+				.getValue = [](const void * attribute, const char * keyString) noexcept -> void * {
 					auto * map = (MemberType *)attribute;
 
 					const auto key = putils::parse<KeyType>(keyString);
 
 					const auto it = map->find(key);
 					if (it != map->end())
-						return &*it;
+						return &it->second;
 					return nullptr;
 				},
-				.forEach = [](void * attribute, const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
+				.forEach = [](const void * attribute, const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
 					auto * map = (MemberType *)attribute;
 
 					for (auto & [key, value] : *map)

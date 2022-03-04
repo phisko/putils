@@ -19,15 +19,15 @@ namespace putils::reflection {
 		std::unique_ptr<AttributeMap> attributes;
 		
 		struct ArrayHelper {
-			using GetSizeSignature = size_t(void * attribute);
+			using GetSizeSignature = size_t(const void * attribute);
 			GetSizeSignature * getSize = nullptr;
 
-			using GetElementSignature = void *(void * attribute, size_t index);
+			using GetElementSignature = void *(const void * attribute, size_t index);
 			GetElementSignature * getElement = nullptr;
 			
 			// using Iterator = putils::function<void(void * element), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
 			using Iterator = std::function<void(void * element)>;
-			using ForEachSignature = void(void * attribute, const Iterator & callback);
+			using ForEachSignature = void(const void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
 			std::unique_ptr<AttributeMap> elementAttributes;
@@ -35,15 +35,15 @@ namespace putils::reflection {
 		std::optional<ArrayHelper> arrayHelper;
 
 		struct MapHelper {
-			using GetSizeSignature = size_t(void * attribute);
+			using GetSizeSignature = size_t(const void * attribute);
 			GetSizeSignature * getSize = nullptr;
 
-			using GetValueSignature = void *(void * attribute, const char * keyString);
+			using GetValueSignature = void *(const void * attribute, const char * keyString);
 			GetValueSignature * getValue = nullptr;
 
 			// using Iterator = putils::function<void(const void * key, void * value), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
 			using Iterator = std::function<void(const void * key, void * value)>;
-			using ForEachSignature = void(void * attribute, const Iterator & callback);
+			using ForEachSignature = void(const void * attribute, const Iterator & callback);
 			ForEachSignature * forEach = nullptr;
 
 			std::unique_ptr<AttributeMap> keyAttributes;
