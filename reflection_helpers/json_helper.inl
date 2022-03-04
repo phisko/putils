@@ -1,5 +1,7 @@
 #include "json_helper.hpp"
 #include "to_string.hpp"
+#include "string.hpp"
+#include "lengthof.hpp"
 #include "meta/traits/is_iterable.hpp"
 #include "meta/traits/is_specialization.hpp"
 
@@ -7,19 +9,38 @@ namespace putils::reflection {
 	namespace detail::json {
 		putils_member_detector(c_str);
 		putils_member_detector(emplace_back);
+        putils_member_detector(push_back);
 
 		template<typename JSONRef, typename TRef>
 		void fromToJSON(JSONRef && jsonObject, TRef && obj) noexcept {
+            using TNoRef = std::remove_reference_t<TRef>;
 			using T = std::decay_t<TRef>;
-			using JSON = std::remove_reference_t<JSONRef>;
 
+			using JSON = std::remove_reference_t<JSONRef>;
 			constexpr bool serialize = !std::is_const<JSON>();
 
-			if constexpr (detail::json::has_member_c_str<T>()) {
+            if constexpr (std::is_same<TNoRef, const char *>()) {
+                if constexpr (serialize)
+                    jsonObject = obj;
+            }
+
+            else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, char>()) {
+                if constexpr (serialize)
+                    jsonObject = obj;
+                else
+                    strncpy(obj, jsonObject.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
+            }
+
+            else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, const char>()) {
+                if constexpr (serialize)
+                    jsonObject = obj;
+            }
+
+			else if constexpr (detail::json::has_member_c_str<T>()) {
 				if constexpr (serialize)
 					jsonObject = obj.c_str();
 				else
-					obj = jsonObject.get<std::string>().c_str();
+					obj = jsonObject.template get<std::string>().c_str();
 			}
 
 			else if constexpr (putils::is_specialization<T, std::map>() || putils::is_specialization<T, std::unordered_map>()) {
@@ -37,20 +58,23 @@ namespace putils::reflection {
 				}
 			}
 
-			else if constexpr (putils::is_iterable<T>() || std::is_array<std::remove_reference_t<TRef>>()) {
+			else if constexpr (putils::is_iterable<T>() || std::is_array<TNoRef>()) {
 				if constexpr (serialize) {
 					for (const auto & it : obj)
 						jsonObject.push_back(toJSON(it));
 				}
-				else if constexpr (detail::json::has_member_emplace_back<T>()) {
+				else if constexpr (putils::is_specialization<T, std::vector>() || detail::json::has_member_emplace_back<T>() || detail::json::has_member_push_back<T>()) {
 					obj.clear();
 					for (const auto & it : jsonObject) {
-						obj.emplace_back();
+                        if constexpr (detail::json::has_member_emplace_back<T>())
+                            obj.emplace_back();
+                        else
+                            obj.push_back({});
 						auto & element = obj.back();
 						fromToJSON(it, element);
 					}
 				}
-				else if constexpr (std::is_array<T>()) {
+				else if constexpr (std::is_array<TNoRef>()) {
 					size_t i = 0;
 					assert(jsonObject.array().size() <= lengthof(obj));
 					for (const auto & it : jsonObject) {
