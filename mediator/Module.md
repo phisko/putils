@@ -44,22 +44,3 @@ void sendTo(const T &data, BaseModule *dest) const;
 ```
 
 Sends the `data` `DataPacket` to the `dest` `Module`.
-
-### query
-
-```cpp
-template<typename Response>
-Response query(auto &&q); // q: DataPacket containing a "putils::BaseModule *sender" field
-```
-
-Lets a `Module` send a "query" to others, through a `DataPacket` containg a `sender` field.
-
-Other `Modules` can reply to the query by calling `sendTo` with the `sender` field of the `DataPacket` and a `Response` as parameters.
-
-### runTask
-
-```cpp
-void runTask(const std::function<void()> &f) const;
-```
-
-Runs `f` asynchronously in the `Mediator`.

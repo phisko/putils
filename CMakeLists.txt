@@ -76,7 +76,13 @@ if (PUTILS_BUILD_TESTS)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /DNOMINMAX /MP8")
     endif()
 
-    file(GLOB_RECURSE test_src *.tests.cpp)
+    file(GLOB_RECURSE test_src tests/*.tests.cpp)
+
+    if(PUTILS_BUILD_MEDIATOR)
+        file(GLOB_RECURSE mediator_test_src mediator/tests/*.tests.cpp)
+        set(test_src ${test_src} ${mediator_test_src})
+    endif()
+
     add_executable(putils_tests ${test_src})
     target_link_libraries(putils_tests CONAN_PKG::gtest putils)
 

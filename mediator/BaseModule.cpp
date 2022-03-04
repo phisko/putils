@@ -1,11 +1,11 @@
 #include "Module.hpp"
 
 namespace putils {
-    BaseModule::BaseModule(Mediator * mediator)
-            : _mediator(mediator) {
+    BaseModule::BaseModule(Mediator * mediator) noexcept
+        : _mediator(mediator) {
     }
 
-    BaseModule::~BaseModule() {
+    BaseModule::~BaseModule() noexcept {
         if (_mediator)
             _mediator->removeModule(*this);
     }
@@ -16,9 +16,5 @@ namespace putils {
 
     void BaseModule::sendDataPacketTo(const ADataPacket & packet, BaseModule & dest) const noexcept {
         dest.receive(packet);
-    }
-
-    void BaseModule::runTask(const ThreadPool::function & f) const {
-        _mediator->runTask(f);
     }
 }

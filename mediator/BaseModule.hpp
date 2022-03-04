@@ -10,8 +10,8 @@ namespace putils {
 
     class BaseModule {
     public:
-        BaseModule(Mediator * mediator = nullptr);
-        virtual ~BaseModule();
+        BaseModule(Mediator * mediator = nullptr) noexcept;
+        virtual ~BaseModule() noexcept;
 
     public:
         BaseModule(const BaseModule &) = delete;
@@ -42,9 +42,6 @@ namespace putils {
     private:
         void sendDataPacket(const ADataPacket & packet) const noexcept;
         void sendDataPacketTo(const ADataPacket & packet, BaseModule & dest) const noexcept;
-
-    protected:
-        void runTask(const ThreadPool::function & f) const;
 
 	protected:
         template<typename Data>
