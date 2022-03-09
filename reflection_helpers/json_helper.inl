@@ -28,7 +28,7 @@ namespace putils::reflection {
                 if constexpr (serialize)
                     jsonObject = obj;
                 else
-                    strncpy(obj, jsonObject.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
+                    strncpy_s(obj, jsonObject.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
             }
 
             else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, const char>()) {
