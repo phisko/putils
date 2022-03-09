@@ -92,7 +92,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString & TString::operator+=(std::string_view rhs) noexcept {
-		strncat_s(_buff, rhs.data(), rhs.size());
+		strncat_s(_buff, MaxSize, rhs.data(), rhs.size());
 		_size += rhs.size();
 		assert(_size < MaxSize);
 		return *this;
