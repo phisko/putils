@@ -21,7 +21,7 @@ namespace putils {
         };
 
         template<typename T>
-        static bool parseValue(int ac, const char * const * av, const char * key, T & member, bool isFlag) noexcept {
+        static bool parseValue(size_t ac, const char * const * av, const char * key, T & member, bool isFlag) noexcept {
 			using AttributeType = impl::remove_optional<putils_typeof(member)>::type;
             
             for (int i = 0; i < ac; ++i) {
@@ -50,7 +50,7 @@ namespace putils {
     }
 
     template<typename T>
-    T parseArguments(int ac, const char * const * av) noexcept {
+    T parseArguments(size_t ac, const char * const * av) noexcept {
         T ret;
 
         putils::reflection::for_each_attribute(ret, [&](const auto & attr) noexcept {
