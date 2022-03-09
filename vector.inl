@@ -58,10 +58,25 @@ namespace putils {
 		try_push_back(val); 
 	}
 
+    TemplateDecl
+    constexpr T & TVector::front() noexcept {
+        assert(_size > 0); return _buff[0];
+    }
+
+    TemplateDecl
+    constexpr const T & TVector::front() const noexcept {
+        assert(_size > 0); return _buff[0];
+    }
+
 	TemplateDecl
 	constexpr T & TVector::back() noexcept {
 		assert(_size > 0); return _buff[_size - 1];
 	}
+
+    TemplateDecl
+    constexpr const T & TVector::back() const noexcept {
+        assert(_size > 0); return _buff[_size - 1];
+    }
 
 	TemplateDecl
 	constexpr T & TVector::operator[](size_t index) noexcept {

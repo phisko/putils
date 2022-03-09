@@ -44,7 +44,11 @@ namespace putils {
 		constexpr T & add(const T & val) noexcept;
 		constexpr void try_add(const T & val) noexcept;
 
+        constexpr T & front() noexcept;
+        constexpr const T & front() const noexcept;
+
 		constexpr T & back() noexcept;
+        constexpr const T & back() const noexcept;
 
 		constexpr T & operator[](size_t index) noexcept;
 		constexpr const T & operator[](size_t index) const noexcept;
