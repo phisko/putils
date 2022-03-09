@@ -132,7 +132,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString & TString::operator+=(unsigned int rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%zu", rhs);
+		_size += snprintf(_buff + _size, MaxSize - _size, "%u", rhs);
 		return *this;
 	}
 
@@ -254,7 +254,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr bool TString::full() const noexcept {
-		return _size >= MaxSize;
+		return _size >= MaxSize - 1;
 	}
 
 	TemplateDecl
