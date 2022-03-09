@@ -1,5 +1,7 @@
 #include "to_string.hpp"
 #include <cstring>
+#include <sstream>
+#include "read_stream.hpp"
 
 namespace putils {
     std::string toString(bool v) noexcept {

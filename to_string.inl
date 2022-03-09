@@ -1,7 +1,10 @@
 #include "to_string.hpp"
+#include <sstream>
+#include "fwd.hpp"
+#include "read_stream.hpp"
 
 namespace putils {
-    template<typename Obj>
+    template<typename Obj, typename EnableIf>
     std::string toString(Obj && obj) noexcept {
         std::stringstream s;
         s << FWD(obj);

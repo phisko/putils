@@ -1,11 +1,9 @@
 #pragma once
 
-#include <sstream>
-#include "read_stream.hpp"
-#include "fwd.hpp"
+#include <string>
 
 namespace putils {
-    template<typename Obj>
+    template<typename Obj, typename EnableIf = std::enable_if_t<!std::is_base_of_v<std::istream, std::decay_t<Obj>>>>
     std::string toString(Obj && obj) noexcept;
     std::string toString(bool v) noexcept;
     std::string toString(std::istream & s) noexcept;
