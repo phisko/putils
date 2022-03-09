@@ -26,7 +26,7 @@ namespace putils::reflection::runtime {
 				},
 				.getElement = [](const void * attribute, size_t index) noexcept -> void * {
 					auto * array = (MemberType *)attribute;
-					auto & element = (*array)[index];
+					auto & element = (*array)[(int)index];
 					return &element;
 				},
 				.forEach = [](const void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
