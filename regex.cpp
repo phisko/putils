@@ -1,7 +1,7 @@
 #include "regex.hpp"
 
 namespace putils::regex {
-    bool operator==(const char * & str, const std::regex & reg) noexcept {
+    bool operator==(const char * str, const std::regex & reg) noexcept {
         return std::regex_match(str, reg);
     }
 
