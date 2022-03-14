@@ -71,11 +71,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
 if (PUTILS_BUILD_TESTS)
     putils_conan(gtest/cci.20210126)
 
-    set(CMAKE_CXX_STANDARD 20)
-    if (MSVC)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /DNOMINMAX /MP8")
-    endif()
-
     file(GLOB_RECURSE test_src
             tests/*.tests.cpp
             reflection_helpers/tests/*.tests.cpp)
