@@ -41,6 +41,11 @@ namespace putils {
 #undef TRAII
 #define TRAII RAII<T, Dtor, true>
 
+    TemplateDecl
+    TRAII::RAII() noexcept
+        : _release(false)
+    {}
+
 	TemplateDecl
 	TRAII::RAII(T res) noexcept
 		: _res(res)

@@ -37,6 +37,7 @@ namespace putils {
     template<typename T, void (*Dtor)(T &)>
     class RAII<T, Dtor, true> {
     public:
+        RAII() noexcept;
         explicit RAII(T res) noexcept;
         RAII(RAII && other) noexcept;
         RAII & operator=(RAII && other) noexcept;
