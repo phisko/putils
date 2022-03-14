@@ -17,19 +17,19 @@ namespace putils::reflection::runtime {
 		template<typename MemberType>
 		static AttributeInfo::ArrayHelper makeArrayHelperImpl() noexcept {
 			AttributeInfo::ArrayHelper helper{
-				.getSize = [](const void * attribute) noexcept {
+				.getSizeImpl = [](const void * attribute) noexcept {
 					auto * array = (MemberType *)attribute;
 					if constexpr (std::is_array<MemberType>())
 						return putils::lengthof(*array);
 					else
 						return array->size();
 				},
-				.getElement = [](const void * attribute, size_t index) noexcept -> void * {
+				.getElementImpl = [](const void * attribute, size_t index) noexcept -> void * {
 					auto * array = (MemberType *)attribute;
 					auto & element = (*array)[(int)index];
 					return &element;
 				},
-				.forEach = [](const void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
+				.forEachImpl = [](const void * attribute, const AttributeInfo::ArrayHelper::Iterator & iterator) noexcept {
 					auto * array = (MemberType *)attribute;
 					for (auto & element : *array)
 						iterator(&element);
@@ -38,8 +38,7 @@ namespace putils::reflection::runtime {
 
 			using IndexedType = std::decay_t<putils::indexed_type<MemberType>>;
             if constexpr (putils::reflection::has_attributes<IndexedType>()) {
-                helper.elementAttributes = std::make_unique<AttributeMap>();
-                fillAttributes<IndexedType>(*helper.elementAttributes);
+                fillAttributes<IndexedType>(helper.elementAttributes);
             }
 
 			return helper;
@@ -63,11 +62,11 @@ namespace putils::reflection::runtime {
 			using ValueType = typename MemberType::mapped_type;
 
 			AttributeInfo::MapHelper helper{
-				.getSize = [](const void * attribute) noexcept {
+				.getSizeImpl = [](const void * attribute) noexcept {
 					auto * map = (MemberType *)attribute;
 					return map->size();
 				},
-				.getValue = [](const void * attribute, const char * keyString) noexcept -> void * {
+				.getValueImpl = [](const void * attribute, const char * keyString) noexcept -> void * {
 					auto * map = (MemberType *)attribute;
 
 					const auto key = putils::parse<KeyType>(keyString);
@@ -77,7 +76,7 @@ namespace putils::reflection::runtime {
 						return &it->second;
 					return nullptr;
 				},
-				.forEach = [](const void * attribute, const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
+				.forEachImpl = [](const void * attribute, const AttributeInfo::MapHelper::Iterator & iterator) noexcept {
 					auto * map = (MemberType *)attribute;
 
 					for (auto & [key, value] : *map)
@@ -86,13 +85,11 @@ namespace putils::reflection::runtime {
 			};
 
             if constexpr (putils::reflection::has_attributes<KeyType>()) {
-                helper.keyAttributes = std::make_unique<AttributeMap>();
-                fillAttributes<KeyType>(*helper.keyAttributes);
+                fillAttributes<KeyType>(helper.keyAttributes);
             }
 
             if constexpr (putils::reflection::has_attributes<ValueType>()) {
-                helper.valueAttributes = std::make_unique<AttributeMap>();
-                fillAttributes<ValueType>(*helper.valueAttributes);
+                fillAttributes<ValueType>(helper.valueAttributes);
             }
 
 			return helper;
@@ -107,22 +104,22 @@ namespace putils::reflection::runtime {
 		}
 
 		template<typename T>
-		static void fillAttributes(AttributeMap & attributes) noexcept {
+		static void fillAttributes(Attributes & attributes) noexcept {
 			putils::reflection::for_each_attribute<T>([&](const auto & attr) noexcept {
 				using MemberType = putils::MemberType<decltype(attr.ptr)>;
 
-				auto & runtimeAttr = attributes[std::string(attr.name)];
-				runtimeAttr.size = sizeof(MemberType);
-				runtimeAttr.offset = putils::member_offset(attr.ptr);
-                runtimeAttr.type = putils::meta::type<MemberType>::index;
-				runtimeAttr.mapHelper = makeMapHelper<MemberType>();
-                if (runtimeAttr.mapHelper == std::nullopt) // avoid having arrayHelper for std::map<int, ...>
-                    runtimeAttr.arrayHelper = makeArrayHelper<MemberType>();
+                const auto runtimeAttr = new AttributeInfo;
+				runtimeAttr->size = sizeof(MemberType);
+				runtimeAttr->offset = putils::member_offset(attr.ptr);
+                runtimeAttr->type = putils::meta::type<MemberType>::index;
+				runtimeAttr->mapHelper = makeMapHelper<MemberType>();
+                if (runtimeAttr->mapHelper == std::nullopt) // avoid having arrayHelper for std::map<int, ...>
+                    runtimeAttr->arrayHelper = makeArrayHelper<MemberType>();
 
-                if (putils::reflection::has_attributes<MemberType>()) {
-                    runtimeAttr.attributes = std::make_unique<AttributeMap>();
-                    fillAttributes<MemberType>(*runtimeAttr.attributes);
-                }
+                if (putils::reflection::has_attributes<MemberType>())
+                    fillAttributes<MemberType>(runtimeAttr->attributes);
+
+                attributes.map.emplace(std::string(attr.name), runtimeAttr);
 			});
 		}
         
@@ -132,7 +129,7 @@ namespace putils::reflection::runtime {
     const Attributes & getAttributes() noexcept {
         static const Attributes attributes = [] {
             Attributes ret;
-            impl::fillAttributes<T>(ret.map);
+            impl::fillAttributes<T>(ret);
             return ret;
         }();
         return attributes;

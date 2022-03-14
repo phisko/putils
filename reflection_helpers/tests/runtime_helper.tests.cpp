@@ -90,7 +90,7 @@ TEST(runtime_helper, intAttribute) {
 
     EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::i));
     EXPECT_EQ(attr->size, sizeof(int));
-    EXPECT_EQ(attr->attributes, nullptr);
+    EXPECT_EQ(attr->attributes.map.size(), 0);
     EXPECT_EQ(attr->arrayHelper, std::nullopt);
     EXPECT_EQ(attr->mapHelper, std::nullopt);
 }
@@ -101,7 +101,7 @@ TEST(runtime_helper, stringAttribute) {
 
     EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::s));
     EXPECT_EQ(attr->size, sizeof(std::string));
-    EXPECT_EQ(attr->attributes, nullptr);
+    EXPECT_EQ(attr->attributes.map.size(), 0);
 
     EXPECT_EQ(attr->arrayHelper->getSize(&obj.s), obj.s.size());
     for (int i = 0; i < obj.s.size(); ++i)
@@ -123,10 +123,10 @@ TEST(runtime_helper, reflectibleAttribute) {
         const auto attr = putils::reflection::runtime::findAttribute<Reflectible>("nested");
         EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::nested));
         EXPECT_EQ(attr->size, sizeof(Reflectible::Nested));
-        EXPECT_EQ(attr->attributes->size(), 2);
-        EXPECT_NE(attr->attributes->find("i"), attr->attributes->end());
-        EXPECT_NE(attr->attributes->find("s"), attr->attributes->end());
-        EXPECT_EQ(attr->attributes->find("foo"), attr->attributes->end());
+        EXPECT_EQ(attr->attributes.map.size(), 2);
+        EXPECT_NE(attr->attributes.map.find("i"), attr->attributes.map.end());
+        EXPECT_NE(attr->attributes.map.find("s"), attr->attributes.map.end());
+        EXPECT_EQ(attr->attributes.map.find("foo"), attr->attributes.map.end());
         EXPECT_EQ(attr->arrayHelper, std::nullopt);
         EXPECT_EQ(attr->mapHelper, std::nullopt);
     }
@@ -135,7 +135,7 @@ TEST(runtime_helper, reflectibleAttribute) {
         const auto attr = putils::reflection::runtime::findAttribute<Reflectible>("nested.i");
         EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::Nested::i));
         EXPECT_EQ(attr->size, sizeof(int));
-        EXPECT_EQ(attr->attributes, nullptr);
+        EXPECT_EQ(attr->attributes.map.size(), 0);
         EXPECT_EQ(attr->arrayHelper, std::nullopt);
         EXPECT_EQ(attr->mapHelper, std::nullopt);
     }
@@ -145,7 +145,7 @@ TEST(runtime_helper, reflectibleAttribute) {
 
         EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::Nested::s));
         EXPECT_EQ(attr->size, sizeof(std::string));
-        EXPECT_EQ(attr->attributes, nullptr);
+        EXPECT_EQ(attr->attributes.map.size(), 0);
 
         EXPECT_EQ(attr->arrayHelper->getSize(&obj.nested.s), obj.nested.s.size());
         for (int i = 0; i < obj.nested.s.size(); ++i)
@@ -168,7 +168,7 @@ TEST(runtime_helper, arrayAttribute) {
     const auto attr = putils::reflection::runtime::findAttribute<Reflectible>("nestedArray");
     EXPECT_EQ(attr->size, sizeof(Reflectible::nestedArray));
     EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::nestedArray));
-    EXPECT_EQ(attr->attributes, nullptr);
+    EXPECT_EQ(attr->attributes.map.size(), 0);
     EXPECT_EQ(attr->arrayHelper->getSize(&obj.nestedArray), putils::lengthof(obj.nestedArray));
 
     for (int i = 0; i < putils::lengthof(obj.nestedArray); ++i)
@@ -182,10 +182,10 @@ TEST(runtime_helper, arrayAttribute) {
         ++i;
     });
 
-    EXPECT_EQ(attr->arrayHelper->elementAttributes->size(), 2);
-    EXPECT_NE(attr->arrayHelper->elementAttributes->find("i"), attr->arrayHelper->elementAttributes->end());
-    EXPECT_NE(attr->arrayHelper->elementAttributes->find("s"), attr->arrayHelper->elementAttributes->end());
-    EXPECT_EQ(attr->arrayHelper->elementAttributes->find("foo"), attr->arrayHelper->elementAttributes->end());
+    EXPECT_EQ(attr->arrayHelper->elementAttributes.map.size(), 2);
+    EXPECT_NE(attr->arrayHelper->elementAttributes.map.find("i"), attr->arrayHelper->elementAttributes.map.end());
+    EXPECT_NE(attr->arrayHelper->elementAttributes.map.find("s"), attr->arrayHelper->elementAttributes.map.end());
+    EXPECT_EQ(attr->arrayHelper->elementAttributes.map.find("foo"), attr->arrayHelper->elementAttributes.map.end());
 
     EXPECT_EQ(attr->mapHelper, std::nullopt);
 }
@@ -196,7 +196,7 @@ TEST(runtime_helper, vectorAttribute) {
     const auto attr = putils::reflection::runtime::findAttribute<Reflectible>("nestedVector");
     EXPECT_EQ(attr->size, sizeof(Reflectible::nestedVector));
     EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::nestedVector));
-    EXPECT_EQ(attr->attributes, nullptr);
+    EXPECT_EQ(attr->attributes.map.size(), 0);
     EXPECT_EQ(attr->arrayHelper->getSize(&obj.nestedVector), obj.nestedVector.size());
 
     for (int i = 0; i < obj.nestedVector.size(); ++i)
@@ -210,10 +210,10 @@ TEST(runtime_helper, vectorAttribute) {
         ++i;
     });
 
-    EXPECT_EQ(attr->arrayHelper->elementAttributes->size(), 2);
-    EXPECT_NE(attr->arrayHelper->elementAttributes->find("i"), attr->arrayHelper->elementAttributes->end());
-    EXPECT_NE(attr->arrayHelper->elementAttributes->find("s"), attr->arrayHelper->elementAttributes->end());
-    EXPECT_EQ(attr->arrayHelper->elementAttributes->find("foo"), attr->arrayHelper->elementAttributes->end());
+    EXPECT_EQ(attr->arrayHelper->elementAttributes.map.size(), 2);
+    EXPECT_NE(attr->arrayHelper->elementAttributes.map.find("i"), attr->arrayHelper->elementAttributes.map.end());
+    EXPECT_NE(attr->arrayHelper->elementAttributes.map.find("s"), attr->arrayHelper->elementAttributes.map.end());
+    EXPECT_EQ(attr->arrayHelper->elementAttributes.map.find("foo"), attr->arrayHelper->elementAttributes.map.end());
 
     EXPECT_EQ(attr->mapHelper, std::nullopt);
 }
@@ -224,7 +224,7 @@ TEST(runtime_helper, mapAttribute) {
     const auto attr = putils::reflection::runtime::findAttribute<Reflectible>("nestedMap");
     EXPECT_EQ(attr->size, sizeof(Reflectible::nestedMap));
     EXPECT_EQ(attr->offset, putils::member_offset(&Reflectible::nestedMap));
-    EXPECT_EQ(attr->attributes, nullptr);
+    EXPECT_EQ(attr->attributes.map.size(), 0);
     EXPECT_EQ(attr->arrayHelper, std::nullopt);
     EXPECT_EQ(attr->mapHelper->getSize(&obj.nestedMap), obj.nestedMap.size());
 
@@ -236,10 +236,10 @@ TEST(runtime_helper, mapAttribute) {
         EXPECT_EQ(&obj.nestedMap.at(*k), value);
     });
 
-    EXPECT_EQ(attr->mapHelper->keyAttributes, nullptr);
+    EXPECT_EQ(attr->mapHelper->keyAttributes.map.size(), 0);
 
-    EXPECT_EQ(attr->mapHelper->valueAttributes->size(), 2);
-    EXPECT_NE(attr->mapHelper->valueAttributes->find("i"), attr->mapHelper->valueAttributes->end());
-    EXPECT_NE(attr->mapHelper->valueAttributes->find("s"), attr->mapHelper->valueAttributes->end());
-    EXPECT_EQ(attr->mapHelper->valueAttributes->find("foo"), attr->mapHelper->valueAttributes->end());
+    EXPECT_EQ(attr->mapHelper->valueAttributes.map.size(), 2);
+    EXPECT_NE(attr->mapHelper->valueAttributes.map.find("i"), attr->mapHelper->valueAttributes.map.end());
+    EXPECT_NE(attr->mapHelper->valueAttributes.map.find("s"), attr->mapHelper->valueAttributes.map.end());
+    EXPECT_EQ(attr->mapHelper->valueAttributes.map.find("foo"), attr->mapHelper->valueAttributes.map.end());
 }

@@ -8,69 +8,93 @@
 
 #include "reflection.hpp"
 
-namespace putils::reflection {
+namespace putils::reflection::runtime {
 	struct AttributeInfo;
-	using AttributeMap = std::unordered_map<std::string, AttributeInfo>;
+
+    struct Attributes {
+        std::unordered_map<std::string, const AttributeInfo *> map;
+    };
 
 	struct AttributeInfo {
 		std::ptrdiff_t offset = 0;
 		size_t size = 0;
         putils::meta::type_index type = 0;
 
-		std::unique_ptr<AttributeMap> attributes;
+		Attributes attributes;
 		
 		struct ArrayHelper {
-			using GetSizeSignature = size_t(const void * attribute);
-			GetSizeSignature * getSize = nullptr;
+            size_t getSize(const void * attribute) const noexcept {
+                return getSizeImpl(attribute);
+            }
 
-			using GetElementSignature = void *(const void * attribute, size_t index);
-			GetElementSignature * getElement = nullptr;
-			
-			// using Iterator = putils::function<void(void * element), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
-			using Iterator = std::function<void(void * element)>;
-			using ForEachSignature = void(const void * attribute, const Iterator & callback);
-			ForEachSignature * forEach = nullptr;
+            void * getElement(const void * attribute, size_t index) const noexcept {
+                return getElementImpl(attribute, index);
+            }
 
-			std::unique_ptr<AttributeMap> elementAttributes;
+            using Iterator = std::function<void(void * element)>;
+            void forEach(const void * attribute, const Iterator & callback) const noexcept {
+                return forEachImpl(attribute, callback);
+            }
+
+            Attributes elementAttributes;
+
+        //private:
+            using GetSizeSignature = putils::member_function_signature<decltype(&ArrayHelper::getSize)>;
+            GetSizeSignature * getSizeImpl = nullptr;
+
+            using GetElementSignature = putils::member_function_signature<decltype(&ArrayHelper::getElement)>;
+            GetElementSignature * getElementImpl = nullptr;
+
+            using ForEachSignature = putils::member_function_signature<decltype(&ArrayHelper::forEach)>;
+            ForEachSignature * forEachImpl = nullptr;
 		};
+
 		std::optional<ArrayHelper> arrayHelper;
 
 		struct MapHelper {
-			using GetSizeSignature = size_t(const void * attribute);
-			GetSizeSignature * getSize = nullptr;
+            size_t getSize(const void * attribute) const noexcept {
+                return getSizeImpl(attribute);
+            }
+
+            void * getValue(const void * attribute, const char * keyString) const noexcept {
+                return getValueImpl(attribute, keyString);
+            }
+
+            using Iterator = std::function<void(const void * key, void * value)>;
+            void forEach(const void * attribute, const Iterator & callback) const noexcept {
+                return forEachImpl(attribute, callback);
+            }
+
+            Attributes keyAttributes;
+            Attributes valueAttributes;
+
+        //private:
+            using GetSizeSignature = putils::member_function_signature<decltype(&MapHelper::getSize)>;
+			GetSizeSignature * getSizeImpl = nullptr;
 
 			using GetValueSignature = void *(const void * attribute, const char * keyString);
-			GetValueSignature * getValue = nullptr;
+			GetValueSignature * getValueImpl = nullptr;
 
-			// using Iterator = putils::function<void(const void * key, void * value), KENGINE_META_ATTRIBUTES_ITERATOR_FUNCTION_SIZE>;
-			using Iterator = std::function<void(const void * key, void * value)>;
 			using ForEachSignature = void(const void * attribute, const Iterator & callback);
-			ForEachSignature * forEach = nullptr;
-
-			std::unique_ptr<AttributeMap> keyAttributes;
-			std::unique_ptr<AttributeMap> valueAttributes;
+			ForEachSignature * forEachImpl = nullptr;
 		};
 		std::optional<MapHelper> mapHelper;
 	};
-
-    struct Attributes {
-        AttributeMap map;
-    };
 }
 
-#define refltype putils::reflection::Attributes
+#define refltype putils::reflection::runtime::Attributes
 putils_reflection_info{
 	putils_reflection_class_name;
 	putils_reflection_attributes(
 		putils_reflection_attribute(map)
 	);
 	putils_reflection_used_types(
-		putils_reflection_type(putils::reflection::AttributeInfo)
+		putils_reflection_type(putils::reflection::runtime::AttributeInfo)
 	);
 };
 #undef refltype
 
-#define refltype putils::reflection::AttributeInfo
+#define refltype putils::reflection::runtime::AttributeInfo
 putils_reflection_info{
 	putils_reflection_class_name;
 	putils_reflection_attributes(
@@ -87,27 +111,31 @@ putils_reflection_info{
 };
 #undef refltype
 
-#define refltype putils::reflection::AttributeInfo::ArrayHelper
+#define refltype putils::reflection::runtime::AttributeInfo::ArrayHelper
 putils_reflection_info {
 	putils_reflection_class_name;
 	putils_reflection_attributes(
-		putils_reflection_attribute(getSize),
-		putils_reflection_attribute(getElement),
-		putils_reflection_attribute(forEach),
 		putils_reflection_attribute(elementAttributes)
+    );
+    putils_reflection_methods(
+        putils_reflection_attribute(getSize),
+        putils_reflection_attribute(getElement),
+        putils_reflection_attribute(forEach)
     );
 };
 #undef refltype
 
-#define refltype putils::reflection::AttributeInfo::MapHelper
+#define refltype putils::reflection::runtime::AttributeInfo::MapHelper
 putils_reflection_info {
 	putils_reflection_class_name;
 	putils_reflection_attributes(
-		putils_reflection_attribute(getSize),
-		putils_reflection_attribute(getValue),
-		putils_reflection_attribute(forEach),
 		putils_reflection_attribute(keyAttributes),
 		putils_reflection_attribute(valueAttributes)
+    );
+    putils_reflection_methods(
+        putils_reflection_attribute(getSize),
+        putils_reflection_attribute(getValue),
+        putils_reflection_attribute(forEach)
     );
 };
 #undef refltype

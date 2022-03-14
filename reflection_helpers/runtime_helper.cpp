@@ -17,7 +17,7 @@ namespace putils::reflection::runtime {
    				return nullptr;
    			}
    
-   			currentAttributes = it->second.attributes.get();
+   			currentAttributes = &it->second->attributes.map;
    		}
    
    		const auto it = currentAttributes->find(currentPath.c_str());
@@ -25,6 +25,6 @@ namespace putils::reflection::runtime {
    			return nullptr;
    		}
    
-   		return &it->second;
+   		return it->second;
    	} 
 }
