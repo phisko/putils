@@ -82,9 +82,19 @@ TEST(vector, front) {
     EXPECT_EQ(v.front(), 0);
 }
 
+TEST(vector, first) {
+    putils::vector<int, 8> v{0, 1, 2};
+    EXPECT_EQ(v.first(), 0);
+}
+
 TEST(vector, back) {
     const putils::vector<int, 8> v{0, 1, 2};
     EXPECT_EQ(v.back(), 2);
+}
+
+TEST(vector, last) {
+    putils::vector<int, 8> v{0, 1, 2};
+    EXPECT_EQ(v.last(), 2);
 }
 
 TEST(vector, index) {

@@ -68,6 +68,11 @@ namespace putils {
         assert(_size > 0); return _buff[0];
     }
 
+    TemplateDecl
+    constexpr T & TVector::first() noexcept {
+        return front();
+    }
+
 	TemplateDecl
 	constexpr T & TVector::back() noexcept {
 		assert(_size > 0); return _buff[_size - 1];
@@ -76,6 +81,11 @@ namespace putils {
     TemplateDecl
     constexpr const T & TVector::back() const noexcept {
         assert(_size > 0); return _buff[_size - 1];
+    }
+
+    TemplateDecl
+    constexpr T & TVector::last() noexcept {
+        return back();
     }
 
 	TemplateDecl

@@ -47,8 +47,12 @@ namespace putils {
         constexpr T & front() noexcept;
         constexpr const T & front() const noexcept;
 
+        constexpr T & first() noexcept;
+
 		constexpr T & back() noexcept;
         constexpr const T & back() const noexcept;
+
+        constexpr T & last() noexcept;
 
 		constexpr T & operator[](size_t index) noexcept;
 		constexpr const T & operator[](size_t index) const noexcept;
@@ -111,7 +115,8 @@ putils_reflection_info_template{
 	putils_reflection_methods(
 		putils_reflection_attribute(add),
 		putils_reflection_attribute(try_add),
-		putils_reflection_attribute(back),
+        putils_reflection_attribute(first),
+		putils_reflection_attribute(last),
 		putils_reflection_attribute(get),
 		putils_reflection_attribute(remove),
 		putils_reflection_attribute(size),
