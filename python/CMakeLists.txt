@@ -1,5 +1,5 @@
 putils_conan(
-	pybind11/2.8.1
+	pybind11/2.9.1
 	GENERATORS cmake_find_package)
 
 # Need to use cmake_find_package generator to use conan components (pybind11::embed and pybind11::module)

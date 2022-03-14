@@ -262,7 +262,7 @@ TEST(Point2, getLength) {
     EXPECT_EQ(putils::getLength(p2), 2);
 
     const putils::Point2i p3{ 1, 1 };
-    EXPECT_FLOAT_EQ(putils::getLength(p3), sqrt(2));
+    EXPECT_FLOAT_EQ(putils::getLength(p3), sqrtf(2.f));
 }
 
 TEST(Point2, normalize) {

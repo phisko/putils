@@ -3,7 +3,7 @@
 #include "lengthof.hpp"
 #include "string.hpp"
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 # include "windows.h"
 # include "dbghelp.h"
 #endif
@@ -12,7 +12,7 @@
 namespace putils {
 	std::string getCallStack() noexcept {
 		std::string ret;
-#ifdef _WIN32
+#ifdef _MSC_VER
 		const auto process = GetCurrentProcess();
 		SymInitialize(process, nullptr, true);
 

@@ -60,7 +60,7 @@ namespace putils {
 	template<typename ...P>
 	void PluginManager::execute(const std::string & name, P && ...params) noexcept {
 		for (const auto & [_, plugin] : _libraries) {
-			auto func = plugin->loadMethod<void, P...>(name);
+			auto func = plugin->template loadMethod<void, P...>(name);
 			if (func != nullptr)
 				func(std::forward<P>(params)...);
 		}
@@ -71,11 +71,11 @@ namespace putils {
 		putils::vector<T, MaxReturns> ret;
 
 		for (const auto & [_, plugin] : _libraries) {
-			auto func = plugin->loadMethod<T, P...>(name);
+			auto func = plugin->template loadMethod<T, P...>(name);
 			if (func != nullptr) {
 				ret.push_back(func(std::forward<P>(params)...));
 				if (ret.full())
-					return;
+					return ret;
 			}
 		}
 

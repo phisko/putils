@@ -133,7 +133,7 @@ namespace putils {
 	TemplateDecl\
 	Point1 & assignName(Point1 & lhs, const Point2 & rhs) noexcept {\
 		for (size_t i = 0; i < D; ++i)\
-			lhs.raw[i] op rhs.raw[i];\
+			lhs.raw[i] op (P1)rhs.raw[i];\
 		return lhs;\
 	}
 
