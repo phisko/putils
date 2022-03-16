@@ -75,6 +75,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [remove_if](remove_if.md): function taking a container and a predicate and calling std::remove_if
 * [same_sign](same_sign.md): function indicating whether two scalars have the same sign
 * [thread_name](thread_name.md): sets or gets the OS-level name for the current thread
+* [scoped_setter](scoped_setter.md): sets the value of a variable for the duration of the current scope
 * [sign](sign.md): function returning -1, 0 or 1 depending on the sign of the parameter
 * [static_assert](static_assert.md): type template to let `static_assert` fail for a specific type
 * [termcolor](termcolor.hpp): colors for the terminal. Credit goes to [ikalnytskyi](https://github.com/ikalnytskyi/termcolor)
