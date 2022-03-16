@@ -45,7 +45,8 @@ namespace putils {
 	template<typename P, size_t D>
 #define refltype Point<P, D>
 	putils_reflection_info_template{
-		static constexpr char class_name[] = { 'P', 'o', 'i', 'n', 't', '0' + D, 0 };
+		static constexpr const char class_name_priv[] = { 'P', 'o', 'i', 'n', 't', '0' + D, 0 };
+        static constexpr const char * class_name = class_name_priv;
 		putils_reflection_attributes(
 			putils_reflection_attribute(raw)
 		);
