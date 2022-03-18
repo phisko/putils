@@ -4,3 +4,6 @@
 [submodule "imgui"]
 	path = imgui
 	url = https://github.com/ocornut/imgui
+[submodule "imgui_lua_bindings"]
+	path = imgui_lua_bindings
+	url = https://github.com/phisko/imgui_lua_bindings.git
