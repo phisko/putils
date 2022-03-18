@@ -13,7 +13,7 @@ namespace putils {
 	};
 
 	template<typename Func>
-	OnScopeExit<Func> onScopeExit(Func && f) noexcept {
+	OnScopeExit<std::decay_t<Func>> onScopeExit(Func && f) noexcept {
 		return { FWD(f) };
 	}
 }
