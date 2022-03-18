@@ -298,3 +298,16 @@ namespace putils {
 		storage storage_{};
 	};
 }
+
+#include "meta/traits/details/function_traits.hpp"
+
+namespace putils::detail {
+    template<typename R, size_t Size, typename ... Args>
+    struct function_traits<
+            putils::function<R(Args...), Size>
+    > : std::true_type {
+        using signature = R(*)(Args...);
+        using return_type = R;
+        using arguments = std::tuple<Args...>;
+    };
+}
