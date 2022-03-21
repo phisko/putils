@@ -177,7 +177,7 @@ namespace putils {
 	TemplateDecl\
 	TPoint & assignName(TPoint & lhs, float rhs) noexcept {\
 		for (size_t i = 0; i < D; ++i)\
-			lhs.raw[i] op rhs;\
+			lhs.raw[i] op (P)rhs;\
 		return lhs;\
 	}\
 
