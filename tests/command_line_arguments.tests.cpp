@@ -1,6 +1,18 @@
 #include <gtest/gtest.h>
 #include "command_line_arguments.hpp"
 
+TEST(command_line_arguments, toArgumentVector) {
+    const std::vector<const char *> args = {
+        "foo",
+        "bar"
+    };
+
+    const auto parsed = putils::toArgumentVector(args.size(), args.data());
+    EXPECT_EQ(parsed.size(), args.size());
+    for (size_t i = 0; i < parsed.size(); ++i)
+        EXPECT_EQ(parsed[i], args[i]);
+}
+
 struct Args {
     std::string s1;
     std::string s2;
@@ -20,29 +32,29 @@ putils_reflection_info{
 #undef refltype
 
 TEST(command_line_arguments, parseOneSpace) {
-    const std::vector<const char *> args {
+    const std::vector<std::string_view> args {
         "--s1", "hello",
     };
-    const auto parsed = putils::parseArguments<Args>(args.size(), args.data());
+    const auto parsed = putils::parseArguments<Args>(std::span(args));
     EXPECT_EQ(parsed.s1, "hello");
 }
 
 TEST(command_line_arguments, parseOneAssign) {
-    const std::vector<const char *> args {
+    const std::vector<std::string_view> args {
         "--s1=hello",
     };
-    const auto parsed = putils::parseArguments<Args>(args.size(), args.data());
+    const auto parsed = putils::parseArguments<Args>(std::span(args));
     EXPECT_EQ(parsed.s1, "hello");
 }
 
 TEST(command_line_arguments, parseMultiple) {
-    const std::vector<const char *> args {
+    const std::vector<std::string_view> args {
         "--s1", "hello",
         "--s2=hi",
         "--f1", "42.5",
         "--f2", "-84",
     };
-    const auto parsed = putils::parseArguments<Args>(args.size(), args.data());
+    const auto parsed = putils::parseArguments<Args>(std::span(args));
     EXPECT_EQ(parsed.s1, "hello");
     EXPECT_EQ(parsed.s2, "hi");
     EXPECT_EQ(parsed.f1, 42.5f);
@@ -50,9 +62,9 @@ TEST(command_line_arguments, parseMultiple) {
 }
 
 TEST(command_line_arguments, flagMetadata) {
-    const std::vector<const char *> args {
+    const std::vector<std::string_view> args {
         "-s", "hello",
     };
-    const auto parsed = putils::parseArguments<Args>(args.size(), args.data());
+    const auto parsed = putils::parseArguments<Args>(std::span(args));
     EXPECT_EQ(parsed.s1, "hello");
 }

@@ -21,47 +21,89 @@ namespace putils {
         };
 
         template<typename T>
-        static bool parseValue(size_t ac, const char * const * av, const char * key, T & member, bool isFlag) noexcept {
+        static bool parseValue(std::span<const std::string_view> args, std::string_view key, T & member, bool isFlag) noexcept {
 			using AttributeType = impl::remove_optional<putils_typeof(member)>::type;
-            
-            for (int i = 0; i < ac; ++i) {
-                if (strcmp(av[i], key) == 0) {
+
+            for (size_t i = 0; i < args.size(); ++i) {
+                if (args[i] == key) {
                     if constexpr (std::is_same<AttributeType, bool>()) {
                         member = true;
                         return true;
                     }
                     ++i;
-                    if (i >= ac)
+                    if (i >= args.size())
                         return true;
-                    member = putils::parse<AttributeType>(av[i]); 
+                    member = putils::parse<AttributeType>(args[i]);
                     return true;
                 }
                 else if (!isFlag) {
-                    const auto keyLen = strlen(key);
-                    if (strncmp(av[i], key, keyLen) != 0 || av[i][keyLen] != '=')
+                    if (args[i].substr(0, key.size()) != key || args[i][key.size()] != '=')
                         continue;
-                    const char * value = av[i] + keyLen + 1; // skip the '='
+                    const auto value = args[i].substr(key.size() + 1);
                     member = putils::parse<AttributeType>(value);
                     return true;
                 }
             }
             return false;
         }
+
+        template<typename T>
+        static void printHelp(std::string_view help) {
+            if (!help.empty())
+                std::cout << help << std::endl << std::endl;
+
+            if constexpr (putils::reflection::has_class_name<T>())
+                std::cout << putils::reflection::get_class_name<T>() << " options:" << std::endl;
+            else
+                std::cout << "Options:" << std::endl;
+            putils::reflection::for_each_attribute<T>([](const auto & attr) {
+                std::cout << "\t";
+                if (const auto flag = putils::reflection::get_metadata<const char *>(attr.metadata, "flag"))
+                    std::cout << "-" << *flag << ", ";
+                std::cout << "--" << attr.name;
+                if (const auto desc = putils::reflection::get_metadata<const char *>(attr.metadata, "help"))
+                    std::cout << "\t\t" << *desc;
+                std::cout << std::endl;
+            });
+            std::cout << std::endl;
+        }
     }
 
     template<typename T>
-    T parseArguments(size_t ac, const char * const * av) noexcept {
+    T parseArguments(std::span<const std::string_view> args, std::string_view help) noexcept {
         T ret;
 
         putils::reflection::for_each_attribute(ret, [&](const auto & attr) noexcept {
             const putils::string<1024> option("--%s", attr.name);
-            if (impl::parseValue(ac, av, option, attr.member, false))
+            if (impl::parseValue(args, option, attr.member, false))
                 return;
             if (const auto flag = putils::reflection::get_metadata<const char *>(attr.metadata, "flag")) {
                 const putils::string<1024> dashFlag("-%s", *flag);
-                impl::parseValue(ac, av, dashFlag, attr.member, true);
+                impl::parseValue(args, dashFlag, attr.member, true);
             }
         });
+
+        for (const auto s : args) {
+            if (s == "--help") {
+                if (!putils::reflection::has_attribute<T>("help")) {
+                    impl::printHelp<T>(help);
+                    return ret;
+                }
+            }
+            if (s == "-h") {
+                bool shouldPrintHelp = true;
+                putils::reflection::for_each_attribute<T>([&](const auto & attr) noexcept {
+                    if (const auto flag = putils::reflection::get_metadata<const char *>(attr.metadata, "flag")) {
+                        if (std::string_view(*flag) == "h")
+                            shouldPrintHelp = false;
+                    }
+                });
+                if (shouldPrintHelp) {
+                    impl::printHelp<T>(help);
+                    return ret;
+                }
+            }
+        }
 
         return ret;
     }
