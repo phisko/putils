@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 namespace putils {
     template<typename Obj, typename EnableIf = std::enable_if_t<!std::is_base_of_v<std::istream, std::decay_t<Obj>>>>
@@ -9,22 +10,22 @@ namespace putils {
     std::string toString(std::istream & s) noexcept;
 
     template<typename Obj>
-    void parse(Obj & obj, const char * str) noexcept;;
+    void parse(Obj & obj, std::string_view str) noexcept;;
 
     template<>
-    void parse(bool & obj, const char * str) noexcept;
+    void parse(bool & obj, std::string_view str) noexcept;
 
 	template<>
-    void parse(std::string & obj, const char * str) noexcept;
+    void parse(std::string & obj, std::string_view str) noexcept;
 
     template<typename Obj>
-    Obj parse(const char * str) noexcept;;
+    Obj parse(std::string_view str) noexcept;;
 
     template<>
-    bool parse(const char * str) noexcept;
+    bool parse(std::string_view str) noexcept;
 
     template<>
-    std::string parse(const char * str) noexcept;
+    std::string parse(std::string_view str) noexcept;
 }
 
 #include "to_string.inl"

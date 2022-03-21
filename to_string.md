@@ -13,7 +13,7 @@ Serializes `obj` using `std::stringstream`.
 
 ```cpp
 template<typename Obj>
-void parse(Obj & obj, const char * str) noexcept;;
+void parse(Obj & obj, std::string_view str) noexcept;;
 ```
 
 Parses `str` into `obj` using `std::stringstream`.

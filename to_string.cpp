@@ -1,5 +1,4 @@
 #include "to_string.hpp"
-#include <cstring>
 #include <sstream>
 #include "read_stream.hpp"
 
@@ -15,22 +14,22 @@ namespace putils {
     }
 
     template<>
-    void parse(bool & obj, const char * str) noexcept {
-		obj = strcmp(str, "true") == 0;
+    void parse(bool & obj, std::string_view str) noexcept {
+		obj = str == "true";
     };
 
 	template<>
-	void parse(std::string & obj, const char * str) noexcept {
+	void parse(std::string & obj, std::string_view str) noexcept {
 		obj = str;
 	}
 
     template<>
-    bool parse(const char * str) noexcept {
-        return strcmp(str, "true") == 0; 
+    bool parse(std::string_view str) noexcept {
+        return str == "true";
     }
 
     template<>
-    std::string parse(const char * str) noexcept {
-        return str; 
+    std::string parse(std::string_view str) noexcept {
+        return std::string(str);
     }
 }

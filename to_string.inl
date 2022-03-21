@@ -12,14 +12,16 @@ namespace putils {
     }
 
     template<typename Obj>
-    void parse(Obj & obj, const char * str) noexcept {
-        std::stringstream s(FWD(str));
+    void parse(Obj & obj, std::string_view str) noexcept {
+        std::stringstream s;
+        s << str;
         s >> obj;
     };
 
     template<typename Obj>
-    Obj parse(const char * str) noexcept {
-        std::stringstream s(FWD(str));
+    Obj parse(std::string_view str) noexcept {
+        std::stringstream s;
+        s << str;
 
         Obj ret;
         s >> ret;
