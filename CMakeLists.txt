@@ -73,7 +73,8 @@ if (PUTILS_BUILD_TESTS)
 
     file(GLOB_RECURSE test_src
             tests/*.tests.cpp
-            reflection_helpers/tests/*.tests.cpp)
+            reflection_helpers/tests/*.tests.cpp
+            reflection/**.tests.cpp)
 
     if(PUTILS_BUILD_MEDIATOR)
         file(GLOB_RECURSE mediator_test_src mediator/tests/*.tests.cpp)
