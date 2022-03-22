@@ -83,7 +83,7 @@ namespace putils::gl {
 		glUseProgram(_handle);
 
 		putils::reflection::for_each_attribute(static_cast<CRTP &>(*this), [&](const auto & attr) {
-			const auto & uniformLocation = attr.member;
+			auto & uniformLocation = attr.member;
 
 			static const auto setLocation = [this](GLint & loc, const char * name) noexcept {
 				loc = glGetUniformLocation(_handle, name);
