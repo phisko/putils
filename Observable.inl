@@ -14,8 +14,10 @@ namespace putils {
 
 	template<typename ... Args>
 	intptr_t TObservable::addObserver(const Observer & observer) noexcept {
-		auto id = (intptr_t)&observer;
-		_observers.push_back({ id, observer });
+		_observers.push_back({ 0, observer });
+        auto & newObserver = _observers.back();
+        const auto id = (intptr_t)&newObserver;
+        newObserver.first = id;
 		return id;
 	}
 
