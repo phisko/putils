@@ -1,14 +1,25 @@
 #include "imgui_helper.hpp"
 
+// stl
+#include <map>
+#include <memory>
+
 #include "imgui.h"
+
+// putils
 #include "reflection.hpp"
+#include "string.hpp"
 #include "Color.hpp"
 #include "magic_enum.hpp"
 #include "lengthof.hpp"
 #include "universal_functor.hpp"
+#include "to_string.hpp"
+
+// traits
 #include "meta/traits/is_iterable.hpp"
 #include "meta/traits/is_function.hpp"
 #include "meta/traits/is_specialization.hpp"
+#include "meta/traits/is_streamable.hpp"
 #include "meta/traits/function_return_type.hpp"
 #include "meta/traits/function_arguments.hpp"
 
