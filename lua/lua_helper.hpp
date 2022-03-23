@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sol.hpp"
+#include "sol/sol.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
 #include "meta/traits/is_streamable.hpp"
