@@ -11,8 +11,8 @@
 namespace putils {
     template<typename Obj, typename EnableIf>
     std::string toString(Obj && obj) noexcept {
-        if constexpr (std::is_enum<Obj>())
-            return putils::magic_enum::enum_name(obj);
+        if constexpr (std::is_enum<std::decay_t<Obj>>())
+            return std::string(putils::magic_enum::enum_name(obj));
         else {
             std::stringstream s;
             s << FWD(obj);

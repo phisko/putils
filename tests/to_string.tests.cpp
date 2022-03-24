@@ -19,6 +19,15 @@ TEST(toString, stream) {
     EXPECT_EQ(putils::toString(s), "42");
 }
 
+TEST(toString, enum) {
+    enum E {
+        A,
+        B
+    };
+    const E e = E::A;
+    EXPECT_EQ(putils::toString(e), "A");
+}
+
 TEST(parse, int) {
     int i = 0;
     putils::parse(i, "42");
@@ -41,4 +50,17 @@ TEST(parse, bool) {
     EXPECT_EQ(b, false);
 
     EXPECT_EQ(putils::parse<bool>("false"), false);
+}
+
+TEST(parse, enum) {
+    enum class E {
+        A,
+        B
+    };
+
+    E e = E::B;
+    putils::parse(e, "A");
+    EXPECT_EQ(e, E::A);
+
+    EXPECT_EQ(putils::parse<E>("B"), E::B);
 }
