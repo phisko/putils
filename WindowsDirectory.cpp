@@ -1,3 +1,5 @@
+#ifdef _WIN32
+
 #include "WindowsDirectory.hpp"
 #include <direct.h>
 #include <fileapi.h>
@@ -34,3 +36,5 @@ namespace putils {
 		return true;
 	}
 }
+
+#endif

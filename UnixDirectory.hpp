@@ -16,7 +16,7 @@ namespace putils {
 
     private:
         DIR * _handle;
-        std::string _path;
+        putils::string<PUTILS_DIRECTORY_MAX_PATH> _path;
     };
 }
 

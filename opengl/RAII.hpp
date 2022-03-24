@@ -2,7 +2,7 @@
 
 #include <utility>
 #include "GL/glew.h"
-#include "GL/GL.h"
+#include "GL/gl.h"
 
 namespace putils::gl {
 	struct FrameBuffer;

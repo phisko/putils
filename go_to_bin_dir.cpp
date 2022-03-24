@@ -3,6 +3,7 @@
 #ifdef __unix__
 # include <unistd.h>
 # include <sys/stat.h>
+# include <assert.h>
 #elif defined(_WIN32)
 # include <windows.h>
 # include <processenv.h>
@@ -13,14 +14,14 @@ namespace putils {
 #ifdef __unix__
         struct stat sb;
         if (lstat(currentPath.c_str(), &sb) == -1)
-            throw std::runtime_error("Path doesn't exist");
+            assert(false);
 
         // If av[0] was a symbolic link, dereference it
         if (S_ISLNK(sb.st_mode)) {
             char buf[1024];
             auto ret = readlink(currentPath.c_str(), buf, 1023);
             if (ret == -1)
-                throw std::runtime_error("Could not read link");
+                assert(false);
             buf[ret] = 0;
             currentPath = buf;
         }

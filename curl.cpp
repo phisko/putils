@@ -26,16 +26,27 @@ namespace putils::curl {
 		return "curl -s \"" + ret + '"';
 	}
 
+#ifdef _WIN32
+# define MY_POPEN _popen
+# define MY_PCLOSE _pclose
+#else
+# define MY_POPEN popen
+# define MY_PCLOSE pclose
+#endif
+
 	std::string httpRequest(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) noexcept {
 		std::string s;
 
-		const auto pipe = _popen(buildCurlCommand(baseURL, params).c_str(), "r");
+		const auto pipe = MY_POPEN(buildCurlCommand(baseURL, params).c_str(), "r");
 		assert(pipe != nullptr);
 		char buffer[1024];
 		while (fgets(buffer, sizeof(buffer), pipe))
 			s += buffer;
-		_pclose(pipe);
+		MY_PCLOSE(pipe);
 
 		return s;
 	}
+
+#undef MY_POPEN
+#undef MY_PCLOSE
 }

@@ -27,8 +27,15 @@ namespace putils::reflection {
             else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, char>()) {
                 if constexpr (serialize)
                     jsonObject = obj;
-                else
-                    strncpy_s(obj, jsonObject.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
+                else {
+#ifdef _WIN32
+# define MY_STRNCPY strncpy_s
+#else
+# define MY_STRNCPY strncpy
+#endif
+                    MY_STRNCPY(obj, jsonObject.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
+#undef MY_STRNCPY
+                }
             }
 
             else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, const char>()) {

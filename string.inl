@@ -5,6 +5,14 @@
 #define TemplateDecl template<size_t MaxSize, const char * ClassName>
 #define TString string<MaxSize, ClassName>
 
+#ifdef _WIN32
+# define MY_STRNCPY strncpy_s
+# define MY_STRNCAT strncat_s
+#else
+# define MY_STRNCPY strncpy
+# define MY_STRNCAT strncat
+#endif
+
 namespace putils {
 	TemplateDecl
 	constexpr TString::string() noexcept {
@@ -22,26 +30,26 @@ namespace putils {
 	TemplateDecl
 	constexpr TString::string(const char * str) noexcept : _size(strlen(str)) {
 		static_assert(MaxSize > 0);
-		strncpy_s(_buff, str, MaxSize);
+		MY_STRNCPY(_buff, str, MaxSize);
 	}
 
 	TemplateDecl
 	constexpr TString::string(const std::string & s) noexcept : _size(s.size()) {
 		static_assert(MaxSize > 0);
 		assert(_size < MaxSize);
-		strncpy_s(_buff, s.data(), _size);
+		MY_STRNCPY(_buff, s.data(), _size);
 	}
 
 	TemplateDecl
 	constexpr TString::string(std::string_view s) noexcept : _size(s.size()) {
 		static_assert(MaxSize > 0);
 		assert(_size < MaxSize);
-		strncpy_s(_buff, s.data(), _size);
+		MY_STRNCPY(_buff, s.data(), _size);
 	}
 
 	TemplateDecl
 	constexpr TString & TString::operator=(const char * rhs) noexcept {
-		strncpy_s(_buff, rhs, MaxSize);
+		MY_STRNCPY(_buff, rhs, MaxSize);
 		_size = strlen(rhs);
 		return *this;
 	}
@@ -49,7 +57,7 @@ namespace putils {
 	TemplateDecl
 	template<size_t N, const char * S>
 	constexpr TString & TString::operator=(const string<N, S> & rhs) noexcept {
-		strncpy_s(_buff, rhs.c_str(), MaxSize);
+		MY_STRNCPY(_buff, rhs.c_str(), MaxSize);
 		_size = rhs.size();
 		return *this;
 	}
@@ -57,7 +65,7 @@ namespace putils {
 	TemplateDecl
 	constexpr TString & TString::operator=(std::string_view rhs) noexcept {
 		assert(rhs.size() < MaxSize);
-		strncpy_s(_buff, rhs.data(), rhs.size());
+		MY_STRNCPY(_buff, rhs.data(), rhs.size());
 		_size = rhs.size();
 		return *this;
 	}
@@ -65,7 +73,7 @@ namespace putils {
 	TemplateDecl
 	constexpr TString & TString::operator=(const std::string & rhs) noexcept {
 		assert(rhs.size() < MaxSize);
-		strncpy_s(_buff, rhs.data(), rhs.size());
+		MY_STRNCPY(_buff, rhs.data(), rhs.size());
 		_size = rhs.size();
 		return *this;
 	}
@@ -84,7 +92,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString & TString::operator+=(const char * pRhs) noexcept {
-		strncat_s(_buff, MaxSize, pRhs, MaxSize - _size);
+		MY_STRNCAT(_buff, pRhs, MaxSize - _size);
 		_size += strlen(pRhs);
 		assert(_size < MaxSize);
 		return *this;
@@ -92,7 +100,7 @@ namespace putils {
 
 	TemplateDecl
 	constexpr TString & TString::operator+=(std::string_view rhs) noexcept {
-		strncat_s(_buff, MaxSize, rhs.data(), rhs.size());
+		MY_STRNCAT(_buff, rhs.data(), rhs.size());
 		_size += rhs.size();
 		assert(_size < MaxSize);
 		return *this;
@@ -153,7 +161,7 @@ namespace putils {
 	TemplateDecl
 	constexpr TString TString::substr(size_t start, size_t count) const noexcept {
 		string ret;
-		strncpy_s(ret._buff, _buff + start, count);
+		MY_STRNCPY(ret._buff, _buff + start, count);
 		ret._size = std::min(strlen(_buff + start), count);
 		return ret;
 	}
@@ -373,6 +381,9 @@ namespace std {
 		return result;
 	}
 }
+
+#undef MY_STRNCPY
+#undef MY_STRNCAT
 
 #undef TemplateDecl
 #undef TString

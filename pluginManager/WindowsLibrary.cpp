@@ -1,14 +1,11 @@
 #ifdef _WIN32
 
 #include "WindowsLibrary.hpp"
-#include <comdef.h>
 #include <algorithm>
-#include <stdio.h>
 #include <sstream>
 
 #include "get_last_error_as_string.hpp"
 #include "concatenate.hpp"
-#include "get_current_dir.hpp"
 
 namespace putils {
 	WindowsLibrary::WindowsLibrary(std::string_view name) noexcept : Library(name) {

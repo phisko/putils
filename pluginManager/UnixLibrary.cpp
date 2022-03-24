@@ -9,7 +9,7 @@ namespace putils {
 	UnixLibrary::UnixLibrary(std::string_view name) noexcept
 		:
 		Library(name),
-		_handle(dlopen(name.c_str(), RTLD_NOW))
+		_handle(dlopen(std::string(name).c_str(), RTLD_NOW))
 	{
 		if (_handle == nullptr) {
 			std::stringstream s;

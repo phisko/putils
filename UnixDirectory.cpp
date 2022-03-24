@@ -28,11 +28,11 @@ namespace putils {
 		if (ent == nullptr)
 			return false;
 
-		out.file = ent->d_name;
-		if (out.file == "." || out.file == ".." || out.file.empty())
-			return getNextFile();
+		out.name = ent->d_name;
+		if (out.name == "." || out.name == ".." || out.name.empty())
+			return getNextFile(out);
 
-		out.fullPath = _path + file;
+		out.fullPath = _path + out.name;
 
 		struct stat sb;
 		if (lstat(out.fullPath.c_str(), &sb) == -1)

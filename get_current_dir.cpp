@@ -8,13 +8,20 @@
 # include <direct.h>
 #endif
 
+#ifdef _WIN32
+# define MY_GETCWD _getcwd
+#else
+# define MY_GETCWD getcwd
+#endif
 
 namespace putils {
     std::string getCurrentDir() noexcept {
         char buff[1024];
 
-        if (_getcwd(buff, 1024) != nullptr)
+        if (MY_GETCWD(buff, 1024) != nullptr)
             return buff;
         return "";
     }
 }
+
+#undef MY_GETCWD
