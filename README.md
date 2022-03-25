@@ -17,8 +17,6 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [Color & NormalizedColor](Color.md): helper classes to manipulate colors
 * [Directory](Directory.md): An abstraction to Unix and Windows directories, which lets you iterate through a directory and get information about each file.
 * [IniFile](IniFile.md): `.ini` file parser
-* [json](json.hpp): JSON implementation, credit goes to [nlohmann](https://github.com/nlohmann/json)
-* [magic_enum](magic_enum.hpp): functions to convert enums to strings, get enum counts... credit goes to [Neargye](https://github.com/Neargye/magic_enum)
 * [Observable](Observable.md): A minimalistic (but greatly sufficient) implementation of the Observer pattern.
 * [Point](Point.md): Simple abstraction to a 2D or 3D point.
 * [Rect](Rect.md): Simple abstraction to a 2D or 3D rectangle.
@@ -78,7 +76,6 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [scoped_setter](scoped_setter.md): sets the value of a variable for the duration of the current scope
 * [sign](sign.md): function returning -1, 0 or 1 depending on the sign of the parameter
 * [static_assert](static_assert.md): type template to let `static_assert` fail for a specific type
-* [termcolor](termcolor.hpp): colors for the terminal. Credit goes to [ikalnytskyi](https://github.com/ikalnytskyi/termcolor)
 * [to_string](to_string.md): uses a `std::stringstream` to serialize an object
 * [traits](traits.md): type traits
 * [url](url.md): URL encoder and decoder

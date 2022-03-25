@@ -8,9 +8,10 @@
 #include <PolyVox/CubicSurfaceExtractor.h>
 #include <PolyVox/VolumeResampler.h>
 
+#include <termcolor/termcolor.hpp>
+
 #include "MagicaVoxel.hpp"
 #include "file_extension.hpp"
-#include "termcolor.hpp"
 #include "Color.hpp"
 #include "Point.hpp"
 
@@ -69,7 +70,7 @@ namespace putils::MagicaVoxel {
 
 	static auto loadVoxFile(const char * f, putils::Point3i * outSize = nullptr) noexcept {
 #ifndef KENGINE_NDEBUG
-		std::cout << putils::termcolor::green << "[MagicaVoxel] Loading " << putils::termcolor::cyan << f << putils::termcolor::green << "..." << putils::termcolor::reset;
+		std::cout << termcolor::green << "[MagicaVoxel] Loading " << termcolor::cyan << f << termcolor::green << "..." << termcolor::reset;
 #endif
 		std::ifstream stream(f, std::ios::binary);
 		assert(stream);
@@ -115,7 +116,7 @@ namespace putils::MagicaVoxel {
 		}
 
 #ifndef KENGINE_NDEBUG
-		std::cout << putils::termcolor::green << " Done.\n" << putils::termcolor::reset;
+		std::cout << termcolor::green << " Done.\n" << termcolor::reset;
 #endif
 
 		return detail::buildMesh(volume);

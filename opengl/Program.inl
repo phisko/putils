@@ -1,5 +1,5 @@
 #include "Program.hpp"
-#include "termcolor.hpp"
+#include <termcolor/termcolor.hpp>
 #include "lengthof.hpp"
 
 namespace putils::gl {
@@ -71,8 +71,8 @@ namespace putils::gl {
 		char buffer[512];
 		glGetProgramInfoLog(_handle, (GLsizei)lengthof(buffer), nullptr, buffer);
 		if (strlen(buffer) != 0) {
-			std::cerr << putils::termcolor::red << "Error linking shaders:\n\t" << buffer << '\n';
-			std::cerr << "\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::red << "] program\n" << putils::termcolor::reset;
+			std::cerr << termcolor::red << "Error linking shaders:\n\t" << buffer << '\n';
+			std::cerr << "\tNote: When building [" << termcolor::cyan << _name << termcolor::red << "] program\n" << termcolor::reset;
 			assert(false);
 		}
 
@@ -89,10 +89,10 @@ namespace putils::gl {
 				loc = glGetUniformLocation(_handle, name);
 #if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 				if (loc == -1) {
-					std::cerr << putils::termcolor::yellow <<
-						"Failed to get location for `" << putils::termcolor::cyan << name << putils::termcolor::yellow << "` uniform\n"
-						"\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::yellow << "] program\n"
-						<< putils::termcolor::reset;
+					std::cerr << termcolor::yellow <<
+						"Failed to get location for `" << termcolor::cyan << name << termcolor::yellow << "` uniform\n"
+						"\tNote: When building [" << termcolor::cyan << _name << termcolor::yellow << "] program\n"
+						<< termcolor::reset;
 				}
 #endif
 			};

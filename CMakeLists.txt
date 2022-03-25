@@ -13,6 +13,19 @@ add_library(putils STATIC ${src})
 target_include_directories(putils PUBLIC .)
 target_include_directories(putils PUBLIC reflection)
 
+putils_conan(
+    magic_enum/0.7.3
+    nlohmann_json/3.10.5
+    stb/cci.20210910
+    termcolor/2.0.0
+)
+target_link_libraries(putils PUBLIC
+    CONAN_PKG::magic_enum
+    CONAN_PKG::nlohmann_json
+    CONAN_PKG::stb
+    CONAN_PKG::termcolor
+)
+
 add_subdirectory(pluginManager)
 target_link_libraries(putils PUBLIC putils_pluginManager)
 

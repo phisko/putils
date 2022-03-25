@@ -6,7 +6,7 @@ Helper functions for manipulating reflectible types in JSON.
 
 ```cpp
 template<typename T>
-void fromJSON(const putils::json & object, T && out);
+void fromJSON(const nlohmann::json & object, T && out);
 ```
 
 For each reflectible attribute in `out`, parses it from `object`.
@@ -15,7 +15,7 @@ For each reflectible attribute in `out`, parses it from `object`.
 
 ```cpp
 template<typename T>
-putils::json toJSON(const T & obj);
+nlohmann::json toJSON(const T & obj);
 ```
 
 For each reflectible attribute in `obj`, outputs it into a json object.

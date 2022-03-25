@@ -1,15 +1,15 @@
 #pragma once
 
-#include "json.hpp"
-#include "magic_enum.hpp"
+#include <magic_enum.hpp>
+#include <nlohmann/json.hpp>
 #include "vector.hpp"
 
 namespace putils::reflection {
 	template<typename T>
-	void fromJSON(const putils::json & object, T && out) noexcept;
+	void fromJSON(const nlohmann::json & object, T && out) noexcept;
 
 	template<typename T>
-	putils::json toJSON(const T & obj) noexcept;
+	nlohmann::json toJSON(const T & obj) noexcept;
 }
 
 #include "json_helper.inl"

@@ -4,15 +4,15 @@
 #include <sstream>
 
 // putils
+#include <magic_enum.hpp>
 #include "fwd.hpp"
 #include "read_stream.hpp"
-#include "magic_enum.hpp"
 
 namespace putils {
     template<typename Obj, typename EnableIf>
     std::string toString(Obj && obj) noexcept {
         if constexpr (std::is_enum<std::decay_t<Obj>>())
-            return std::string(putils::magic_enum::enum_name(obj));
+            return std::string(magic_enum::enum_name(obj));
         else {
             std::stringstream s;
             s << FWD(obj);
@@ -23,8 +23,8 @@ namespace putils {
     template<typename Obj>
     void parse(Obj & obj, std::string_view str) noexcept {
         if constexpr (std::is_enum<Obj>()) {
-            for (int i = 0; i < putils::magic_enum::enum_count<Obj>(); ++i) {
-                if (putils::magic_enum::enum_names<Obj>()[i] == str) {
+            for (int i = 0; i < magic_enum::enum_count<Obj>(); ++i) {
+                if (magic_enum::enum_names<Obj>()[i] == str) {
                     obj = static_cast<Obj>(i);
                     return;
                 }

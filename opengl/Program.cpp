@@ -1,8 +1,8 @@
 #ifdef PUTILS_GLM
 
 #include "Program.hpp"
+#include <termcolor/termcolor.hpp>
 #include "reflection.hpp"
-#include "termcolor.hpp"
 
 namespace putils::gl {
 	void setViewPort(const putils::Rect2i & viewport) noexcept {
@@ -41,10 +41,10 @@ namespace putils::gl {
 			glUniform1i(attrib, texture);
 #if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 		else {
-			std::cerr << putils::termcolor::yellow
-				<< "Failed to get location for `" << putils::termcolor::cyan << gName << putils::termcolor::yellow << "` uniform\n"
-				"\tNote: When building [" << putils::termcolor::cyan << _name << putils::termcolor::yellow << "] program\n"
-				<< putils::termcolor::reset;
+			std::cerr << termcolor::yellow
+				<< "Failed to get location for `" << termcolor::cyan << gName << termcolor::yellow << "` uniform\n"
+				"\tNote: When building [" << termcolor::cyan << _name << termcolor::yellow << "] program\n"
+				<< termcolor::reset;
 		}
 #endif
 	}
@@ -59,9 +59,9 @@ namespace putils::gl {
 			char buffer[512];
 			glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
 			if (strlen(buffer) != 0) {
-				std::cerr << putils::termcolor::red <<
-					"Error compiling program [" << putils::termcolor::cyan << _name << putils::termcolor::red << "]:\n\t" << putils::termcolor::white << buffer << '\n'
-					<< putils::termcolor::reset;
+				std::cerr << termcolor::red <<
+					"Error compiling program [" << termcolor::cyan << _name << termcolor::red << "]:\n\t" << termcolor::white << buffer << '\n'
+					<< termcolor::reset;
 				assert(false);
 			}
 

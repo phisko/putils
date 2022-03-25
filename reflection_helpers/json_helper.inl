@@ -109,9 +109,9 @@ namespace putils::reflection {
 			
 			else if constexpr (std::is_enum<T>()) {
 				if constexpr (serialize)
-					jsonObject = putils::magic_enum::enum_name<T>(obj);
+					jsonObject = magic_enum::enum_name<T>(obj);
 				else {
-					for (const auto & p : putils::magic_enum::enum_entries<T>())
+					for (const auto & p : magic_enum::enum_entries<T>())
 						if (jsonObject == putils::string<64>(p.second).c_str())
 							obj = p.first;
 				}
@@ -131,13 +131,13 @@ namespace putils::reflection {
 	}
 
 	template<typename TRef>
-	void fromJSON(const putils::json & object, TRef && val) noexcept {
+	void fromJSON(const nlohmann::json & object, TRef && val) noexcept {
 		detail::json::fromToJSON(object, val);
 	}
 
 	template<typename T>
-	putils::json toJSON(const T & obj) noexcept {
-		putils::json ret;
+	nlohmann::json toJSON(const T & obj) noexcept {
+		nlohmann::json ret;
 		detail::json::fromToJSON(ret, obj);
 		return ret;
 	}

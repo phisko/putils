@@ -7,10 +7,10 @@
 #include "imgui.h"
 
 // putils
+#include <magic_enum.hpp>
 #include "reflection.hpp"
 #include "string.hpp"
 #include "Color.hpp"
-#include "magic_enum.hpp"
 #include "lengthof.hpp"
 #include "universal_functor.hpp"
 #include "to_string.hpp"
@@ -28,11 +28,11 @@ namespace putils::reflection {
 	bool imguiEnumCombo(const char * label, E & e) noexcept {
 		static_assert(std::is_same_v<std::underlying_type_t<E>, int>);
 
-		static putils::string<64> names[putils::magic_enum::enum_count<E>()];
+		static putils::string<64> names[magic_enum::enum_count<E>()];
 		static bool first = true;
 		if (first) {
 			for (int i = 0; i < lengthof(names); ++i)
-				names[i] = putils::magic_enum::enum_names<E>()[i];
+				names[i] = magic_enum::enum_names<E>()[i];
 			first = false;
 		}
 		return ImGui::Combo(label, (int *)&e, [](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; }, nullptr, (int)lengthof(names));
@@ -275,7 +275,7 @@ namespace putils::reflection {
 		else if constexpr (std::is_enum<T>()) {
 			detail::imgui::displayInColumns(name, [&]() noexcept {
 				if constexpr (isConst)
-					ImGui::Text(putils::magic_enum::enum_name(obj).data());
+					ImGui::Text(magic_enum::enum_name(obj).data());
 				else
 					imguiEnumCombo(id, obj);
 			});
