@@ -14,7 +14,7 @@ namespace putils {
 		if (_handle == nullptr) {
 			std::stringstream s;
 			s << "Failed to load library '" << name << "': " << dlerror();
-			std::cerr << s.str() << '\n';
+			std::cerr << s.str() << std::endl;
 		}
 	}
 

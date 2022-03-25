@@ -116,7 +116,7 @@ namespace putils::MagicaVoxel {
 		}
 
 #ifndef KENGINE_NDEBUG
-		std::cout << termcolor::green << " Done.\n" << termcolor::reset;
+		std::cout << termcolor::green << " Done." << std::endl << termcolor::reset;
 #endif
 
 		return detail::buildMesh(volume);

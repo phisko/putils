@@ -43,7 +43,7 @@ namespace putils::python {
 				type.def("__iter__", [](const T & obj) { return py::make_iterator(obj.begin(), obj.end()); });
 		}
 		catch (const std::exception & e) {
-			std::cerr << "[Python] Failed to register type: " << e.what() << '\n';
+			std::cerr << "[Python] Failed to register type: " << e.what() << std::endl;
 		}
 	}
 }

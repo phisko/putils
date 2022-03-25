@@ -42,8 +42,8 @@ namespace putils::gl {
 #if !defined(PUTILS_NDEBUG) && !defined(PUTILS_NO_SHADER_DEBUG)
 		else {
 			std::cerr << termcolor::yellow
-				<< "Failed to get location for `" << termcolor::cyan << gName << termcolor::yellow << "` uniform\n"
-				"\tNote: When building [" << termcolor::cyan << _name << termcolor::yellow << "] program\n"
+				<< "Failed to get location for `" << termcolor::cyan << gName << termcolor::yellow << "` uniform" << std::endl
+				<< "\tNote: When building [" << termcolor::cyan << _name << termcolor::yellow << "] program" << std::endl
 				<< termcolor::reset;
 		}
 #endif
@@ -60,7 +60,8 @@ namespace putils::gl {
 			glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
 			if (strlen(buffer) != 0) {
 				std::cerr << termcolor::red <<
-					"Error compiling program [" << termcolor::cyan << _name << termcolor::red << "]:\n\t" << termcolor::white << buffer << '\n'
+					"Error compiling program [" << termcolor::cyan << _name << termcolor::red << "]:" << std::endl
+					<< '\t' << termcolor::white << buffer << std::endl
 					<< termcolor::reset;
 				assert(false);
 			}

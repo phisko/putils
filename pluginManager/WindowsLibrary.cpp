@@ -14,7 +14,7 @@ namespace putils {
 		std::replace(copy.begin(), copy.end(), '/', '\\');
 		_handle = LoadLibrary(copy.c_str());
 		if (_handle == nullptr)
-			std::cerr << "Failed to load library '" << name << "': " << GetLastErrorAsString() << '\n';
+			std::cerr << "Failed to load library '" << name << "': " << GetLastErrorAsString() << std::endl;
 	}
 
 	WindowsLibrary::~WindowsLibrary() noexcept {

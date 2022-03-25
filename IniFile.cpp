@@ -35,11 +35,11 @@ namespace putils {
 			if (!match.empty()) {
                 currentSection = getSection(ini, match[1].str());
                 if (currentSection == nullptr)
-                    std::cerr << "Invalid section name '" << match[1].str() << "'\n";
+                    std::cerr << "Invalid section name '" << match[1].str() << "'" << std::endl;
 				continue;
 			}
 			else if (currentSection == nullptr) {
-				std::cerr << "Invalid INI file, should start with a section\n";
+				std::cerr << "Invalid INI file, should start with a section" << std::endl;
 				continue;
 			}
 
@@ -48,7 +48,7 @@ namespace putils {
 
 			const auto index = line.find('=');
 			if (index == std::string::npos) {
-				std::cerr << "Invalid INI file, should match 'key = value' format\n";
+				std::cerr << "Invalid INI file, should match 'key = value' format" << std::endl;
 				continue;
 			}
 
@@ -61,12 +61,12 @@ namespace putils {
 	}
 
     static void serializeSection(std::ostream & s, const std::string & name, const IniFile::Section & section) noexcept {
-        s << '[' << name << "]\n";
+        s << '[' << name << ']' << std::endl;
         for (const auto & [key, value] : section.values)
-            s << key << '=' << value << '\n';
+            s << key << '=' << value << std::endl;
 
         for (const auto & [key, subsection] : section.sections) {
-            s << '\n';
+            s << std::endl;
             serializeSection(s, name + '/' + key, subsection);
         }
     }
@@ -75,7 +75,7 @@ namespace putils {
         bool first = true;
 		for (const auto & [name, section] : ini.sections) {
             if (!first)
-                s << '\n';
+                s << std::endl;
             first = false;
 
             serializeSection(s, name, section);
