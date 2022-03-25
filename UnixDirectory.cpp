@@ -9,7 +9,7 @@ namespace putils {
 		_handle(opendir(path.c_str())),
 		_path(path)
 	{
-		assert(handle != nullptr);
+		assert(_handle != nullptr);
 		if (_path[_path.length() - 1] != '/')
 			_path = _path + "/";
 	}
