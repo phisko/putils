@@ -5,7 +5,7 @@
 #define TemplateDecl template<size_t MaxSize, const char * ClassName>
 #define TString string<MaxSize, ClassName>
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 # define MY_STRNCPY strncpy_s
 # define MY_STRNCAT strncat_s
 #else
