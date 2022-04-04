@@ -83,9 +83,6 @@ if (PUTILS_NO_SHADER_DEBUG)
     target_compile_definitions(putils PUBLIC PUTILS_NO_SHADER_DEBUG)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
-
-
 #
 # Tests
 #
