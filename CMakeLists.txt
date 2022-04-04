@@ -87,22 +87,17 @@ endif()
 # Tests
 #
 
-if (PUTILS_BUILD_TESTS)
-    putils_conan(gtest/cci.20210126)
-
-    file(GLOB_RECURSE test_src
+if (PUTILS_TESTS)
+    set(test_exe_name putils_tests)
+    file(GLOB test_src
             tests/*.tests.cpp
-            reflection_helpers/tests/*.tests.cpp
-            reflection/**.tests.cpp)
+            reflection_helpers/tests/*.tests.cpp)
 
-    if(PUTILS_BUILD_MEDIATOR)
-        file(GLOB_RECURSE mediator_test_src mediator/tests/*.tests.cpp)
-        set(test_src ${test_src} ${mediator_test_src})
-    endif()
+    add_executable(${test_exe_name} ${test_src})
 
-    add_executable(putils_tests ${test_src})
-    target_link_libraries(putils_tests CONAN_PKG::gtest putils)
+    putils_conan(gtest/cci.20210126)
+    target_link_libraries(${test_exe_name} CONAN_PKG::gtest putils)
 
     include(GoogleTest)
-    gtest_discover_tests(putils_tests)
+    gtest_discover_tests(${test_exe_name})
 endif()
