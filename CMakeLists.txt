@@ -42,9 +42,10 @@ if (PUTILS_IMGUI)
     target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
 endif()
 
-if(PUTILS_BUILD_LUA)
+if(PUTILS_LUA)
     add_subdirectory(lua)
     target_link_libraries(putils PUBLIC putils_lua)
+    target_compile_definitions(putils PUBLIC PUTILS_LUA)
 
     file(GLOB imgui_lua_src
         imgui_lua_bindings/*.cpp
@@ -54,25 +55,25 @@ if(PUTILS_BUILD_LUA)
     target_link_libraries(putils PUBLIC putils_imgui_lua_bindings)
 endif()
 
-if(PUTILS_BUILD_MEDIATOR)
+if(PUTILS_MEDIATOR)
     add_subdirectory(mediator)
     target_link_libraries(putils PUBLIC putils_mediator)
     target_compile_definitions(putils PUBLIC PUTILS_MEDIATOR)
 endif()
 
-if(PUTILS_BUILD_PYTHON)
+if(PUTILS_PYTHON)
     add_subdirectory(python)
     target_link_libraries(putils PUBLIC putils_python)
     target_compile_definitions(putils PUBLIC PUTILS_PYTHON)
 endif()
 
-if (PUTILS_BUILD_OPENGL)
+if (PUTILS_OPENGL)
     add_subdirectory(opengl)
     target_link_libraries(putils PUBLIC putils_opengl)
     target_compile_definitions(putils PUBLIC PUTILS_OPENGL)
 endif ()
 
-if (PUTILS_BUILD_VULKAN)
+if (PUTILS_VULKAN)
     add_subdirectory(vulkan)
     target_link_libraries(putils PUBLIC putils_vulkan)
     target_compile_definitions(putils PUBLIC PUTILS_VULKAN)
