@@ -28,13 +28,19 @@ target_link_libraries(putils PUBLIC
     CONAN_PKG::termcolor
 )
 
-add_subdirectory(pluginManager)
-target_link_libraries(putils PUBLIC putils_pluginManager)
+if (PUTILS_PLUGIN_MANAGER)
+    add_subdirectory(pluginManager)
+    target_link_libraries(putils PUBLIC putils_pluginManager)
+    target_compile_definitions(putils PUBLIC PUTILS_PLUGIN_MANAGER)
+endif()
 
-set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
-add_library(putils_imgui STATIC ${imguiSrc})
-target_include_directories(putils_imgui PUBLIC imgui)
-target_link_libraries(putils PUBLIC putils_imgui)
+if (PUTILS_IMGUI)
+    set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
+    add_library(putils_imgui STATIC ${imguiSrc})
+    target_include_directories(putils_imgui PUBLIC imgui)
+    target_link_libraries(putils PUBLIC putils_imgui)
+    target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
+endif()
 
 if(PUTILS_BUILD_LUA)
     add_subdirectory(lua)
