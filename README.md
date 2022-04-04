@@ -33,14 +33,14 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 
 ## Packages
 
-* [Lua](lua/README.md) (enabled with the PUTILS_BUILD_LUA CMake option)
-* [Python](python/README.md) (enabled with the PUTILS_BUILD_PYTHON CMake option)
-* [Mediator](mediator/README.md) (enabled with the PUTILS_BUILD_MEDIATOR CMake option)
+* [Lua](lua/README.md) (enabled with the PUTILS_LUA CMake option)
+* [Python](python/README.md) (enabled with the PUTILS_PYTHON CMake option)
+* [Mediator](mediator/README.md) (enabled with the PUTILS_MEDIATOR CMake option)
 * [Meta](meta/README.md)
-* OpenGL (enabled with the PUTILS_BUILD_OPENGL CMake option)
-* [PluginManager](pluginManager/README.md)
+* [OpenGL](opengl) (enabled with the PUTILS_OPENGL CMake option)
+* [PluginManager](pluginManager/README.md) (enabled with the PUTILS_PLUGIN_MANAGER CMake option)
 * [Reflection](reflection/README.md)
-* Vulkan (enabled with the PUTILS_BUILD_VULKAN CMake option)
+* [Vulkan](vulkan) (enabled with the PUTILS_VULKAN CMake option)
 
 ## Function-only headers
 
@@ -55,7 +55,6 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [epsilon](epsilon.md): approximate comparison of floating point types
 * [erase](erase.md): function taking a container and a value and erasing the value from the container
 * [file_extension](file_extension.md): functions for working with file extensions
-* [fwd](fwd.md): macro which calls `std::forward` for the correct type
 * [get_call_stack](get_call_stack.md): function which returns a formatted call-stack
 * [get_current_dir](get_current_dir.md): function which returns the current working directory as a string
 * [get_last_error_as_string](get_last_error_as_string.md): function for Windows

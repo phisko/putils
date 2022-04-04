@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include "fwd.hpp"
+#include "meta/fwd.hpp"
 
 namespace putils {
     template<typename T>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include "fwd.hpp"
+#include "meta/fwd.hpp"
 
 namespace putils {
     // Remove items fitting a condition

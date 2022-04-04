@@ -5,7 +5,7 @@
 
 // putils
 #include <magic_enum.hpp>
-#include "fwd.hpp"
+#include "meta/fwd.hpp"
 #include "read_stream.hpp"
 
 namespace putils {

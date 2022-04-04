@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fwd.hpp"
+#include "meta/fwd.hpp"
 
 namespace putils {
 	template<typename Func>

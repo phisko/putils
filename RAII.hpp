@@ -2,7 +2,7 @@
 
 #include <type_traits>
 #include <utility>
-#include "fwd.hpp"
+#include "meta/fwd.hpp"
 
 namespace putils {
     template<typename T, void (*Dtor)(T &), bool = std::is_scalar<T>()>
