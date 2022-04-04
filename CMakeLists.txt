@@ -11,7 +11,9 @@ endif()
 file(GLOB src *.cpp *.hpp reflection_helpers/*.cpp reflection_helpers/*.hpp)
 add_library(putils STATIC ${src})
 target_include_directories(putils PUBLIC .)
-target_include_directories(putils PUBLIC reflection)
+
+add_subdirectory(reflection)
+target_link_libraries(putils PUBLIC reflection)
 
 putils_conan(
     magic_enum/0.7.3
