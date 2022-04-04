@@ -28,12 +28,14 @@ target_link_libraries(putils PUBLIC
     CONAN_PKG::termcolor
 )
 
+option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
 if (PUTILS_PLUGIN_MANAGER)
     add_subdirectory(pluginManager)
     target_link_libraries(putils PUBLIC putils_pluginManager)
     target_compile_definitions(putils PUBLIC PUTILS_PLUGIN_MANAGER)
 endif()
 
+option(PUTILS_IMGUI "Build ImGui" OFF)
 if (PUTILS_IMGUI)
     set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
     add_library(putils_imgui STATIC ${imguiSrc})
@@ -42,6 +44,7 @@ if (PUTILS_IMGUI)
     target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
 endif()
 
+option(PUTILS_LUA "Build Lua helper" OFF)
 if(PUTILS_LUA)
     add_subdirectory(lua)
     target_link_libraries(putils PUBLIC putils_lua)
@@ -55,30 +58,35 @@ if(PUTILS_LUA)
     target_link_libraries(putils PUBLIC putils_imgui_lua_bindings)
 endif()
 
+option(PUTILS_MEDIATOR "Build Mediator" OFF)
 if(PUTILS_MEDIATOR)
     add_subdirectory(mediator)
     target_link_libraries(putils PUBLIC putils_mediator)
     target_compile_definitions(putils PUBLIC PUTILS_MEDIATOR)
 endif()
 
+option(PUTILS_PYTHON "Build Python helper" OFF)
 if(PUTILS_PYTHON)
     add_subdirectory(python)
     target_link_libraries(putils PUBLIC putils_python)
     target_compile_definitions(putils PUBLIC PUTILS_PYTHON)
 endif()
 
+option(PUTILS_OPENGL "Build OpenGL helper" OFF)
 if (PUTILS_OPENGL)
     add_subdirectory(opengl)
     target_link_libraries(putils PUBLIC putils_opengl)
     target_compile_definitions(putils PUBLIC PUTILS_OPENGL)
 endif ()
 
+option(PUTILS_VULKAN "Build Vulkan helper" OFF)
 if (PUTILS_VULKAN)
     add_subdirectory(vulkan)
     target_link_libraries(putils PUBLIC putils_vulkan)
     target_compile_definitions(putils PUBLIC PUTILS_VULKAN)
 endif()
 
+option(PUTILS_NO_SHADER_DEBUG "Disable shader debug" OFF)
 if (PUTILS_NO_SHADER_DEBUG)
     target_compile_definitions(putils PUBLIC PUTILS_NO_SHADER_DEBUG)
 endif()
@@ -87,6 +95,7 @@ endif()
 # Tests
 #
 
+option(PUTILS_TESTS "Build tests" OFF)
 if (PUTILS_TESTS)
     set(test_exe_name putils_tests)
     file(GLOB test_src
