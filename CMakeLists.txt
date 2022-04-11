@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.0)
+project(putils HOMEPAGE_URL "https://github.com/phisko/putils")
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeModules)
 include(cmake_helper)
 include(conan_helper)
@@ -97,6 +100,7 @@ endif()
 
 option(PUTILS_TESTS "Build tests" OFF)
 if (PUTILS_TESTS)
+	enable_testing()
     set(test_exe_name putils_tests)
     file(GLOB test_src
             tests/*.tests.cpp
