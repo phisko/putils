@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(putils HOMEPAGE_URL "https://github.com/phisko/putils")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeModules)
-include(cmake_helper)
-include(conan_helper)
-
 set(CMAKE_CXX_STANDARD 20)
 
 if (MSVC)
