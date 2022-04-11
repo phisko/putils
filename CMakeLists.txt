@@ -11,6 +11,11 @@ file(GLOB src *.cpp *.hpp reflection_helpers/*.cpp reflection_helpers/*.hpp)
 add_library(putils STATIC ${src})
 target_include_directories(putils PUBLIC .)
 
+option(PUTILS_NDEBUG "Disable debug code" OFF)
+if (PUTILS_NDEBUG)
+    target_compile_definitions(putils PUBLIC PUTILS_NDEBUG)
+endif()
+
 add_subdirectory(reflection)
 target_link_libraries(putils PUBLIC reflection)
 
