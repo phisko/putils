@@ -1,0 +1,15 @@
+name: msvc
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: phisko/cmake-cxx-conan/.github/workflows/test.yml@main
+    with:
+      os: windows-latest
+      cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_OPENGL=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON

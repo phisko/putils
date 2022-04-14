@@ -1,5 +1,8 @@
 # putils
 
+[![gcc](https://github.com/phisko/putils/workflows/gcc/badge.svg)](https://github.com/phisko/putils/actions/workflows/gcc.yml)
+[![msvc](https://github.com/phisko/putils/workflows/msvc/badge.svg)](https://github.com/phisko/putils/actions/workflows/msvc.yml)
+
 Phisko's C++ Utilities
 
 ## [Reflection](reflection.md)
