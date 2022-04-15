@@ -3,8 +3,26 @@ name: gcc
 on:
   push:
     branches: [ main ]
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+      - '**.inl'
+      - '**/CMakeLists.txt'
+      - '**.cmake'
+      - 'imgui'
+      - 'imgui_lua_bindings'
+      - 'reflection'
   pull_request:
     branches: [ main ]
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+      - '**.inl'
+      - '**/CMakeLists.txt'
+      - '**.cmake'
+      - 'imgui'
+      - 'imgui_lua_bindings'
+      - 'reflection'
   workflow_dispatch:
 
 jobs:
