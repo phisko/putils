@@ -26,9 +26,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  debug:
     uses: phisko/cmake-cxx-conan/.github/workflows/test.yml@main
     with:
       os: ubuntu-latest
+      configuration: Debug
+      apt_dependencies: libgl-dev libglu1-mesa-dev
+      cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_OPENGL=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON
+
+  release:
+    uses: phisko/cmake-cxx-conan/.github/workflows/test.yml@main
+    with:
+      os: ubuntu-latest
+      configuration: Release
       apt_dependencies: libgl-dev libglu1-mesa-dev
       cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_OPENGL=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON
