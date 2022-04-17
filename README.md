@@ -1,7 +1,6 @@
 # putils
 
-[![gcc](https://github.com/phisko/putils/workflows/gcc/badge.svg)](https://github.com/phisko/putils/actions/workflows/gcc.yml)
-[![msvc](https://github.com/phisko/putils/workflows/msvc/badge.svg)](https://github.com/phisko/putils/actions/workflows/msvc.yml)
+[![tests](https://github.com/phisko/putils/workflows/tests/badge.svg)](https://github.com/phisko/putils/actions/workflows/tests.yml)
 
 Phisko's C++ Utilities
 

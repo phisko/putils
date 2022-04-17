@@ -1,0 +1,33 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+      - '**.inl'
+      - '**/CMakeLists.txt'
+      - '**.cmake'
+      - 'imgui'
+      - 'imgui_lua_bindings'
+      - 'reflection'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+      - '**.inl'
+      - '**/CMakeLists.txt'
+      - '**.cmake'
+      - 'imgui'
+      - 'imgui_lua_bindings'
+      - 'reflection'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: phisko/cmake-cxx-conan/.github/workflows/build.yml@main
+    with:
+      apt_dependencies: libgl-dev libglu1-mesa-dev
+      cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_OPENGL=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON
