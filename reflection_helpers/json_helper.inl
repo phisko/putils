@@ -124,6 +124,10 @@ namespace putils::reflection {
 					obj = jsonObject;
 			}
 
+            else if constexpr (std::is_empty<T>()) {
+                // Do nothing
+            }
+
 			else {
 				assert(false);
 			}
