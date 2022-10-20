@@ -76,7 +76,9 @@ namespace putils::reflection {
 	void imguiEdit(TRef && obj) noexcept {
 		using T = std::decay_t<TRef>;
 		if constexpr (putils::reflection::has_attributes<T>())
-			putils::reflection::for_each_attribute(obj, UNIVERSAL_FUNCTOR(imguiEdit));
+			putils::reflection::for_each_attribute(obj, [](const auto & attrInfo) {
+                imguiEdit(attrInfo.name, attrInfo.member);
+            });
 		else
 			imguiEdit(nullptr, FWD(obj));
 	}
