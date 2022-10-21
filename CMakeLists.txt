@@ -50,10 +50,9 @@ if (PUTILS_IMGUI)
     target_include_directories(putils_imgui PUBLIC imgui)
     target_link_libraries(putils PUBLIC putils_imgui)
     target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
-    if (UNIX)
-    target_compile_options(putils_imgui PUBLIC -fPIC)
-endif()
-
+    if(UNIX)
+        target_compile_options(putils_imgui PUBLIC -fPIC)
+    endif()
 endif()
 
 option(PUTILS_LUA "Build Lua helper" OFF)
