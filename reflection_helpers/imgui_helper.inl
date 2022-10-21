@@ -26,7 +26,8 @@
 namespace putils::reflection {
 	template<typename E>
 	bool imguiEnumCombo(const char * label, E & e) noexcept {
-		static_assert(std::is_same_v<std::underlying_type_t<E>, int>);
+		using UnderlyingType = std::underlying_type_t<E>;
+		static_assert(std::is_same_v<UnderlyingType, int> || std::is_same_v<UnderlyingType, unsigned int>);
 
 		static putils::string<64> names[magic_enum::enum_count<E>()];
 		static bool first = true;
@@ -51,7 +52,7 @@ namespace putils::reflection {
 			}
 
 			ImGui::Columns(2);
-			ImGui::Text(name);
+			ImGui::Text("%s", name);
 			ImGui::NextColumn();
 			f();
 			ImGui::Columns();
@@ -117,7 +118,7 @@ namespace putils::reflection {
 		else if constexpr (detail::imgui::has_member_c_str<T>()) {
 			detail::imgui::displayInColumns(name, [&]() noexcept {
 				if constexpr (isConst) {
-					ImGui::Text(obj.c_str());
+					ImGui::Text("%s", obj.c_str());
 				}
 				else {
 					putils::string<1024> s = obj.c_str();
@@ -277,7 +278,7 @@ namespace putils::reflection {
 		else if constexpr (std::is_enum<T>()) {
 			detail::imgui::displayInColumns(name, [&]() noexcept {
 				if constexpr (isConst)
-					ImGui::Text(magic_enum::enum_name(obj).data());
+					ImGui::Text("%s", magic_enum::enum_name(obj).data());
 				else
 					imguiEnumCombo(id, obj);
 			});
@@ -296,9 +297,12 @@ namespace putils::reflection {
 			if constexpr (isConst) {
 				detail::imgui::displayInColumns(name, [&] {
 					constexpr auto format =
+						std::is_same_v<T, short> ? "%hd" :
+						std::is_same_v<T, unsigned short> ? "%hu" :
 						std::is_same_v<T, int> ? "%d" :
-						std::is_same_v<T, std::ptrdiff_t> ? "%d" :
-						std::is_same_v<T, unsigned int> ? "%zu" :
+						std::is_same_v<T, unsigned int> ? "%u" :
+						std::is_same_v<T, long> ? "%ld" :
+						std::is_same_v<T, unsigned long> ? "%lu" :
 						std::is_same_v<T, size_t> ? "%zu" :
 						std::is_same_v<T, float> ? "%f" :
 						std::is_same_v<T, double> ? "%d" :
