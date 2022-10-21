@@ -19,6 +19,10 @@ endif()
 add_subdirectory(reflection)
 target_link_libraries(putils PUBLIC reflection)
 
+if (UNIX)
+    target_compile_options(putils PUBLIC -fPIC)
+endif()
+
 putils_conan(
     magic_enum/0.7.3
     nlohmann_json/3.10.5
@@ -46,6 +50,10 @@ if (PUTILS_IMGUI)
     target_include_directories(putils_imgui PUBLIC imgui)
     target_link_libraries(putils PUBLIC putils_imgui)
     target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
+    if (UNIX)
+    target_compile_options(putils_imgui PUBLIC -fPIC)
+endif()
+
 endif()
 
 option(PUTILS_LUA "Build Lua helper" OFF)
