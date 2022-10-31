@@ -39,7 +39,6 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [Python](python/README.md) (enabled with the PUTILS_PYTHON CMake option)
 * [Mediator](mediator/README.md) (enabled with the PUTILS_MEDIATOR CMake option)
 * [Meta](meta/README.md)
-* [OpenGL](opengl) (enabled with the PUTILS_OPENGL CMake option)
 * [PluginManager](pluginManager/README.md) (enabled with the PUTILS_PLUGIN_MANAGER CMake option)
 * [Reflection](reflection/README.md)
 * [Vulkan](vulkan) (enabled with the PUTILS_VULKAN CMake option)

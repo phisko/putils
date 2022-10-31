@@ -83,13 +83,6 @@ if(PUTILS_PYTHON)
     target_compile_definitions(putils PUBLIC PUTILS_PYTHON)
 endif()
 
-option(PUTILS_OPENGL "Build OpenGL helper" OFF)
-if (PUTILS_OPENGL)
-    add_subdirectory(opengl)
-    target_link_libraries(putils PUBLIC putils_opengl)
-    target_compile_definitions(putils PUBLIC PUTILS_OPENGL)
-endif ()
-
 option(PUTILS_VULKAN "Build Vulkan helper" OFF)
 if (PUTILS_VULKAN)
     add_subdirectory(vulkan)
