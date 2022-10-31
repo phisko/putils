@@ -61,12 +61,14 @@ if(PUTILS_LUA)
     target_link_libraries(putils PUBLIC putils_lua)
     target_compile_definitions(putils PUBLIC PUTILS_LUA)
 
-    file(GLOB imgui_lua_src
-        imgui_lua_bindings/*.cpp
-        imgui_lua_bindings/*.hpp)
-    add_library(putils_imgui_lua_bindings STATIC ${imgui_lua_src})
-    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils)
-    target_link_libraries(putils PUBLIC putils_imgui_lua_bindings)
+    if (PUTILS_IMGUI)
+        file(GLOB imgui_lua_src
+            imgui_lua_bindings/*.cpp
+            imgui_lua_bindings/*.hpp)
+        add_library(putils_imgui_lua_bindings STATIC ${imgui_lua_src})
+        target_link_libraries(putils_imgui_lua_bindings PUBLIC putils)
+        target_link_libraries(putils PUBLIC putils_imgui_lua_bindings)
+    endif()
 endif()
 
 option(PUTILS_MEDIATOR "Build Mediator" OFF)
