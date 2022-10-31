@@ -23,17 +23,12 @@ if (UNIX)
     target_compile_options(putils PUBLIC -fPIC)
 endif()
 
-putils_conan(
+putils_conan_download_and_link_packages(
+    putils PUBLIC
     magic_enum/0.7.3
     nlohmann_json/3.10.5
     stb/cci.20210910
     termcolor/2.0.0
-)
-target_link_libraries(putils PUBLIC
-    CONAN_PKG::magic_enum
-    CONAN_PKG::nlohmann_json
-    CONAN_PKG::stb
-    CONAN_PKG::termcolor
 )
 
 option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
@@ -110,9 +105,16 @@ if (PUTILS_TESTS)
             reflection_helpers/tests/*.tests.cpp)
 
     add_executable(${test_exe_name} ${test_src})
+    target_link_libraries(${test_exe_name} PRIVATE putils)
 
-    putils_conan(gtest/cci.20210126)
-    target_link_libraries(${test_exe_name} CONAN_PKG::gtest putils)
+    set(customFindPackageNames gtest:GTest)
+    set(customLibraryNames gtest:GTest)
+    putils_conan_download_and_link_packages_with_names(
+        ${test_exe_name} PRIVATE
+        "${customFindPackageNames}"
+        "${customLibraryNames}"
+        gtest/cci.20210126
+    )
 
     include(GoogleTest)
     gtest_discover_tests(${test_exe_name})
