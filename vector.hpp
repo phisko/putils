@@ -1,10 +1,17 @@
 #pragma once
 
+// stl
 #include <span>
 #include <assert.h>
+
+// reflection
 #include "reflection.hpp"
-#include "anonymous_variable.hpp"
+
+// meta
 #include "meta/fwd.hpp"
+
+// putils
+#include "anonymous_variable.hpp"
 
 namespace putils {
 	namespace detail_vector {

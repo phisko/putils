@@ -1,5 +1,7 @@
-#include <random>
 #include "rand.hpp"
+
+// stl
+#include <random>
 
 namespace putils {
 	template<typename T>

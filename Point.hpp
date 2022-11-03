@@ -1,7 +1,10 @@
 #pragma once
 
-#include "hash.hpp"
+// reflection
 #include "reflection.hpp"
+
+// putils
+#include "hash.hpp"
 #include "lengthof.hpp"
 
 namespace putils {

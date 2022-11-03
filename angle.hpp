@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+// putils
 #include "Point.hpp"
 
 namespace putils {

@@ -1,9 +1,13 @@
 #if defined(__unix__) || defined(__APPLE__)
 
 #include "UnixLibrary.hpp"
-#include <dlfcn.h>
+
+// stl
 #include <sstream>
 #include <iostream>
+
+// unix
+#include <dlfcn.h>
 
 namespace putils {
 	UnixLibrary::UnixLibrary(std::string_view name) noexcept

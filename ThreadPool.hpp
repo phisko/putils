@@ -29,10 +29,13 @@ distribution.
 # define PUTILS_THREADPOOL_FUNCTION_SIZE 128
 #endif
 
+// stl
 #include <vector>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+
+// putils
 #include "function.hpp"
 
 namespace putils {

@@ -3,9 +3,13 @@
 // stl
 #include <sstream>
 
-// putils
+// magic_enum
 #include <magic_enum.hpp>
+
+// meta
 #include "meta/fwd.hpp"
+
+// putils
 #include "read_stream.hpp"
 
 namespace putils {

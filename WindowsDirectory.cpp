@@ -1,9 +1,13 @@
 #ifdef _WIN32
 
 #include "WindowsDirectory.hpp"
+
+// windows
 #include <direct.h>
 #include <fileapi.h>
 #include <handleapi.h>
+
+// stl
 #include <assert.h>
 
 namespace putils {

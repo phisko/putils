@@ -1,9 +1,12 @@
+// meta
+#include "meta/traits/is_iterable.hpp"
+#include "meta/traits/is_specialization.hpp"
+
+// putils
 #include "json_helper.hpp"
 #include "to_string.hpp"
 #include "string.hpp"
 #include "lengthof.hpp"
-#include "meta/traits/is_iterable.hpp"
-#include "meta/traits/is_specialization.hpp"
 
 namespace putils::reflection {
 	namespace detail::json {

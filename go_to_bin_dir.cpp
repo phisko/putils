@@ -1,5 +1,6 @@
 #include "go_to_bin_dir.hpp"
 
+// platform
 #ifdef __unix__
 # include <unistd.h>
 # include <sys/stat.h>

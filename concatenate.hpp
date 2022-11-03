@@ -1,9 +1,14 @@
 #pragma once
 
+// stl
 #include <string>
 #include <sstream>
-#include "meta/fwd.hpp"
+
+// putils
 #include "string.hpp"
+
+// meta
+#include "meta/fwd.hpp"
 
 namespace putils {
     template<typename ... Args>

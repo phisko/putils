@@ -1,4 +1,9 @@
+#include "curl.hpp"
+
+// stl
 #include <assert.h>
+
+// putils
 #include "curl.hpp"
 
 namespace putils::curl {

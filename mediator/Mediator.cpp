@@ -1,7 +1,11 @@
+#include "Mediator.hpp"
+
+// stl
 #include <iostream>
 #include <algorithm>
+
+// termcolor
 #include <termcolor/termcolor.hpp>
-#include "Mediator.hpp"
 
 namespace putils
 {
