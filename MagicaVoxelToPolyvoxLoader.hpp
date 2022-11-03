@@ -1,15 +1,19 @@
 #pragma once
 
+// stl
 #include <iostream>
 #include <fstream>
 #include <assert.h>
 
+// polyvox
 #include <PolyVox/RawVolume.h>
 #include <PolyVox/CubicSurfaceExtractor.h>
 #include <PolyVox/VolumeResampler.h>
 
+// termcolor
 #include <termcolor/termcolor.hpp>
 
+// putils
 #include "MagicaVoxel.hpp"
 #include "file_extension.hpp"
 #include "Color.hpp"

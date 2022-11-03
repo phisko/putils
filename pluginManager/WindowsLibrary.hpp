@@ -2,9 +2,13 @@
 
 #ifdef _WIN32
 
-#include <Windows.h>
+// stl
 #include <string_view>
 
+// windows
+#include <Windows.h>
+
+// putils
 #include "Library.hpp"
 
 namespace putils {

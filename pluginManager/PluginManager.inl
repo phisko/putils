@@ -1,5 +1,11 @@
 #include "PluginManager.hpp"
 
+// stl
+#include <string_view>
+
+// putils
+#include "LibraryFactory.hpp"
+
 namespace putils {
 	template<typename ...P>
 	void PluginManager::rescanDirectory(const char * path, const char * toExecute, P && ...params) noexcept {

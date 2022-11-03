@@ -1,9 +1,12 @@
 #ifdef _WIN32
 
 #include "WindowsLibrary.hpp"
+
+// stl
 #include <algorithm>
 #include <sstream>
 
+// putils
 #include "get_last_error_as_string.hpp"
 #include "concatenate.hpp"
 

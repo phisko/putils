@@ -1,7 +1,12 @@
 #pragma once
 
+// magic_enum
 #include <magic_enum.hpp>
+
+// nlohmann
 #include <nlohmann/json.hpp>
+
+// putils
 #include "vector.hpp"
 
 namespace putils::reflection {

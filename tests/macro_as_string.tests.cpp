@@ -1,4 +1,7 @@
+// gtest
 #include <gtest/gtest.h>
+
+// putils
 #include "macro_as_string.hpp"
 
 TEST(macro_as_string, macro_as_string) {

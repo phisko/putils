@@ -7,7 +7,7 @@ namespace putils {
 			return file;
 		return file + slash + 1;
 	}
-	
+
 	std::string_view file_extension(const char * file) noexcept {
 		const auto dot = std::string_view(file).find_last_of(".");
 		if (dot == std::string_view::npos)

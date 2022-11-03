@@ -1,4 +1,7 @@
+// gtest
 #include <gtest/gtest.h>
+
+// putils
 #include "Color.hpp"
 
 TEST(Color, attributes) {

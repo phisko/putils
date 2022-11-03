@@ -1,5 +1,10 @@
+// gtest
 #include <gtest/gtest.h>
+
+// stl
 #include <thread>
+
+// putils
 #include "Timer.hpp"
 
 static const auto sleepDuration = std::chrono::milliseconds(100);

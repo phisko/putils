@@ -1,7 +1,9 @@
 #ifdef __unix__
 
-#include <sys/stat.h>
 #include "UnixDirectory.hpp"
+
+// unix
+#include <sys/stat.h>
 
 namespace putils {
 	UnixDirectory::UnixDirectory(const std::string & path) noexcept

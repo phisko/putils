@@ -4,24 +4,29 @@
 #include <map>
 #include <memory>
 
-#include "imgui.h"
+// imgui
+#include <imgui.h>
 
-// putils
+// magic_enum
 #include <magic_enum.hpp>
-#include "reflection.hpp"
-#include "string.hpp"
-#include "Color.hpp"
-#include "lengthof.hpp"
-#include "universal_functor.hpp"
-#include "to_string.hpp"
 
-// traits
+// meta
 #include "meta/traits/is_iterable.hpp"
 #include "meta/traits/is_function.hpp"
 #include "meta/traits/is_specialization.hpp"
 #include "meta/traits/is_streamable.hpp"
 #include "meta/traits/function_return_type.hpp"
 #include "meta/traits/function_arguments.hpp"
+
+// reflection
+#include "reflection.hpp"
+
+// putils
+#include "string.hpp"
+#include "Color.hpp"
+#include "lengthof.hpp"
+#include "universal_functor.hpp"
+#include "to_string.hpp"
 
 namespace putils::reflection {
 	template<typename E>

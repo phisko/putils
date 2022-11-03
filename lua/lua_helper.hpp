@@ -1,9 +1,14 @@
 #pragma once
 
-#include "sol/sol.hpp"
+// sol
+#include <sol/sol.hpp>
+
+// meta
+#include "meta/traits/is_streamable.hpp"
+
+// putils
 #include "function.hpp"
 #include "to_string.hpp"
-#include "meta/traits/is_streamable.hpp"
 
 namespace sol {
 	namespace detail {

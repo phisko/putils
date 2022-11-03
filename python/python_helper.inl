@@ -1,15 +1,22 @@
 #include "python_helper.hpp"
 
-#include "pybind11/stl.h"
-#include "pybind11/functional.h"
-#include "pybind11/chrono.h"
-#include "pybind11/cast.h"
-#include "pybind11/iostream.h"
-#include "pybind11/embed.h"
-#include "reflection.hpp"
-#include "to_string.hpp"
+// pybind11
+#include <pybind11/stl.h>
+#include <pybind11/functional.h>
+#include <pybind11/chrono.h>
+#include <pybind11/cast.h>
+#include <pybind11/iostream.h>
+#include <pybind11/embed.h>
+
+// meta
 #include "meta/traits/is_streamable.hpp"
 #include "meta/traits/member_function_return_type.hpp"
+
+// reflection
+#include "reflection.hpp"
+
+// putils
+#include "to_string.hpp"
 
 namespace putils::python {
 	putils_member_detector(begin);

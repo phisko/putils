@@ -1,8 +1,13 @@
 #pragma once
 
+// stl
 #include <unordered_map>
-#include "BaseModule.hpp"
+
+// meta
 #include "meta/for_each.hpp"
+
+// mediator
+#include "BaseModule.hpp"
 #include "Mediator.hpp"
 
 namespace putils {

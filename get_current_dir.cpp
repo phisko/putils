@@ -1,9 +1,11 @@
 #include "get_current_dir.hpp"
 
+// unix
 #ifdef __unix__
 # include <unistd.h>
 #endif
 
+// windows
 #ifdef _WIN32
 # include <direct.h>
 #endif
