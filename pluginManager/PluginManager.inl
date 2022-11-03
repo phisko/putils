@@ -5,10 +5,13 @@
 
 // putils
 #include "LibraryFactory.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
 	template<typename ...P>
 	void PluginManager::rescanDirectory(const char * path, const char * toExecute, P && ...params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 #ifdef _WIN32
 		static constexpr auto extension = ".dll";
 #else
@@ -45,6 +48,8 @@ namespace putils {
 
 	template<size_t MaxReturns, typename T, typename ...P>
 	putils::vector<T, MaxReturns> PluginManager::rescanDirectoryWithReturn(const char * path, const char * toExecute, P && ...params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 #ifdef _WIN32
 		static constexpr auto extension = ".dll";
 #else
@@ -86,6 +91,8 @@ namespace putils {
 
 	template<typename ...P>
 	void PluginManager::execute(const std::string & name, P && ...params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		for (const auto & [_, plugin] : _libraries) {
 			auto func = plugin->template loadMethod<void, P...>(name);
 			if (func != nullptr)
@@ -95,6 +102,8 @@ namespace putils {
 
 	template<size_t MaxReturns, typename T, typename ...P>
 	putils::vector<T, MaxReturns> PluginManager::executeWithReturn(const std::string & name, P && ...params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		putils::vector<T, MaxReturns> ret;
 
 		for (const auto & [_, plugin] : _libraries) {

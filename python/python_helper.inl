@@ -17,6 +17,7 @@
 
 // putils
 #include "to_string.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::python {
 	putils_member_detector(begin);
@@ -24,6 +25,8 @@ namespace putils::python {
 
 	template<typename T>
 	void registerType(py::module_ & m) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		try {
 			py::class_<T> type(m, putils::reflection::get_class_name<T>(), py::dynamic_attr());
 			putils::reflection::for_each_attribute<T>([&type](const auto & attr) noexcept {

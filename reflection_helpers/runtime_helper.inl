@@ -13,6 +13,7 @@
 #include "to_string.hpp"
 #include "lengthof.hpp"
 #include "vector.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::reflection::runtime {
     namespace impl {
@@ -20,6 +21,8 @@ namespace putils::reflection::runtime {
 
 		template<typename MemberType>
 		static AttributeInfo::ArrayHelper makeArrayHelperImpl() noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			AttributeInfo::ArrayHelper helper{
 				.getSizeImpl = [](const void * attribute) noexcept {
 					auto * array = (MemberType *)attribute;
@@ -50,6 +53,8 @@ namespace putils::reflection::runtime {
 
     	template<typename MemberType>
     	static std::optional<AttributeInfo::ArrayHelper> makeArrayHelper() noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			if constexpr (std::is_array<MemberType>())
 				return makeArrayHelperImpl<MemberType>();
 
@@ -62,6 +67,8 @@ namespace putils::reflection::runtime {
 
 		template<typename MemberType>
 		static AttributeInfo::MapHelper makeMapHelperImpl() noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			using KeyType = typename MemberType::key_type;
 			using ValueType = typename MemberType::mapped_type;
 
@@ -101,6 +108,8 @@ namespace putils::reflection::runtime {
 
     	template<typename MemberType>
     	static std::optional<AttributeInfo::MapHelper> makeMapHelper() noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			if constexpr (putils::is_specialization<MemberType, std::map>() || putils::is_specialization<MemberType, std::unordered_map>())
 				return makeMapHelperImpl<MemberType>();
 
@@ -109,6 +118,8 @@ namespace putils::reflection::runtime {
 
 		template<typename T>
 		static void fillAttributes(Attributes & attributes) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			putils::reflection::for_each_attribute<T>([&](const auto & attr) noexcept {
 				using MemberType = putils::MemberType<decltype(attr.ptr)>;
 
@@ -126,11 +137,12 @@ namespace putils::reflection::runtime {
                 attributes.map.emplace(std::string(attr.name), runtimeAttr);
 			});
 		}
-        
     }
 
     template<typename T>
     const Attributes & getAttributes() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         static const Attributes attributes = [] {
             Attributes ret;
             impl::fillAttributes<T>(ret);
@@ -141,6 +153,7 @@ namespace putils::reflection::runtime {
 
 	template<typename T>
 	const AttributeInfo * findAttribute(std::string_view path, std::string_view separator) noexcept {
+		PUTILS_PROFILING_SCOPE;
 	    return findAttribute(getAttributes<T>(), path, separator);
     }
 }

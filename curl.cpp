@@ -5,13 +5,17 @@
 
 // putils
 #include "curl.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::curl {
 	void downloadFile(const std::string & url, const std::string & outputLocation) noexcept {
+		PUTILS_PROFILING_SCOPE;
 		system((buildCurlCommand(url) + " > " + outputLocation).c_str());
 	}
 
 	std::string buildCurlCommand(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		std::string ret = baseURL;
 
 		if (!params.empty())
@@ -40,6 +44,8 @@ namespace putils::curl {
 #endif
 
 	std::string httpRequest(const std::string & baseURL, const std::unordered_map<std::string, std::string> & params) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		std::string s;
 
 		const auto pipe = MY_POPEN(buildCurlCommand(baseURL, params).c_str(), "r");

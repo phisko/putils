@@ -9,6 +9,7 @@
 // putils
 #include "function.hpp"
 #include "to_string.hpp"
+#include "putils_profiling.hpp"
 
 namespace sol {
 	namespace detail {
@@ -83,6 +84,8 @@ namespace putils {
 	namespace lua {
 		template<typename T>
 		void registerType(sol::state & state) {
+			PUTILS_PROFILING_SCOPE;
+
 			static_assert(putils::reflection::has_class_name<T>());
 
 			auto type = state.new_usertype<T>(putils::reflection::get_class_name<T>());

@@ -10,8 +10,13 @@
 # include <processenv.h>
 #endif
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	void goToBinDir(std::string currentPath) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 #ifdef __unix__
         struct stat sb;
         if (lstat(currentPath.c_str(), &sb) == -1)

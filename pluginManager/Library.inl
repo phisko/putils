@@ -1,5 +1,8 @@
 #include "Library.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	template<typename String>
 	Library::Library(String && name) noexcept 
@@ -8,6 +11,8 @@ namespace putils {
 
 	template<typename T, typename ...P>
 	Library::Func<T, P...> Library::loadMethod(const std::string & name) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_symbols.find(name) == _symbols.end()) {
 			void * symbol = loadSymbol(name);
 			if (!symbol)
@@ -24,8 +29,7 @@ namespace putils {
 
 	template<typename T, typename ...P>
 	T Library::execute(const std::string & name, P && ...args) noexcept {
+		PUTILS_PROFILING_SCOPE;
 		return (loadMethod<T, P...>(name))(std::forward<P>(args)...);
 	}
-
-
 }

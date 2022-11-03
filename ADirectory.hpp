@@ -5,6 +5,7 @@
 
 // putils
 #include "string.hpp"
+#include "putils_profiling.hpp"
 
 #ifndef PUTILS_DIRECTORY_MAX_PATH
 # define PUTILS_DIRECTORY_MAX_PATH 256
@@ -32,6 +33,8 @@ namespace putils {
         // Apply a function to each file in the directory
 		template<typename Func> // Func: void(const File &)
         void for_each(Func && func) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			File f;
             while (getNextFile(f))
                 func(f);
@@ -39,6 +42,8 @@ namespace putils {
 
         // Get a list of all the files
         std::vector<File> getFiles() noexcept {
+			PUTILS_PROFILING_SCOPE;
+
             std::vector<File> ret;
 
             for_each([&ret](const File & f) noexcept {

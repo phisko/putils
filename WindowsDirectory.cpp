@@ -10,8 +10,13 @@
 // stl
 #include <assert.h>
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	WindowsDirectory::WindowsDirectory(const char * path) noexcept : _path(path) {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_path[_path.size() - 1] != '/')
 			_path = _path + "/";
 		_handle = FindFirstFile((_path + "*").c_str(), &_ffd);
@@ -19,11 +24,15 @@ namespace putils {
 	}
 
 	WindowsDirectory::~WindowsDirectory() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_handle != nullptr)
 			FindClose(_handle);
 	}
 
 	bool WindowsDirectory::getNextFile(File & out) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_handle == INVALID_HANDLE_VALUE)
 			return false;
 

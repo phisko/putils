@@ -11,10 +11,13 @@
 
 // putils
 #include "read_stream.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
     template<typename Obj, typename EnableIf>
     std::string toString(Obj && obj) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         if constexpr (std::is_enum<std::decay_t<Obj>>())
             return std::string(magic_enum::enum_name(obj));
         else {
@@ -26,6 +29,8 @@ namespace putils {
 
     template<typename Obj>
     void parse(Obj & obj, std::string_view str) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         if constexpr (std::is_enum<Obj>()) {
             for (int i = 0; i < magic_enum::enum_count<Obj>(); ++i) {
                 if (magic_enum::enum_names<Obj>()[i] == str) {

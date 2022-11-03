@@ -6,8 +6,13 @@
 #include <direct.h>
 #include <Windows.h>
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
     std::string GetLastErrorAsString() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         auto errorMessageID = GetLastError();
         if (errorMessageID == 0)
             return "";

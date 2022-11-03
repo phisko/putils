@@ -5,12 +5,15 @@
 
 // putils
 #include "string.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::LibraryFactory {
 	using string = putils::string<PUTILS_LIBRARY_MAX_PATH>;
 
 	template<typename Str1, typename Str2>
 	string addLibToPath(Str1 && name, Str2 && extension) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		static std::regex end(string("^.*\\") + extension + "$");
 
 		if (std::regex_match(name, end))
@@ -30,6 +33,8 @@ namespace putils::LibraryFactory {
 	}
 
 	putils::Library * make(const char * name) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		using string = putils::string<1024>;
 
 		static std::unordered_map<string, std::unique_ptr<Library>> _register;

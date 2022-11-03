@@ -1,7 +1,12 @@
 #include "chop.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
     std::string_view chop(std::string_view str) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         const auto space = " \t\n\r";
 
         auto firstNonSpace = str.find_first_not_of(space);

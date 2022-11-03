@@ -27,10 +27,13 @@
 #include "lengthof.hpp"
 #include "universal_functor.hpp"
 #include "to_string.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::reflection {
 	template<typename E>
 	bool imguiEnumCombo(const char * label, E & e) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		using UnderlyingType = std::underlying_type_t<E>;
 		static_assert(std::is_same_v<UnderlyingType, int> || std::is_same_v<UnderlyingType, unsigned int>);
 
@@ -51,6 +54,8 @@ namespace putils::reflection {
 
 		template<typename F>
 		void displayInColumns(const char * name, F && f) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			if (name == nullptr) {
 				f();
 				return;
@@ -65,6 +70,8 @@ namespace putils::reflection {
 
 		template<typename Member>
 		putils::string<64> getID(const char * name, Member && member) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			if (name == nullptr)
 				return putils::string<64>("##") + (intptr_t)&member;
 			return putils::string<64>("##%s", name) + (intptr_t)&member;
@@ -72,6 +79,8 @@ namespace putils::reflection {
 
 		template<typename Member>
 		putils::string<64> getNameWithID(const char * name, Member && member) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			if (name == nullptr)
 				return putils::string<64>("##") + (intptr_t)&member;
 			return putils::string<64>("%s##", name) + (intptr_t)&member;
@@ -80,6 +89,8 @@ namespace putils::reflection {
 
 	template<typename TRef>
 	void imguiEdit(TRef && obj) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		using T = std::decay_t<TRef>;
 		if constexpr (putils::reflection::has_attributes<T>())
 			putils::reflection::for_each_attribute(obj, [](const auto & attrInfo) {
@@ -91,6 +102,8 @@ namespace putils::reflection {
 
 	template<typename TRef>
 	void imguiEdit(const char * name, TRef && obj) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		using TNoRef = std::remove_reference_t<TRef>;
 		constexpr bool isConst = std::is_const<TNoRef>();
 
