@@ -1,5 +1,8 @@
 #pragma once
 
+// stl
+#include <type_traits>
+
 namespace putils {
 	template<typename T>
 	constexpr size_t lengthof() noexcept {
