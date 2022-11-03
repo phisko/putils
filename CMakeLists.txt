@@ -80,13 +80,6 @@ if(PUTILS_PYTHON)
     target_compile_definitions(putils PUBLIC PUTILS_PYTHON)
 endif()
 
-option(PUTILS_VULKAN "Build Vulkan helper" OFF)
-if (PUTILS_VULKAN)
-    add_subdirectory(vulkan)
-    target_link_libraries(putils PUBLIC putils_vulkan)
-    target_compile_definitions(putils PUBLIC PUTILS_VULKAN)
-endif()
-
 option(PUTILS_NO_SHADER_DEBUG "Disable shader debug" OFF)
 if (PUTILS_NO_SHADER_DEBUG)
     target_compile_definitions(putils PUBLIC PUTILS_NO_SHADER_DEBUG)
