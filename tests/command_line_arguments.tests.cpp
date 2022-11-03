@@ -10,7 +10,7 @@ TEST(command_line_arguments, toArgumentVector) {
         "bar"
     };
 
-    const auto parsed = putils::toArgumentVector(args.size(), args.data());
+    const auto parsed = putils::toArgumentVector(int(args.size()), args.data());
     EXPECT_EQ(parsed.size(), args.size());
     for (size_t i = 0; i < parsed.size(); ++i)
         EXPECT_EQ(parsed[i], args[i]);
