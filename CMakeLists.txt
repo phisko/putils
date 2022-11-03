@@ -85,6 +85,23 @@ if (PUTILS_NO_SHADER_DEBUG)
     target_compile_definitions(putils PUBLIC PUTILS_NO_SHADER_DEBUG)
 endif()
 
+# Profiling
+option(PUTILS_PROFILING OFF)
+if(PUTILS_PROFILING)
+	target_compile_definitions(putils PUBLIC PUTILS_PROFILING TRACY_ENABLE)
+
+	include(FetchContent)
+	FetchContent_Declare(
+		tracy
+		GIT_REPOSITORY https://github.com/wolfpld/tracy
+		GIT_TAG v0.9
+		GIT_PROGRESS TRUE
+		GIT_SHALLOW TRUE
+	)
+	FetchContent_MakeAvailable(tracy)
+	target_link_libraries(putils PUBLIC TracyClient)
+endif()
+
 #
 # Tests
 #
