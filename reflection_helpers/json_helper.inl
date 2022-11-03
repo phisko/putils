@@ -7,6 +7,7 @@
 #include "to_string.hpp"
 #include "string.hpp"
 #include "lengthof.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::reflection {
 	namespace detail::json {
@@ -16,6 +17,8 @@ namespace putils::reflection {
 
 		template<typename JSONRef, typename TRef>
 		void fromToJSON(JSONRef && jsonObject, TRef && obj) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
             using TNoRef = std::remove_reference_t<TRef>;
 			using T = std::decay_t<TRef>;
 
@@ -139,11 +142,13 @@ namespace putils::reflection {
 
 	template<typename TRef>
 	void fromJSON(const nlohmann::json & object, TRef && val) noexcept {
+		PUTILS_PROFILING_SCOPE;
 		detail::json::fromToJSON(object, val);
 	}
 
 	template<typename T>
 	nlohmann::json toJSON(const T & obj) noexcept {
+		PUTILS_PROFILING_SCOPE;
 		nlohmann::json ret;
 		detail::json::fromToJSON(ret, obj);
 		return ret;

@@ -1,5 +1,8 @@
 #include "Observable.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 #define TObservable Observable<Args...>
 
 namespace putils {
@@ -14,6 +17,8 @@ namespace putils {
 
 	template<typename ... Args>
 	intptr_t TObservable::addObserver(const Observer & observer) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		_observers.push_back({ 0, observer });
         auto & newObserver = _observers.back();
         const auto id = (intptr_t)&newObserver;
@@ -29,6 +34,8 @@ namespace putils {
 
 	template<typename ... Args>
 	void TObservable::removeObserver(intptr_t id) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		_observers.erase(std::find_if(_observers.begin(), _observers.end(),
 			[id](const auto & p) { return p.first == id; })
 		);
@@ -36,6 +43,8 @@ namespace putils {
 
 	template<typename ... Args>
 	void TObservable::changed(const Args & ...args) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		for (const auto & [_, func] : _observers)
 			func(args...);
 	}

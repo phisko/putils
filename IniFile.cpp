@@ -9,9 +9,12 @@
 // putils
 #include "regex.hpp"
 #include "chop.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
     static IniFile::Section * getSection(IniFile & ini, std::string fullSection) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         IniFile::Section * ret = nullptr;
 
         size_t slashPos;
@@ -31,6 +34,8 @@ namespace putils {
     }
 
     std::istream & operator>>(std::istream & s, IniFile & ini) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		IniFile::Section * currentSection = nullptr;
 		for (std::string line; std::getline(s, line);) {
 			using namespace putils::regex;
@@ -65,6 +70,8 @@ namespace putils {
 	}
 
     static void serializeSection(std::ostream & s, const std::string & name, const IniFile::Section & section) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         s << '[' << name << ']' << std::endl;
         for (const auto & [key, value] : section.values)
             s << key << '=' << value << std::endl;
@@ -76,6 +83,8 @@ namespace putils {
     }
 
 	std::ostream & operator<<(std::ostream & s, const IniFile & ini) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         bool first = true;
 		for (const auto & [name, section] : ini.sections) {
             if (!first)

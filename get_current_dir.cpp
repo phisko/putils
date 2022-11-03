@@ -1,5 +1,8 @@
 #include "get_current_dir.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 // unix
 #ifdef __unix__
 # include <unistd.h>
@@ -18,6 +21,8 @@
 
 namespace putils {
     std::string getCurrentDir() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         char buff[1024];
 
         if (MY_GETCWD(buff, 1024) != nullptr)

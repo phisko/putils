@@ -6,6 +6,9 @@
 // meta
 #include "meta/for_each.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 // mediator
 #include "BaseModule.hpp"
 #include "Mediator.hpp"
@@ -15,6 +18,8 @@ namespace putils {
     class Module : public virtual BaseModule {
     public:
         Module(Mediator * m = nullptr) noexcept : BaseModule(m) {
+			PUTILS_PROFILING_SCOPE;
+
             static_assert(std::is_base_of<Module, CRTP>(),
                           "Module's first template parameter should be its inheriting class");
 

@@ -3,6 +3,7 @@
 // putils
 #include "lengthof.hpp"
 #include "string.hpp"
+#include "putils_profiling.hpp"
 
 // windows
 #ifdef _MSC_VER
@@ -13,6 +14,8 @@
 
 namespace putils {
 	std::string getCallStack() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		std::string ret;
 #ifdef _MSC_VER
 		const auto process = GetCurrentProcess();

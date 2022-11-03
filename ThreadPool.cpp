@@ -5,12 +5,15 @@
 
 // putils
 #include "thread_name.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
 	// the constructor just launches some amount of workers
 	ThreadPool::ThreadPool(size_t threads) noexcept
 		: _stop(false)
 	{
+		PUTILS_PROFILING_SCOPE;
+
 		for (size_t i = 0; i < threads; ++i)
 			_workers.emplace_back([this] {
 				putils::set_thread_name(L"ThreadPool worker");
@@ -34,6 +37,8 @@ namespace putils {
 
 	// add new work item to the pool
 	void ThreadPool::runTask(function && f) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_workers.empty()) {
 			f();
 			return;
@@ -52,6 +57,8 @@ namespace putils {
 
 	// the destructor joins all threads
 	ThreadPool::~ThreadPool() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		{
 			std::unique_lock<std::mutex> lock(_queueMutex);
 			_stop = true;

@@ -3,11 +3,16 @@
 // stl
 #include <string>
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
     namespace url {
         // Blatantly stolen from StackOverflow
         template<typename Str>
         std::string decode(Str && url) {
+			PUTILS_PROFILING_SCOPE;
+
             static const char HEX2DEC[256] =
                     {
                             /*       0  1  2  3   4  5  6  7   8  9  A  B   C  D  E  F */

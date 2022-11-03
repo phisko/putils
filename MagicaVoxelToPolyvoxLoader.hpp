@@ -18,6 +18,7 @@
 #include "file_extension.hpp"
 #include "Color.hpp"
 #include "Point.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils::MagicaVoxel {
 	struct VertexData {
@@ -42,6 +43,8 @@ namespace putils::MagicaVoxel {
 
 	namespace detail {
 		static auto buildMesh(PolyVox::RawVolume<VertexData> & volume) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			const auto encodedMesh = PolyVox::extractCubicMesh(&volume, volume.getEnclosingRegion());
 			const auto mesh = PolyVox::decodeMesh(encodedMesh);
 			return mesh;
@@ -55,6 +58,8 @@ namespace putils::MagicaVoxel {
 
 		template<typename T>
 		static void readFromStream(T & header, std::istream & s, unsigned int size) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			s.read((char *)&header, size);
 			assert(s.gcount() == size);
 		}
@@ -65,6 +70,8 @@ namespace putils::MagicaVoxel {
 		}
 
 		static void checkHeader(std::istream & s) noexcept {
+			PUTILS_PROFILING_SCOPE;
+
 			MagicaVoxel::FileHeader header;
 			readFromStream(header, s);
 			assert(idMatches(header.id, "VOX "));
@@ -73,6 +80,8 @@ namespace putils::MagicaVoxel {
 	}
 
 	static auto loadVoxFile(const char * f, putils::Point3i * outSize = nullptr) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 #ifndef KENGINE_NDEBUG
 		std::cout << termcolor::green << "[MagicaVoxel] Loading " << termcolor::cyan << f << termcolor::green << "..." << termcolor::reset;
 #endif

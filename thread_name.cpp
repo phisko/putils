@@ -6,14 +6,21 @@
 #include <processthreadsapi.h>
 #endif
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	void set_thread_name(const wchar_t * name) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 #ifdef _MSC_VER
 		SetThreadDescription(GetCurrentThread(), name);
 #endif
 	}
 
 	const std::string & get_thread_name() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		static thread_local const std::string ret = [] {
 #ifdef _MSC_VER
 			wchar_t * buff;

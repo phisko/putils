@@ -10,6 +10,7 @@
 // putils
 #include "to_string.hpp"
 #include "string.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
     namespace impl {
@@ -77,6 +78,8 @@ namespace putils {
 
     template<typename T>
     T parseArguments(std::span<const std::string_view> args, std::string_view help) noexcept {
+        PUTILS_PROFILING_SCOPE;
+
         T ret;
 
         putils::reflection::for_each_attribute(ret, [&](const auto & attr) noexcept {

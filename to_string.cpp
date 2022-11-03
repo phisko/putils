@@ -5,15 +5,20 @@
 
 // putils
 #include "read_stream.hpp"
+#include "putils_profiling.hpp"
 
 namespace putils {
     std::string toString(bool v) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         std::stringstream s;
         s << std::boolalpha << v;
         return s.str();
     }
 
     std::string toString(std::istream & s) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
         return read_stream(s);
     }
 

@@ -3,9 +3,14 @@
 // stl
 #include <random>
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	template<typename T>
 	T rand(T start, T end) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if constexpr (std::is_floating_point<T>()) {
 			static std::random_device r;
 			static std::default_random_engine e(r());

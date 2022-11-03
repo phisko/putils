@@ -5,23 +5,32 @@
 // unix
 #include <sys/stat.h>
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	UnixDirectory::UnixDirectory(const std::string & path) noexcept
 		:
 		_handle(opendir(path.c_str())),
 		_path(path)
 	{
+		PUTILS_PROFILING_SCOPE;
+
 		assert(_handle != nullptr);
 		if (_path[_path.length() - 1] != '/')
 			_path = _path + "/";
 	}
 
 	UnixDirectory::~UnixDirectory() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_handle != nullptr)
 			closedir(_handle);
 	}
 
 	bool UnixDirectory::getNextFile(File & out) noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		if (_handle == nullptr)
 			return false;
 

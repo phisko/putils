@@ -1,7 +1,12 @@
 #include "SpinLock.hpp"
 
+// putils
+#include "putils_profiling.hpp"
+
 namespace putils {
 	void SpinLock::lock() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		while (write_now.exchange(true, std::memory_order_acquire))
 			;
 
@@ -11,10 +16,13 @@ namespace putils {
 	}
 
 	void SpinLock::unlock() noexcept {
+		PUTILS_PROFILING_SCOPE;
 		write_now.store(false, std::memory_order_release);
 	}
 
 	void SpinLock::lock_shared() noexcept {
+		PUTILS_PROFILING_SCOPE;
+
 		// unique_lock have priority
 		while (true) {
 			// wait for unlock
@@ -35,10 +43,12 @@ namespace putils {
 	}
 
 	void SpinLock::unlock_shared() noexcept {
-            readers_count.fetch_sub(1, std::memory_order_release);
-        }
+		PUTILS_PROFILING_SCOPE;
+		readers_count.fetch_sub(1, std::memory_order_release);
+	}
 
 	void SpinLock::unlock_and_lock_shared() noexcept {
+		PUTILS_PROFILING_SCOPE;
 		readers_count.fetch_add(1, std::memory_order_acquire);
 		write_now.store(false, std::memory_order_release);
 	}
