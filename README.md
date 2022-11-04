@@ -66,6 +66,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [MagicaVoxelToPolyvoxLoader](MagicaVoxelToPolyvoxLoader.md): conversion functions to parse the MagicaVoxel format into [PolyVox](https://bitbucket.org/volumesoffun/polyvox/src/develop/) objects
 * [members](members.md): help with class members
 * [on_scope_exit](on_scope_exit.md): returns an object that calls a function in its dtor
+* [putils_profiling.hpp](putils_profiling.hpp): macros wrapping [Tracy](https://github.com/wolfpld/tracy)
 * [rand](rand.md): function using C++ 11's random number generation facilities
 * [read_stream](read_stream.md): function which extracts an entire std::istream to a std::string
 * [regex](regex.md): utilities to easily construct and match regexes through literal operators
@@ -81,9 +82,3 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [universal_functor](universal_functor.md): macro for passing generic functions as functors
 * [visit](visit.md): `overloaded` type letting you pass multiple lambdas to `std::visit`
 * [with](with.md): `with` macro mimicking the Kotlin construct
-
-## CMake tools
-
-* [conan](CMakeModules/conan.cmake): lets you run conan commands directly from cmake
-* [conan_helper](CMakeModules/conan_helper.cmake): provides a helper macro to simply list conan dependencies
-* [cotire](https://github.com/sakra/cotire): lets you easily set up precompiled-header and single-compilation-unit compilations to speed up builds
