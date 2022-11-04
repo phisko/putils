@@ -20,9 +20,11 @@ namespace sol {
 	namespace stack {
 		template <typename Signature, size_t MaxSize>
 		struct unqualified_pusher<putils::function<Signature, MaxSize>> {
+			using TargetFunctor = function_detail::functor_function<putils::function<Signature, MaxSize>, false, true>;
+
 			static int push(lua_State* L, detail::yield_tag_t, const putils::function<Signature, MaxSize>& fx) {
 				if (fx) {
-					function_detail::select<true>(L, fx);
+					function_detail::select_set_fx<true, false, TargetFunctor>(L, fx);
 					return 1;
 				}
 				return stack::push(L, lua_nil);
@@ -30,7 +32,7 @@ namespace sol {
 
 			static int push(lua_State* L, detail::yield_tag_t, putils::function<Signature, MaxSize>&& fx) {
 				if (fx) {
-					function_detail::select<true>(L, std::move(fx));
+					function_detail::select_set_fx<true, false, TargetFunctor>(L, std::move(fx));
 					return 1;
 				}
 				return stack::push(L, lua_nil);
@@ -38,7 +40,7 @@ namespace sol {
 
 			static int push(lua_State* L, const putils::function<Signature, MaxSize>& fx) {
 				if (fx) {
-					function_detail::select<false>(L, fx);
+					function_detail::select_set_fx<false, false, TargetFunctor>(L, fx);
 					return 1;
 				}
 				return stack::push(L, lua_nil);
@@ -46,7 +48,7 @@ namespace sol {
 
 			static int push(lua_State* L, putils::function<Signature, MaxSize>&& fx) {
 				if (fx) {
-					function_detail::select<false>(L, std::move(fx));
+					function_detail::select_set_fx<false, false, TargetFunctor>(L, std::move(fx));
 					return 1;
 				}
 				return stack::push(L, lua_nil);
@@ -64,7 +66,7 @@ namespace sol {
 			template <typename... R>
 			static putils::function<Signature, MaxSize> get_std_func(types<R...>, lua_State* L, int index) {
 				detail::std_shim<R...> fx(unsafe_function(L, index));
-				return std::move(fx);
+				return fx;
 			}
 
 			static putils::function<Signature, MaxSize> get(lua_State* L, int index, record& tracking) {
@@ -77,7 +79,6 @@ namespace sol {
 			}
 		};
 	}
-
 }
 
 namespace putils {
