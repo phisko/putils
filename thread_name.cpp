@@ -26,7 +26,9 @@ namespace putils {
 			wchar_t * buff;
 			GetThreadDescription(GetCurrentThread(), &buff);
 			const std::wstring s = buff;
+#pragma warning(disable : 4244) // Disable "conversion from wchar_t to char" warning
 			return std::string{ s.begin(), s.end() };
+#pragma warning(default : 4244)
 #else
             return "";
 #endif

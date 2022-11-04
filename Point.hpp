@@ -12,9 +12,6 @@ namespace putils {
 	struct Point {
 		using Buffer = Precision[Dimensions];
 		Buffer raw;
-
-		operator Buffer & () noexcept { return raw; }
-		operator const Buffer & () const noexcept { return raw; }
 	};
 
 	template<typename Precision, size_t Dimensions>
@@ -86,9 +83,6 @@ namespace putils {
 
 		Precision & operator[](size_t index) noexcept;
 		Precision operator[](size_t index) const noexcept;
-
-		operator Buffer & () noexcept { return raw; }
-		operator const Buffer & () const noexcept { return raw; }
 	};
 
 	template<typename T>
@@ -134,9 +128,6 @@ namespace putils {
 
 		Precision & operator[](size_t index) noexcept;
 		Precision operator[](size_t index) const noexcept;
-
-		operator Buffer & () noexcept { return raw; }
-		operator const Buffer & () const noexcept { return raw; }
 	};
 
 	template<typename T>

@@ -208,16 +208,6 @@ namespace putils {
 	}
 
 	TemplateDecl
-	constexpr TString::operator const typename TString::Buffer & () const noexcept {
-		return _buff;
-	}
-
-	TemplateDecl
-	constexpr TString::operator typename TString::Buffer & () noexcept {
-		return _buff;
-	}
-
-	TemplateDecl
 	constexpr TString::operator std::string_view() const noexcept {
 		return std::string_view(_buff);
 	}

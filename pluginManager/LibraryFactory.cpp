@@ -14,7 +14,7 @@ namespace putils::LibraryFactory {
 	string addLibToPath(Str1 && name, Str2 && extension) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-		static std::regex end(string("^.*\\") + extension + "$");
+		static std::regex end((string("^.*\\") + extension + "$").c_str());
 
 		if (std::regex_match(name, end))
 			return name;
