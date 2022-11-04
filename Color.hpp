@@ -45,7 +45,7 @@ namespace putils {
 			};
 		};
 
-		explicit NormalizedColor(float r = 1.f, float g = 1.f, float b = 1.f, float a = 1.f) noexcept : r(r), g(g), b(b), a(a) {}
+		NormalizedColor(float r = 1.f, float g = 1.f, float b = 1.f, float a = 1.f) noexcept : r(r), g(g), b(b), a(a) {}
 		NormalizedColor(const NormalizedColor & rhs) noexcept = default;
 		NormalizedColor & operator=(const NormalizedColor & rhs) noexcept = default;
 	};
