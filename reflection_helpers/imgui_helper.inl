@@ -314,18 +314,26 @@ namespace putils::reflection {
 		else if constexpr (std::is_scalar_v<T> || std::is_same_v<T, std::ptrdiff_t>) {
 			if constexpr (isConst) {
 				detail::imgui::displayInColumns(name, [&] {
-					constexpr auto format =
-						std::is_same_v<T, short> ? "%hd" :
-						std::is_same_v<T, unsigned short> ? "%hu" :
-						std::is_same_v<T, int> ? "%d" :
-						std::is_same_v<T, unsigned int> ? "%u" :
-						std::is_same_v<T, long> ? "%ld" :
-						std::is_same_v<T, unsigned long> ? "%lu" :
-						std::is_same_v<T, size_t> ? "%zu" :
-						std::is_same_v<T, float> ? "%f" :
-						std::is_same_v<T, double> ? "%d" :
-						"<unknown type>";	
-					ImGui::Text(format, obj);
+					if constexpr (std::is_same_v<T, short>)
+						ImGui::Text("%hd", obj);
+					else if constexpr (std::is_same_v<T, unsigned short>)
+						ImGui::Text("%hu", obj);
+					else if constexpr (std::is_same_v<T, int>)
+						ImGui::Text("%d", obj);
+					else if constexpr (std::is_same_v<T, unsigned int>)
+						ImGui::Text("%u", obj);
+					else if constexpr (std::is_same_v<T, long>)
+						ImGui::Text("%ld", obj);
+					else if constexpr (std::is_same_v<T, unsigned long>)
+						ImGui::Text("%lu", obj);
+					else if constexpr (std::is_same_v<T, size_t>)
+						ImGui::Text("%zu", obj);
+					else if constexpr (std::is_same_v<T, float>)
+						ImGui::Text("%f", obj);
+					else if constexpr (std::is_same_v<T, double>)
+						ImGui::Text("%d", obj);
+					else
+						ImGui::Text("<unknown type>");
 				});
 			}
             else {
