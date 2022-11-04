@@ -75,8 +75,6 @@ namespace putils {
 
 	public:
 		using Buffer = value_type[MaxSize];
-		constexpr operator const Buffer & () const noexcept;
-		constexpr operator Buffer & () noexcept;
 
 		constexpr operator std::string_view() const noexcept;
 		

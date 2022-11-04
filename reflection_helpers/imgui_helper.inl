@@ -112,7 +112,7 @@ namespace putils::reflection {
 		const auto nameWithID = detail::imgui::getNameWithID(name, obj);
 		
 		if constexpr (putils::reflection::has_attributes<T>()) {
-			if (ImGui::TreeNode(nameWithID)) {
+			if (ImGui::TreeNode(nameWithID.c_str())) {
 				putils::reflection::for_each_attribute(obj, [](const auto & attr) noexcept {
 					imguiEdit(attr.name, attr.member);
 				});
@@ -141,7 +141,7 @@ namespace putils::reflection {
 				else {
 					putils::string<1024> s = obj.c_str();
 					ImGui::PushItemWidth(-1.f);
-					if (ImGui::InputText(id, s.begin(), s.max_size, ImGuiInputTextFlags_EnterReturnsTrue))
+					if (ImGui::InputText(id.c_str(), s.begin(), s.max_size, ImGuiInputTextFlags_EnterReturnsTrue))
 						obj = s.c_str();
 					ImGui::PopItemWidth();
 				}
@@ -157,24 +157,24 @@ namespace putils::reflection {
 					ImGui::Text("empty");
 				});
 			}
-			else if (ImGui::TreeNode(nameWithID)) {
+			else if (ImGui::TreeNode(nameWithID.c_str())) {
 				for (auto && [key, value] : obj) {
 					// If we can use the key as the treenode title, do so
 					if constexpr (putils::is_streamable<std::stringstream, putils_typeof(key)>()) {
 						const auto keyString = putils::toString(key);
-						if (ImGui::TreeNode(detail::imgui::getNameWithID(keyString.c_str(), key))) {
+						if (ImGui::TreeNode(detail::imgui::getNameWithID(keyString.c_str(), key).c_str())) {
 							imguiEdit(value);
 							ImGui::TreePop();
 						}
 					}
 					// Otherwise, display two treenodes for the key and value
 					else {
-						if (ImGui::TreeNode(detail::imgui::getNameWithID("key", key))) {
+						if (ImGui::TreeNode(detail::imgui::getNameWithID("key", key).c_str())) {
 							imguiEdit(key);
 							ImGui::TreePop();
 						}
 					
-						if (ImGui::TreeNode(detail::imgui::getNameWithID("value", value))) {
+						if (ImGui::TreeNode(detail::imgui::getNameWithID("value", value).c_str())) {
 							imguiEdit(value);
 							ImGui::TreePop();
 						}
@@ -194,10 +194,10 @@ namespace putils::reflection {
 				}
 			}
 
-			if (ImGui::TreeNode(nameWithID)) {
+			if (ImGui::TreeNode(nameWithID.c_str())) {
 				int i = 0;
 				for (auto && val : obj)
-					imguiEdit(putils::string<64>("%d", i++), val);
+					imguiEdit(putils::string<64>("%d", i++).c_str(), val);
 				
 				if constexpr (!isConst && detail::imgui::has_member_emplace_back<T>()) {
 					if (ImGui::MenuItem("Add"))
@@ -227,14 +227,14 @@ namespace putils::reflection {
 			detail::imgui::displayInColumns(name, [&]() noexcept {
 				auto normalized = putils::toNormalizedColor(obj);
 				const ImVec4 col = { normalized.r, normalized.g, normalized.b, normalized.a };
-				const auto shouldOpenPopup = ImGui::ColorButton(id, col);
+				const auto shouldOpenPopup = ImGui::ColorButton(id.c_str(), col);
 
 				if constexpr (!isConst) {
 					if (shouldOpenPopup)
-						ImGui::OpenPopup(nameWithID);
+						ImGui::OpenPopup(nameWithID.c_str());
 
-					if (ImGui::BeginPopup(nameWithID)) {
-						if (ImGui::ColorPicker4(nameWithID, normalized.attributes))
+					if (ImGui::BeginPopup(nameWithID.c_str())) {
+						if (ImGui::ColorPicker4(nameWithID.c_str(), normalized.attributes))
 							obj = putils::toColor(normalized);
 						ImGui::EndPopup();
 					}
@@ -246,13 +246,13 @@ namespace putils::reflection {
 			detail::imgui::displayInColumns(name, [&]() noexcept {
 				const ImVec4 col = {obj.r, obj.g, obj.b, obj.a};
 
-				const auto shouldOpenPopup = ImGui::ColorButton(id, col);
+				const auto shouldOpenPopup = ImGui::ColorButton(id.c_str(), col);
 				if constexpr (!isConst) {
 					if (shouldOpenPopup)
-						ImGui::OpenPopup(nameWithID);
+						ImGui::OpenPopup(nameWithID.c_str());
 
-					if (ImGui::BeginPopup(nameWithID)) {
-						ImGui::ColorPicker4(nameWithID, obj.attributes);
+					if (ImGui::BeginPopup(nameWithID.c_str())) {
+						ImGui::ColorPicker4(nameWithID.c_str(), obj.attributes);
 						ImGui::EndPopup();
 					}
 				}
@@ -266,7 +266,7 @@ namespace putils::reflection {
 			using Args = putils::function_arguments<T>;
 
 			if constexpr (std::is_default_constructible<Args>()) {
-				if (ImGui::TreeNode(nameWithID)) {
+				if (ImGui::TreeNode(nameWithID.c_str())) {
 					static Args args;
 
 
@@ -284,7 +284,7 @@ namespace putils::reflection {
 
 					size_t i = 0;
 					putils::tuple_for_each(args, [&](auto & arg) {
-						imguiEdit(putils::string<64>("Arg %zu", i), arg);
+						imguiEdit(putils::string<64>("Arg %zu", i).c_str(), arg);
 						++i;
 					});
 
@@ -298,7 +298,7 @@ namespace putils::reflection {
 				if constexpr (isConst)
 					ImGui::Text("%s", magic_enum::enum_name(obj).data());
 				else
-					imguiEnumCombo(id, obj);
+					imguiEnumCombo(id.c_str(), obj);
 			});
 		}
 		
@@ -307,7 +307,7 @@ namespace putils::reflection {
 				if constexpr (isConst)
 					ImGui::Text(obj ? "true" : "false");
 				else
-					ImGui::Checkbox(id, &obj);
+					ImGui::Checkbox(id.c_str(), &obj);
 			});
 		}
 
@@ -368,7 +368,7 @@ namespace putils::reflection {
                             assert(false);
                     }();
                     auto val = obj;
-                    if (ImGui::InputScalar(id, dataType, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue))
+                    if (ImGui::InputScalar(id.c_str(), dataType, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue))
                         obj = val;
                     ImGui::PopItemWidth();
                 });

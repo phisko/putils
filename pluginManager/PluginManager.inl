@@ -36,8 +36,8 @@ namespace putils {
             if (_libraries.find(f.fullPath) != _libraries.end())
                 return;
 
-            auto plugin = LibraryFactory::make(f.fullPath);
-            _libraries[f.fullPath] = plugin;
+            auto plugin = LibraryFactory::make(f.fullPath.c_str());
+            _libraries[f.fullPath.c_str()] = plugin;
             if (toExecute != nullptr) {
                 const auto func = plugin->loadMethod<void, P...>(toExecute);
                 if (func != nullptr)
@@ -77,8 +77,8 @@ namespace putils {
             if (_libraries.find(f.fullPath) != _libraries.end())
                 return;
 
-            auto plugin = LibraryFactory::make(f.fullPath);
-            _libraries[f.fullPath] = plugin;
+            auto plugin = LibraryFactory::make(f.fullPath.c_str());
+            _libraries[f.fullPath.c_str()] = plugin;
             if (toExecute != nullptr) {
                 const auto func = plugin->loadMethod<T, P...>(toExecute);
                 if (func != nullptr)
