@@ -8,7 +8,7 @@
 #include <handleapi.h>
 
 // stl
-#include <assert.h>
+#include <cassert>
 
 // putils
 #include "putils_profiling.hpp"
