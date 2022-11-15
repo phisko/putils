@@ -15,7 +15,7 @@
 
 namespace putils {
 	namespace detail_vector {
-        extern const char defaultClassName[32];
+        constexpr char defaultClassName[32] = "putils_vector";
 	}
 
 	template<typename T, size_t MaxSize, const char * ClassName = detail_vector::defaultClassName>
