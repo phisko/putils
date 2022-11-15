@@ -4,6 +4,6 @@
 #include <string>
 
 namespace putils {
-	void set_thread_name(const wchar_t * name) noexcept;
-	const std::string & get_thread_name() noexcept;
+	PUTILS_CORE_EXPORT void set_thread_name(const wchar_t * name) noexcept;
+	PUTILS_CORE_EXPORT const std::string & get_thread_name() noexcept;
 }

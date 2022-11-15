@@ -4,7 +4,7 @@
 #include "reflection.hpp"
 
 namespace putils {
-	struct Color {
+	struct PUTILS_CORE_EXPORT Color {
 		union {
 			unsigned char attributes[4];
 			struct {
@@ -34,7 +34,7 @@ namespace putils {
 	};
 #undef refltype
 
-	struct NormalizedColor {
+	struct PUTILS_CORE_EXPORT NormalizedColor {
 		union {
 			float attributes[4];
 			struct {
@@ -66,58 +66,58 @@ namespace putils {
 	** Conversion
 	*/
 
-	Color toColor(const NormalizedColor & normalized) noexcept;
-	NormalizedColor toNormalizedColor(const Color & color) noexcept;
+	PUTILS_CORE_EXPORT Color toColor(const NormalizedColor & normalized) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor toNormalizedColor(const Color & color) noexcept;
 
-	unsigned int toRGBA(const NormalizedColor & color) noexcept;
-	NormalizedColor fromRGBA(unsigned int color) noexcept;
+	PUTILS_CORE_EXPORT unsigned int toRGBA(const NormalizedColor & color) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor fromRGBA(unsigned int color) noexcept;
 
-	unsigned int toARGB(const Color & color) noexcept;
-	unsigned int toARGB(const NormalizedColor & color) noexcept;
+	PUTILS_CORE_EXPORT unsigned int toARGB(const Color & color) noexcept;
+	PUTILS_CORE_EXPORT unsigned int toARGB(const NormalizedColor & color) noexcept;
 
-	Color fromARGB(unsigned int color) noexcept;
+	PUTILS_CORE_EXPORT Color fromARGB(unsigned int color) noexcept;
 
 	/*
 	** Color * factor
 	*/
 
-	Color operator*(const Color & color, float factor) noexcept;
-	Color operator*(float factor, const Color & color) noexcept;
-	Color & operator*=(Color & lhs, float factor) noexcept;
+	PUTILS_CORE_EXPORT Color operator*(const Color & color, float factor) noexcept;
+	PUTILS_CORE_EXPORT Color operator*(float factor, const Color & color) noexcept;
+	PUTILS_CORE_EXPORT Color & operator*=(Color & lhs, float factor) noexcept;
 
 	/*
 	** Color / factor
 	*/
 
-	Color operator/(const Color & color, float factor) noexcept;
-	Color & operator/=(Color & lhs, float factor) noexcept;
+	PUTILS_CORE_EXPORT Color operator/(const Color & color, float factor) noexcept;
+	PUTILS_CORE_EXPORT Color & operator/=(Color & lhs, float factor) noexcept;
 
 	/*
 	** NormalizedColor * factor
 	*/
 
-	NormalizedColor operator*(const NormalizedColor & color, float factor) noexcept;
-	NormalizedColor operator*(float factor, const NormalizedColor & color) noexcept;
-	NormalizedColor & operator*=(NormalizedColor & lhs, float factor) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor operator*(const NormalizedColor & color, float factor) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor operator*(float factor, const NormalizedColor & color) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor & operator*=(NormalizedColor & lhs, float factor) noexcept;
 
 	/*
 	** NormalizedColor / factor
 	*/
 
-	NormalizedColor operator/(const NormalizedColor & color, float factor) noexcept;
-	NormalizedColor & operator/=(NormalizedColor & lhs, float factor) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor operator/(const NormalizedColor & color, float factor) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor & operator/=(NormalizedColor & lhs, float factor) noexcept;
 
 	/*
 	** NormalizedColor * NormalizedColor
 	*/
 
-	NormalizedColor operator*(const NormalizedColor & color, const NormalizedColor & rhs) noexcept;
-	NormalizedColor & operator*=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor operator*(const NormalizedColor & color, const NormalizedColor & rhs) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor & operator*=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept;
 
 	/*
 	** NormalizedColor / NormalizedColor
 	*/
 
-	NormalizedColor operator/(const NormalizedColor & color, const NormalizedColor & rhs) noexcept;
-	NormalizedColor & operator/=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor operator/(const NormalizedColor & color, const NormalizedColor & rhs) noexcept;
+	PUTILS_CORE_EXPORT NormalizedColor & operator/=(NormalizedColor & lhs, const NormalizedColor & rhs) noexcept;
 }

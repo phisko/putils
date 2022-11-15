@@ -11,14 +11,10 @@
 namespace putils {
     class Mediator;
 
-    class BaseModule {
+    class PUTILS_MEDIATOR_EXPORT BaseModule {
     public:
         BaseModule(Mediator * mediator = nullptr) noexcept;
         virtual ~BaseModule() noexcept;
-
-    public:
-        BaseModule(const BaseModule &) = delete;
-        BaseModule & operator=(const BaseModule &) = delete;
 
     public:
         virtual const std::vector<putils::meta::type_index> & getSubscriptions() const noexcept = 0;

@@ -39,7 +39,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [Python](python/README.md) (enabled with the PUTILS_PYTHON CMake option)
 * [Mediator](mediator/README.md) (enabled with the PUTILS_MEDIATOR CMake option)
 * [Meta](meta/README.md)
-* [PluginManager](pluginManager/README.md) (enabled with the PUTILS_PLUGIN_MANAGER CMake option)
+* [PluginManager](plugin_manager/README.md) (enabled with the PUTILS_PLUGIN_MANAGER CMake option)
 * [Reflection](reflection/README.md)
 
 ## Function-only headers

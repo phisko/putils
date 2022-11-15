@@ -4,5 +4,5 @@
 #include <string>
 
 namespace putils {
-    std::string getCurrentDir() noexcept;
+    PUTILS_CORE_EXPORT std::string getCurrentDir() noexcept;
 }

@@ -4,5 +4,5 @@
 #include <string_view>
 
 namespace putils {
-    std::string_view chop(std::string_view str) noexcept;
+    PUTILS_CORE_EXPORT std::string_view chop(std::string_view str) noexcept;
 }

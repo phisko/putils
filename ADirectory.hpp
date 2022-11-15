@@ -12,7 +12,7 @@
 #endif
 
 namespace putils {
-    class ADirectory {
+    class PUTILS_CORE_EXPORT ADirectory {
         // File structure
     public:
 		using string = putils::string<PUTILS_DIRECTORY_MAX_PATH>;

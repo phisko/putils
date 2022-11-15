@@ -5,5 +5,5 @@
 
 namespace putils {
     // Go to the directory containing file in currentPath
-    void goToBinDir(std::string currentPath) noexcept;
+    PUTILS_CORE_EXPORT void goToBinDir(std::string currentPath) noexcept;
 }
