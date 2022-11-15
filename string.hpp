@@ -12,7 +12,7 @@
 
 namespace putils {
 	namespace detail_string {
-        extern const char defaultClassName[32];
+        constexpr char defaultClassName[32] = "putils_string";
 	}
 
 	template<size_t MaxSize, const char * ClassName = detail_string::defaultClassName>
