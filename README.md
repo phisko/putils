@@ -52,6 +52,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [command_line_arguments](command_line_arguments.md): function that parses command-line arguments into a struct
 * [concatenate](concatenate.md): function taking any number of parameters and concatenating them into a string
 * [curl](curl.md): function that runs a `curl` request over CLI (to avoid having to install curl packages. This is NOT the optimal way to do an HTTP request)
+* [default_constructors](default_constructors.md): macros to avoid redundant declarations of default constructors
 * [epsilon](epsilon.md): approximate comparison of floating point types
 * [erase](erase.md): function taking a container and a value and erasing the value from the container
 * [file_extension](file_extension.md): functions for working with file extensions
