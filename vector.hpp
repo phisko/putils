@@ -2,7 +2,7 @@
 
 // stl
 #include <span>
-#include <assert.h>
+#include <cassert>
 
 // reflection
 #include "reflection.hpp"

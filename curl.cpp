@@ -1,7 +1,7 @@
 #include "curl.hpp"
 
 // stl
-#include <assert.h>
+#include <cassert>
 
 // putils
 #include "curl.hpp"

@@ -1,7 +1,7 @@
 #include "IniFile.hpp"
 
 // stl
-#include <assert.h>
+#include <cassert>
 #include <string>
 #include <fstream>
 #include <iostream>
