@@ -1,4 +1,4 @@
-# pluginManager
+# plugin_manager
 A simple and re-usable C++ dynamic library abstraction.
 
 ## EXPORT

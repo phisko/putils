@@ -39,7 +39,7 @@ distribution.
 #include "function.hpp"
 
 namespace putils {
-	class ThreadPool {
+	class PUTILS_CORE_EXPORT ThreadPool {
 	public:
 		using function = putils::function<void(), PUTILS_THREADPOOL_FUNCTION_SIZE>;
 

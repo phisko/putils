@@ -31,3 +31,7 @@ jobs:
     with:
       apt_dependencies: libgl-dev libglu1-mesa-dev
       cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON
+  build_shared:
+    uses: phisko/cmake-cxx-conan/.github/workflows/build.yml@main
+    with:
+      cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON -DBUILD_SHARED_LIBS=ON

@@ -4,7 +4,7 @@
 #include <cstddef>
 
 namespace putils {
-	class ConstBitFieldRef {
+	class PUTILS_CORE_EXPORT ConstBitFieldRef {
 	public:
 		ConstBitFieldRef(const void * data) noexcept;
 		
@@ -15,7 +15,7 @@ namespace putils {
 		const char * data;
 	};
 
-    class BitFieldRef : ConstBitFieldRef {
+    class PUTILS_CORE_EXPORT BitFieldRef : ConstBitFieldRef {
 	public:
         BitFieldRef(void * data) noexcept;
 

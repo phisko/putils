@@ -13,18 +13,18 @@
 namespace putils::reflection::runtime {
 	struct AttributeInfo;
 
-    struct Attributes {
+    struct PUTILS_CORE_EXPORT Attributes {
         std::unordered_map<std::string, const AttributeInfo *> map;
     };
 
-	struct AttributeInfo {
+	struct PUTILS_CORE_EXPORT AttributeInfo {
 		std::ptrdiff_t offset = 0;
 		size_t size = 0;
         putils::meta::type_index type = 0;
 
 		Attributes attributes;
 		
-		struct ArrayHelper {
+		struct PUTILS_CORE_EXPORT ArrayHelper {
             size_t getSize(const void * attribute) const noexcept {
                 return getSizeImpl(attribute);
             }
@@ -53,7 +53,7 @@ namespace putils::reflection::runtime {
 
 		std::optional<ArrayHelper> arrayHelper;
 
-		struct MapHelper {
+		struct PUTILS_CORE_EXPORT MapHelper {
             size_t getSize(const void * attribute) const noexcept {
                 return getSizeImpl(attribute);
             }

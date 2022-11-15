@@ -8,9 +8,8 @@
 // putils
 #include "ADirectory.hpp"
 
-namespace putils
-{
-	class WindowsDirectory final : public putils::ADirectory {
+namespace putils {
+	class PUTILS_CORE_EXPORT WindowsDirectory final : public putils::ADirectory {
 	public:
 		WindowsDirectory(const char * path) noexcept;
 

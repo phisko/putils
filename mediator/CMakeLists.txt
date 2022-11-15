@@ -1,6 +1,7 @@
 file(GLOB src *.cpp *.hpp)
-add_library(putils_mediator STATIC ${src})
-target_link_libraries(putils_mediator putils)
+add_library(putils_mediator ${src})
+target_link_libraries(putils_mediator putils_core)
+putils_export_symbols(putils_mediator)
 
 if (UNIX)
     target_link_libraries(putils_mediator pthread)

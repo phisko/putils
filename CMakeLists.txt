@@ -7,88 +7,50 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNOMINMAX")
 endif()
 
+add_library(putils INTERFACE)
+
+# Core
+
 file(GLOB src *.cpp *.hpp reflection_helpers/*.cpp reflection_helpers/*.hpp)
-add_library(putils STATIC ${src})
-target_include_directories(putils PUBLIC .)
+add_library(putils_core ${src})
+target_include_directories(putils_core PUBLIC .)
+target_link_libraries(putils INTERFACE putils_core)
 
 option(PUTILS_NDEBUG "Disable debug code" OFF)
 if (PUTILS_NDEBUG)
-    target_compile_definitions(putils PUBLIC PUTILS_NDEBUG)
+    target_compile_definitions(putils_core PUBLIC PUTILS_NDEBUG)
+else()
+    if (MSVC)
+        target_link_libraries(putils_core PUBLIC Dbghelp)
+    endif()
 endif()
 
 add_subdirectory(reflection)
-target_link_libraries(putils PUBLIC reflection)
+target_link_libraries(putils_core PUBLIC reflection)
+
+# Export the symbols if we're built as a DLL
+putils_export_symbols(putils_core)
 
 if (UNIX)
-    target_compile_options(putils PUBLIC -fPIC)
+    target_compile_options(putils_core PUBLIC -fPIC)
 endif()
 
 putils_conan_download_and_link_packages(
-    putils PUBLIC
+    putils_core PUBLIC
     magic_enum/0.7.3
     nlohmann_json/3.10.5
     stb/cci.20210910
     termcolor/2.0.0
 )
 
-option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
-if (PUTILS_PLUGIN_MANAGER)
-    add_subdirectory(pluginManager)
-    target_link_libraries(putils PUBLIC putils_pluginManager)
-    target_compile_definitions(putils PUBLIC PUTILS_PLUGIN_MANAGER)
-endif()
-
-option(PUTILS_IMGUI "Build ImGui" OFF)
-if (PUTILS_IMGUI)
-    set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
-    add_library(putils_imgui STATIC ${imguiSrc})
-    target_include_directories(putils_imgui PUBLIC imgui)
-    target_link_libraries(putils PUBLIC putils_imgui)
-    target_compile_definitions(putils PUBLIC PUTILS_IMGUI)
-    if(UNIX)
-        target_compile_options(putils_imgui PUBLIC -fPIC)
-    endif()
-endif()
-
-option(PUTILS_LUA "Build Lua helper" OFF)
-if(PUTILS_LUA)
-    add_subdirectory(lua)
-    target_link_libraries(putils PUBLIC putils_lua)
-    target_compile_definitions(putils PUBLIC PUTILS_LUA)
-
-    if (PUTILS_IMGUI)
-        file(GLOB imgui_lua_src
-            imgui_lua_bindings/*.cpp
-            imgui_lua_bindings/*.hpp)
-        add_library(putils_imgui_lua_bindings STATIC ${imgui_lua_src})
-        target_link_libraries(putils_imgui_lua_bindings PUBLIC putils)
-        target_link_libraries(putils PUBLIC putils_imgui_lua_bindings)
-    endif()
-endif()
-
-option(PUTILS_MEDIATOR "Build Mediator" OFF)
-if(PUTILS_MEDIATOR)
-    add_subdirectory(mediator)
-    target_link_libraries(putils PUBLIC putils_mediator)
-    target_compile_definitions(putils PUBLIC PUTILS_MEDIATOR)
-endif()
-
-option(PUTILS_PYTHON "Build Python helper" OFF)
-if(PUTILS_PYTHON)
-    add_subdirectory(python)
-    target_link_libraries(putils PUBLIC putils_python)
-    target_compile_definitions(putils PUBLIC PUTILS_PYTHON)
-endif()
-
-option(PUTILS_NO_SHADER_DEBUG "Disable shader debug" OFF)
-if (PUTILS_NO_SHADER_DEBUG)
-    target_compile_definitions(putils PUBLIC PUTILS_NO_SHADER_DEBUG)
-endif()
-
 # Profiling
+
 option(PUTILS_PROFILING OFF)
 if(PUTILS_PROFILING)
-	target_compile_definitions(putils PUBLIC PUTILS_PROFILING TRACY_ENABLE)
+	target_compile_definitions(putils_core PUBLIC PUTILS_PROFILING TRACY_ENABLE)
+    if (MSVC)
+        target_compile_options(putils_core PUBLIC /wd4101) # disable warnings about unreferenced tracy scopes
+    endif()
 
 	include(FetchContent)
 	FetchContent_Declare(
@@ -99,7 +61,86 @@ if(PUTILS_PROFILING)
 		GIT_SHALLOW TRUE
 	)
 	FetchContent_MakeAvailable(tracy)
-	target_link_libraries(putils PUBLIC TracyClient)
+	target_link_libraries(putils_core PUBLIC TracyClient)
+endif()
+
+# Plugin manager
+
+option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
+if (PUTILS_PLUGIN_MANAGER)
+    add_subdirectory(plugin_manager)
+    target_link_libraries(putils INTERFACE putils_plugin_manager)
+    target_compile_definitions(putils INTERFACE PUTILS_PLUGIN_MANAGER)
+endif()
+
+# ImGui
+
+option(PUTILS_IMGUI "Build ImGui" OFF)
+if (PUTILS_IMGUI)
+    set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
+    add_library(putils_imgui ${imguiSrc})
+    target_include_directories(putils_imgui PUBLIC imgui)
+    if(UNIX)
+        target_compile_options(putils_imgui PUBLIC -fPIC)
+    endif()
+    target_link_libraries(putils INTERFACE putils_imgui)
+    target_compile_definitions(putils INTERFACE PUTILS_IMGUI)
+
+    # Export the symbols if we're built as a DLL
+    putils_export_symbols(putils_imgui EXPORT_MACRO_NAME IMGUI_API)
+    if (MSVC)
+        # Force include the header defining the export macros (to avoid modifying imgui source code)
+        target_compile_options(putils_imgui PUBLIC /FIputils_imgui_export.h)
+    endif()
+endif()
+
+# Lua
+
+option(PUTILS_LUA "Build Lua helper" OFF)
+if(PUTILS_LUA)
+    add_subdirectory(lua)
+    target_link_libraries(putils INTERFACE putils_lua)
+    target_compile_definitions(putils INTERFACE PUTILS_LUA)
+
+endif()
+
+# ImGui Lua bindings
+
+if (PUTILS_IMGUI AND PUTILS_LUA)
+    file(GLOB imgui_lua_src
+            imgui_lua_bindings/*.cpp
+            imgui_lua_bindings/*.hpp)
+    add_library(putils_imgui_lua_bindings ${imgui_lua_src})
+    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_core)
+    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_imgui)
+    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_lua)
+    target_link_libraries(putils INTERFACE putils_imgui_lua_bindings)
+
+    # Export the symbols if we're built as a DLL
+    putils_export_symbols(putils_imgui_lua_bindings)
+
+    if (MSVC)
+        # Disable "'argument': conversion from 'double' to 'float'" warnings
+        target_compile_options(putils_imgui_lua_bindings PRIVATE /wd4244)
+    endif()
+endif()
+
+# Mediator
+
+option(PUTILS_MEDIATOR "Build Mediator" OFF)
+if(PUTILS_MEDIATOR)
+    add_subdirectory(mediator)
+    target_link_libraries(putils INTERFACE putils_mediator)
+    target_compile_definitions(putils INTERFACE PUTILS_MEDIATOR)
+endif()
+
+# Python
+
+option(PUTILS_PYTHON "Build Python helper" OFF)
+if(PUTILS_PYTHON)
+    add_subdirectory(python)
+    target_link_libraries(putils INTERFACE putils_python)
+    target_compile_definitions(putils INTERFACE PUTILS_PYTHON)
 endif()
 
 #

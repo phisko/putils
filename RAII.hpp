@@ -22,10 +22,6 @@ namespace putils {
         RAII(RAII && other) noexcept;
         RAII & operator=(RAII && other) noexcept;
         RAII & operator=(T && other) noexcept;
-
-        RAII(const RAII &) = delete;
-        RAII & operator=(const RAII &) = delete;
-
         ~RAII() noexcept;
 
     public:

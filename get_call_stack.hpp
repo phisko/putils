@@ -4,5 +4,5 @@
 #include <string>
 
 namespace putils {
-	std::string getCallStack() noexcept;
+	PUTILS_CORE_EXPORT std::string getCallStack() noexcept;
 }

@@ -6,7 +6,7 @@
 #include <string_view>
 
 namespace putils {
-    std::vector<std::string_view> toArgumentVector(int ac, const char * const * av) noexcept;
+    PUTILS_CORE_EXPORT std::vector<std::string_view> toArgumentVector(int ac, const char * const * av) noexcept;
 
     template<typename T>
     T parseArguments(std::span<const std::string_view> args, std::string_view help = "") noexcept;

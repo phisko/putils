@@ -4,5 +4,5 @@
 #include <sstream>
 
 namespace putils {
-    std::string read_stream(std::istream & istream) noexcept;
+    PUTILS_CORE_EXPORT std::string read_stream(std::istream & istream) noexcept;
 }

@@ -5,7 +5,7 @@
 
 namespace putils
 {
-    struct ADataPacket
+    struct PUTILS_MEDIATOR_EXPORT ADataPacket
     {
         virtual ~ADataPacket() {}
 

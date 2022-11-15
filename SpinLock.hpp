@@ -6,7 +6,7 @@
 // Taken from https://codereview.stackexchange.com/questions/167641/c-read-write-shared-spinlock-implementation
 
 namespace putils {
-    class SpinLock {
+    class PUTILS_CORE_EXPORT SpinLock {
 	public:
         void lock() noexcept;
         void unlock() noexcept;
@@ -16,7 +16,7 @@ namespace putils {
 
         void unlock_and_lock_shared() noexcept;
 
-        struct Lock {
+        struct PUTILS_CORE_EXPORT Lock {
             Lock(SpinLock & spinLock) noexcept;
             ~Lock() noexcept;
 
@@ -27,7 +27,7 @@ namespace putils {
             bool _locked;
         };
 
-        struct SharedLock {
+        struct PUTILS_CORE_EXPORT SharedLock {
             SharedLock(SpinLock & spinLock) noexcept;
             ~SharedLock() noexcept;
             SharedLock(Lock && rhs) noexcept;

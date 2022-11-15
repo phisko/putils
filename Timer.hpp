@@ -7,18 +7,14 @@ namespace putils {
     //
     // Timer class
     //
-    class Timer {
+    class PUTILS_CORE_EXPORT Timer {
     public:
         using t_clock = std::chrono::steady_clock;
         using t_duration = std::chrono::duration<float, std::ratio<1>>;
         using seconds = t_duration;
 
     public:
-        Timer() noexcept = default;
         Timer(const seconds & duration) noexcept;
-
-        Timer(const Timer & other) noexcept = default;
-        Timer & operator=(const Timer & other) noexcept = default;
 
         // Is the timer ringing
         bool isDone() const noexcept;

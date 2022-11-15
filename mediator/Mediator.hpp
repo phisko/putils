@@ -13,7 +13,7 @@
 
 namespace putils
 {
-    class Mediator {
+    class PUTILS_MEDIATOR_EXPORT Mediator {
     public:
         void addModule(BaseModule &m);
         void removeModule(BaseModule &m);
