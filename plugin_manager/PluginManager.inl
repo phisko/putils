@@ -1,6 +1,7 @@
 #include "PluginManager.hpp"
 
 // stl
+#include <filesystem>
 #include <string_view>
 
 // putils
@@ -18,32 +19,25 @@ namespace putils {
 		static constexpr auto extension = ".so";
 #endif
 
-		putils::Directory d(path);
-		d.for_each([&](const putils::Directory::File & f) noexcept {
-			const std::string_view view = f.fullPath;
+		for (const auto & entry : std::filesystem::directory_iterator(path)) {
+			if (entry.is_directory())
+				continue;
 
-            if (f.isDirectory)
-                return;
+			if (entry.path().extension() != extension)
+				continue;
 
-            const auto dotPos = view.find_last_of('.');
-            if (dotPos == std::string::npos)
-                return;
+			const auto libraryPath = entry.path().string();
+			if (_libraries.find(libraryPath) != _libraries.end())
+				continue;
 
-			const auto fileExt = view.substr(dotPos);
-            if (fileExt != extension)
-                return;
-
-            if (_libraries.find(f.fullPath) != _libraries.end())
-                return;
-
-            auto plugin = LibraryFactory::make(f.fullPath.c_str());
-            _libraries[f.fullPath.c_str()] = plugin;
-            if (toExecute != nullptr) {
-                const auto func = plugin->loadMethod<void, P...>(toExecute);
-                if (func != nullptr)
-                    func(FWD(params)...);
-            }
-		});
+			auto plugin = LibraryFactory::make(libraryPath.c_str());
+			_libraries[libraryPath] = plugin;
+			if (toExecute != nullptr) {
+				const auto func = plugin->loadMethod<void, P...>(toExecute);
+				if (func != nullptr)
+					func(FWD(params)...);
+			}
+		}
 	}
 
 	template<size_t MaxReturns, typename T, typename ...P>
@@ -57,34 +51,28 @@ namespace putils {
 #endif
 		putils::vector<T, MaxReturns> ret;
 
-		putils::Directory d(path);
-		d.for_each([&](const putils::Directory::File & f) noexcept {
+		for (const auto & entry : std::filesystem::directory_iterator(path)) {
 			if (ret.full())
-				return;
+				break;
 
-			const std::string_view view = f.fullPath;
-            if (f.isDirectory)
-                return;
+            if (entry.is_directory())
+                continue;
 
-            const auto dotPos = view.find_last_of('.');
-            if (dotPos == std::string::npos)
-                return;
+            if (entry.path().extension() != extension)
+                continue;
 
-			const auto fileExt = view.substr(dotPos);
-            if (fileExt != extension)
-                return;
+			const auto libraryPath = entry.path().string();
+            if (_libraries.find(libraryPath) != _libraries.end())
+                continue;
 
-            if (_libraries.find(f.fullPath) != _libraries.end())
-                return;
-
-            auto plugin = LibraryFactory::make(f.fullPath.c_str());
-            _libraries[f.fullPath.c_str()] = plugin;
+            auto plugin = LibraryFactory::make(libraryPath.c_str());
+            _libraries[libraryPath] = plugin;
             if (toExecute != nullptr) {
                 const auto func = plugin->loadMethod<T, P...>(toExecute);
                 if (func != nullptr)
                     ret.push_back(func(FWD(params)...));
             }
-        });
+        }
 
 		return ret;
 	}

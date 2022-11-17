@@ -5,14 +5,12 @@
 #include <unordered_map>
 
 // putils
-#include "Directory.hpp"
 #include "Library.hpp"
-#include "string.hpp"
 #include "vector.hpp"
 
 namespace putils {
 	class PluginManager {
-    public:
+	public:
 		// In each plugin, execute the [name] function, taking P as parameter
 		template<typename... P>
 		void execute(const std::string & name, P &&... params) noexcept;
@@ -29,8 +27,8 @@ namespace putils {
 		template<size_t MaxReturns, typename T, typename... P>
 		putils::vector<T, MaxReturns> rescanDirectoryWithReturn(const char * path, const char * toExecute, P &&... params) noexcept;
 
-		private:
-            std::unordered_map<putils::string<PUTILS_DIRECTORY_MAX_PATH>, Library *> _libraries;
+	private:
+		std::unordered_map<std::string, Library *> _libraries;
 	};
 }
 

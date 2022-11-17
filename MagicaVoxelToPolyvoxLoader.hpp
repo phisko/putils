@@ -12,7 +12,6 @@
 
 // putils
 #include "MagicaVoxel.hpp"
-#include "file_extension.hpp"
 #include "Color.hpp"
 #include "Point.hpp"
 #include "putils_profiling.hpp"
