@@ -17,7 +17,6 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 ## Utility classes
 
 * [Color & NormalizedColor](Color.md): helper classes to manipulate colors
-* [Directory](Directory.md): An abstraction to Unix and Windows directories, which lets you iterate through a directory and get information about each file.
 * [IniFile](IniFile.md): `.ini` file parser
 * [Observable](Observable.md): A minimalistic (but greatly sufficient) implementation of the Observer pattern.
 * [Point](Point.md): Simple abstraction to a 2D or 3D point.
@@ -55,11 +54,8 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [default_constructors](default_constructors.md): macros to avoid redundant declarations of default constructors
 * [epsilon](epsilon.md): approximate comparison of floating point types
 * [erase](erase.md): function taking a container and a value and erasing the value from the container
-* [file_extension](file_extension.md): functions for working with file extensions
 * [get_call_stack](get_call_stack.md): function which returns a formatted call-stack
-* [get_current_dir](get_current_dir.md): function which returns the current working directory as a string
 * [get_last_error_as_string](get_last_error_as_string.md): function for Windows
-* [go_to_bin_dir](go_to_bin_dir.md): function which takes `argv[0]` as parameter and changes the current working directory to that containing the executed file.
 * [hash](hash.md): pre-defined hashers for enums and pairs
 * [lengthof](lengthof.md): template function returning the length of an array
 * [macro_as_string](macro_as_string.md): returns the value of a macro as a string
