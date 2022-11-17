@@ -43,6 +43,15 @@ putils_conan_download_and_link_packages(
     termcolor/2.0.0
 )
 
+putils_conan_set_shared_options(options imgui)
+putils_conan_download_and_link_packages(
+    putils_core PUBLIC
+    imgui/cci.20220621+1.88.docking
+    IMPORTS # Copy the bindings
+        "res, * -> ${CMAKE_CURRENT_BINARY_DIR}/imgui_res"
+    ${options}
+)
+
 # Profiling
 
 option(PUTILS_PROFILING OFF)
@@ -73,27 +82,6 @@ if (PUTILS_PLUGIN_MANAGER)
     target_compile_definitions(putils INTERFACE PUTILS_PLUGIN_MANAGER)
 endif()
 
-# ImGui
-
-option(PUTILS_IMGUI "Build ImGui" OFF)
-if (PUTILS_IMGUI)
-    set(imguiSrc imgui/imgui.cpp imgui/imgui_widgets.cpp imgui/imgui_draw.cpp imgui/imgui_tables.cpp imgui/imgui_demo.cpp)
-    add_library(putils_imgui ${imguiSrc})
-    target_include_directories(putils_imgui PUBLIC imgui)
-    if(UNIX)
-        target_compile_options(putils_imgui PUBLIC -fPIC)
-    endif()
-    target_link_libraries(putils INTERFACE putils_imgui)
-    target_compile_definitions(putils INTERFACE PUTILS_IMGUI)
-
-    # Export the symbols if we're built as a DLL
-    putils_export_symbols(putils_imgui EXPORT_MACRO_NAME IMGUI_API)
-    if (MSVC)
-        # Force include the header defining the export macros (to avoid modifying imgui source code)
-        target_compile_options(putils_imgui PUBLIC /FIputils_imgui_export.h)
-    endif()
-endif()
-
 # Lua
 
 option(PUTILS_LUA "Build Lua helper" OFF)
@@ -106,13 +94,13 @@ endif()
 
 # ImGui Lua bindings
 
-if (PUTILS_IMGUI AND PUTILS_LUA)
+if (PUTILS_LUA)
     file(GLOB imgui_lua_src
             imgui_lua_bindings/*.cpp
             imgui_lua_bindings/*.hpp)
     add_library(putils_imgui_lua_bindings ${imgui_lua_src})
     target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_core)
-    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_imgui)
+    target_link_libraries(putils_imgui_lua_bindings)
     target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_lua)
     target_link_libraries(putils INTERFACE putils_imgui_lua_bindings)
 
