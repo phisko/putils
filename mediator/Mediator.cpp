@@ -4,9 +4,6 @@
 #include <iostream>
 #include <algorithm>
 
-// termcolor
-#include <termcolor/termcolor.hpp>
-
 // putils
 #include "putils_profiling.hpp"
 
@@ -41,7 +38,7 @@ namespace putils
 			try {
 				m->receive(packet);
 			} catch (const std::exception & e) {
-				std::cerr << termcolor::red << e.what() << std::endl << termcolor::reset;
+				std::cerr << e.what() << std::endl;
 			}
         }
     }

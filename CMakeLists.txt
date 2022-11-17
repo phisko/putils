@@ -39,8 +39,6 @@ putils_conan_download_and_link_packages(
     putils_core PUBLIC
     magic_enum/0.7.3
     nlohmann_json/3.10.5
-    stb/cci.20210910
-    termcolor/2.0.0
 )
 
 putils_conan_set_shared_options(options imgui)
