@@ -54,6 +54,7 @@ Another example is the [registerType](lua/README.md) function provided for lua, 
 * [default_constructors](default_constructors.md): macros to avoid redundant declarations of default constructors
 * [epsilon](epsilon.md): approximate comparison of floating point types
 * [erase](erase.md): function taking a container and a value and erasing the value from the container
+* [forward_to](forward_to.md): helper macros to forward arguments to an object
 * [get_call_stack](get_call_stack.md): function which returns a formatted call-stack
 * [get_last_error_as_string](get_last_error_as_string.md): function for Windows
 * [hash](hash.md): pre-defined hashers for enums and pairs
