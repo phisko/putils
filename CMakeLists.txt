@@ -11,7 +11,7 @@ add_library(putils INTERFACE)
 
 # Core
 
-file(GLOB src *.cpp *.hpp reflection_helpers/*.cpp reflection_helpers/*.hpp)
+file(GLOB src putils/*.cpp putils/*.hpp putils/reflection_helpers/*.cpp putils/reflection_helpers/*.hpp)
 add_library(putils_core ${src})
 target_include_directories(putils_core PUBLIC .)
 target_link_libraries(putils INTERFACE putils_core)
@@ -26,7 +26,7 @@ else()
 endif()
 
 add_subdirectory(reflection)
-target_link_libraries(putils_core PUBLIC reflection)
+target_link_libraries(putils_core PUBLIC putils_reflection)
 
 # Export the symbols if we're built as a DLL
 putils_export_symbols(putils_core)
@@ -75,7 +75,7 @@ endif()
 
 option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
 if (PUTILS_PLUGIN_MANAGER)
-    add_subdirectory(plugin_manager)
+    add_subdirectory(putils/plugin_manager)
     target_link_libraries(putils INTERFACE putils_plugin_manager)
     target_compile_definitions(putils INTERFACE PUTILS_PLUGIN_MANAGER)
 endif()
@@ -84,7 +84,7 @@ endif()
 
 option(PUTILS_LUA "Build Lua helper" OFF)
 if(PUTILS_LUA)
-    add_subdirectory(lua)
+    add_subdirectory(putils/lua)
     target_link_libraries(putils INTERFACE putils_lua)
     target_compile_definitions(putils INTERFACE PUTILS_LUA)
 
@@ -94,8 +94,8 @@ endif()
 
 if (PUTILS_LUA)
     file(GLOB imgui_lua_src
-            imgui_lua_bindings/*.cpp
-            imgui_lua_bindings/*.hpp)
+            putils/imgui_lua_bindings/*.cpp
+            putils/imgui_lua_bindings/*.hpp)
     add_library(putils_imgui_lua_bindings ${imgui_lua_src})
     target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_core)
     target_link_libraries(putils_imgui_lua_bindings)
@@ -111,20 +111,11 @@ if (PUTILS_LUA)
     endif()
 endif()
 
-# Mediator
-
-option(PUTILS_MEDIATOR "Build Mediator" OFF)
-if(PUTILS_MEDIATOR)
-    add_subdirectory(mediator)
-    target_link_libraries(putils INTERFACE putils_mediator)
-    target_compile_definitions(putils INTERFACE PUTILS_MEDIATOR)
-endif()
-
 # Python
 
 option(PUTILS_PYTHON "Build Python helper" OFF)
 if(PUTILS_PYTHON)
-    add_subdirectory(python)
+    add_subdirectory(putils/python)
     target_link_libraries(putils INTERFACE putils_python)
     target_compile_definitions(putils INTERFACE PUTILS_PYTHON)
 endif()
@@ -138,8 +129,8 @@ if (PUTILS_TESTS)
 	enable_testing()
     set(test_exe_name putils_tests)
     file(GLOB test_src
-            tests/*.tests.cpp
-            reflection_helpers/tests/*.tests.cpp)
+            putils/tests/*.tests.cpp
+            putils/reflection_helpers/tests/*.tests.cpp)
 
     putils_add_test_executable(${test_exe_name} ${test_src})
     target_link_libraries(${test_exe_name} PRIVATE putils)
