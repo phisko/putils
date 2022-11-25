@@ -2,5 +2,5 @@
 	path = reflection
 	url = https://github.com/phisko/reflection
 [submodule "imgui_lua_bindings"]
-	path = imgui_lua_bindings
+	path = putils/imgui_lua_bindings
 	url = https://github.com/phisko/imgui_lua_bindings.git
