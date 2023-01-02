@@ -20,6 +20,9 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: 'Yes'
 BinPackArguments: true
 BinPackParameters: true
+BraceWrapping:
+  BeforeElse: true
+  BeforeCatch: true
 BreakAfterJavaFieldAnnotations: true
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
@@ -43,6 +46,7 @@ MaxEmptyLinesToKeep: '1'
 NamespaceIndentation: All
 PointerAlignment: Middle
 ReflowComments: false
+RequiresClausePosition: OwnLine
 SortIncludes: false
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false

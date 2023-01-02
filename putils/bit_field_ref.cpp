@@ -2,8 +2,7 @@
 
 namespace putils {
 	const_bit_field_ref::const_bit_field_ref(const void * data) noexcept
-	: data((const char *)data)
-	{}
+		: data((const char *)data) {}
 
 	bool const_bit_field_ref::get(size_t index) const noexcept {
 		return get(index / 8, index % 8);
@@ -14,9 +13,8 @@ namespace putils {
 	}
 
 	bit_field_ref::bit_field_ref(void * data) noexcept
-	: const_bit_field_ref(data)
-	, data((char *)data)
-	{}
+		: const_bit_field_ref(data),
+		  data((char *)data) {}
 
 	void bit_field_ref::set(size_t index, bool value) noexcept {
 		set(index / 8, index % 8, value);

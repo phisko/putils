@@ -14,35 +14,35 @@ namespace putils::reflection {
 		void from_to_json(JSONRef && json_object, TRef && obj) noexcept {
 			PUTILS_PROFILING_SCOPE;
 
-            using TNoRef = std::remove_reference_t<TRef>;
+			using TNoRef = std::remove_reference_t<TRef>;
 			using T = std::decay_t<TRef>;
 
 			using json = std::remove_reference_t<JSONRef>;
 			constexpr bool serialize = !std::is_const<json>();
 
-            if constexpr (std::is_same<TNoRef, const char *>()) {
-                if constexpr (serialize)
-                    json_object = obj;
-            }
+			if constexpr (std::is_same<TNoRef, const char *>()) {
+				if constexpr (serialize)
+					json_object = obj;
+			}
 
-            else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, char>()) {
-                if constexpr (serialize)
-                    json_object = obj;
-                else {
+			else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, char>()) {
+				if constexpr (serialize)
+					json_object = obj;
+				else {
 #ifdef _WIN32
-# define MY_STRNCPY strncpy_s
+#	define MY_STRNCPY strncpy_s
 #else
-# define MY_STRNCPY strncpy
+#	define MY_STRNCPY strncpy
 #endif
-                    MY_STRNCPY(obj, json_object.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
+					MY_STRNCPY(obj, json_object.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
 #undef MY_STRNCPY
-                }
-            }
+				}
+			}
 
-            else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, const char>()) {
-                if constexpr (serialize)
-                    json_object = obj;
-            }
+			else if constexpr (std::is_array<TNoRef>() && std::is_same<std::remove_extent_t<TNoRef>, const char>()) {
+				if constexpr (serialize)
+					json_object = obj;
+			}
 
 			else if constexpr (requires { obj.c_str(); }) {
 				if constexpr (serialize)
@@ -71,7 +71,9 @@ namespace putils::reflection {
 					for (const auto & it : obj)
 						json_object.push_back(to_json(it));
 				}
+				// clang-format off
 				else if constexpr (requires { obj.clear(); obj.back(); } && (requires { obj.emplace_back(); } || requires { obj.push_back({}); })) {
+					// clang-format on
 					obj.clear();
 					for (const auto & it : json_object) {
 						if constexpr (requires { obj.emplace_back(); })
@@ -107,7 +109,7 @@ namespace putils::reflection {
 					});
 				}
 			}
-			
+
 			else if constexpr (std::is_enum<T>()) {
 				if constexpr (serialize)
 					json_object = magic_enum::enum_name<T>(obj);
@@ -125,9 +127,9 @@ namespace putils::reflection {
 					obj = json_object;
 			}
 
-            else if constexpr (std::is_empty<T>()) {
-                // Do nothing
-            }
+			else if constexpr (std::is_empty<T>()) {
+				// Do nothing
+			}
 
 			else {
 				assert(false);

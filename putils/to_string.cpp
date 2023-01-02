@@ -8,37 +8,37 @@
 #include "profiling.hpp"
 
 namespace putils {
-    std::string to_string(bool v) noexcept {
+	std::string to_string(bool v) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-        std::stringstream s;
-        s << std::boolalpha << v;
-        return s.str();
-    }
+		std::stringstream s;
+		s << std::boolalpha << v;
+		return s.str();
+	}
 
-    std::string to_string(std::istream & s) noexcept {
+	std::string to_string(std::istream & s) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-        return read_stream(s);
-    }
+		return read_stream(s);
+	}
 
-    template<>
-    void parse(bool & obj, std::string_view str) noexcept {
+	template<>
+	void parse(bool & obj, std::string_view str) noexcept {
 		obj = str == "true";
-    };
+	};
 
 	template<>
 	void parse(std::string & obj, std::string_view str) noexcept {
 		obj = str;
 	}
 
-    template<>
-    bool parse(std::string_view str) noexcept {
-        return str == "true";
-    }
+	template<>
+	bool parse(std::string_view str) noexcept {
+		return str == "true";
+	}
 
-    template<>
-    std::string parse(std::string_view str) noexcept {
-        return std::string(str);
-    }
+	template<>
+	std::string parse(std::string_view str) noexcept {
+		return std::string(str);
+	}
 }

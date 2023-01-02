@@ -3,10 +3,10 @@
 // std::visit helper
 
 namespace putils {
-	template<typename ... Ts>
+	template<typename... Ts>
 	struct overloaded : Ts... {
 		using Ts::operator()...;
 	};
-	template<typename ... Ts>
+	template<typename... Ts>
 	overloaded(Ts...) -> overloaded<Ts...>;
 }

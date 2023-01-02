@@ -8,8 +8,8 @@
 #include "putils/meta/concepts/streamable.hpp"
 
 namespace putils {
-    template<putils::streamable<std::stringstream> ... Args>
-    std::string concatenate(Args && ... args) noexcept;
+	template<putils::streamable<std::stringstream>... Args>
+	std::string concatenate(Args &&... args) noexcept;
 }
 
 #include "concatenate.inl"

@@ -7,7 +7,7 @@ namespace putils {
 
 	TemplateDecl
 	template<size_t N>
-	constexpr TVector::vector(const T(&arr)[N]) noexcept {
+	constexpr TVector::vector(const T (&arr)[N]) noexcept {
 		for (const T & elem : arr)
 			_buff[_size++] = elem;
 	}
@@ -34,59 +34,63 @@ namespace putils {
 	}
 
 	TemplateDecl
-	template<typename ... Args>
-	constexpr T & TVector::emplace_back(Args && ...args) noexcept {
+	template<typename... Args>
+	constexpr T & TVector::emplace_back(Args &&... args) noexcept {
 		assert(!full());
 		_buff[_size] = T(FWD(args)...);
 		return _buff[_size++];
 	}
 
 	TemplateDecl
-	template<typename ... Args>
-	constexpr void TVector::try_emplace_back(Args && ...args) noexcept {
+	template<typename... Args>
+	constexpr void TVector::try_emplace_back(Args &&... args) noexcept {
 		if (!full())
 			emplace_back(FWD(args)...);
 	}
 
 	TemplateDecl
 	constexpr T & TVector::add(const T & val) noexcept {
-		return push_back(val); 
+		return push_back(val);
 	}
 
 	TemplateDecl
 	constexpr void TVector::try_add(const T & val) noexcept {
-		try_push_back(val); 
+		try_push_back(val);
 	}
 
-    TemplateDecl
-    constexpr T & TVector::front() noexcept {
-        assert(_size > 0); return _buff[0];
-    }
+	TemplateDecl
+	constexpr T & TVector::front() noexcept {
+		assert(_size > 0);
+		return _buff[0];
+	}
 
-    TemplateDecl
-    constexpr const T & TVector::front() const noexcept {
-        assert(_size > 0); return _buff[0];
-    }
+	TemplateDecl
+	constexpr const T & TVector::front() const noexcept {
+		assert(_size > 0);
+		return _buff[0];
+	}
 
-    TemplateDecl
-    constexpr T & TVector::first() noexcept {
-        return front();
-    }
+	TemplateDecl
+	constexpr T & TVector::first() noexcept {
+		return front();
+	}
 
 	TemplateDecl
 	constexpr T & TVector::back() noexcept {
-		assert(_size > 0); return _buff[_size - 1];
+		assert(_size > 0);
+		return _buff[_size - 1];
 	}
 
-    TemplateDecl
-    constexpr const T & TVector::back() const noexcept {
-        assert(_size > 0); return _buff[_size - 1];
-    }
+	TemplateDecl
+	constexpr const T & TVector::back() const noexcept {
+		assert(_size > 0);
+		return _buff[_size - 1];
+	}
 
-    TemplateDecl
-    constexpr T & TVector::last() noexcept {
-        return back();
-    }
+	TemplateDecl
+	constexpr T & TVector::last() noexcept {
+		return back();
+	}
 
 	TemplateDecl
 	constexpr T & TVector::operator[](size_t index) noexcept {
@@ -102,17 +106,17 @@ namespace putils {
 
 	TemplateDecl
 	constexpr T & TVector::at(size_t index) noexcept {
-		return (*this)[index]; 
+		return (*this)[index];
 	}
 
 	TemplateDecl
 	constexpr const T & TVector::at(size_t index) const noexcept {
-		return (*this)[index]; 
+		return (*this)[index];
 	}
 
 	TemplateDecl
-		constexpr T & TVector::get(size_t index) noexcept {
-		return at(index); 
+	constexpr T & TVector::get(size_t index) noexcept {
+		return at(index);
 	}
 
 	TemplateDecl
@@ -134,77 +138,77 @@ namespace putils {
 
 	TemplateDecl
 	constexpr void TVector::remove(T * ptr) noexcept {
-		erase(ptr); 
+		erase(ptr);
 	}
 
 	TemplateDecl
 	constexpr auto TVector::size() const noexcept {
-		return _size; 
+		return _size;
 	}
 
 	TemplateDecl
 	constexpr bool TVector::empty() const noexcept {
-		return _size == 0; 
+		return _size == 0;
 	}
 
 	TemplateDecl
 	constexpr bool TVector::full() const {
-		return _size >= MaxSize; 
+		return _size >= MaxSize;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::begin() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::end() const noexcept {
-		return _buff + _size; 
+		return _buff + _size;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::begin() noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::end() noexcept {
-		return _buff + _size; 
+		return _buff + _size;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::data() const noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr auto TVector::data() noexcept {
-		return _buff; 
+		return _buff;
 	}
 
 	TemplateDecl
 	constexpr void TVector::clear() noexcept {
-		_size = 0; 
+		_size = 0;
 	}
 
 	TemplateDecl
 	constexpr void TVector::resize(size_t size) noexcept {
-		_size = size; 
+		_size = size;
 	}
 
 	TemplateDecl
 	constexpr size_t TVector::capacity() const noexcept {
-		return MaxSize; 
+		return MaxSize;
 	}
 
 	TemplateDecl
 	constexpr TVector::operator std::span<const T>() const noexcept {
-		return { _buff, _size }; 
+		return { _buff, _size };
 	}
 
 	TemplateDecl
 	constexpr TVector::operator std::span<T>() noexcept {
-		return { _buff, _size }; 
+		return { _buff, _size };
 	}
 
 	TemplateDecl
@@ -213,8 +217,8 @@ namespace putils {
 	TemplateDecl
 	constexpr auto end(const TVector & v) noexcept { return v.end(); }
 
-	template<typename ... Args>
-	constexpr auto make_vector(Args && ... args) noexcept -> vector<std::common_type_t<Args...>, sizeof...(Args)> {
+	template<typename... Args>
+	constexpr auto make_vector(Args &&... args) noexcept -> vector<std::common_type_t<Args...>, sizeof...(Args)> {
 		return { FWD(args)... };
 	}
 }

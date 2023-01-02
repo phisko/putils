@@ -20,10 +20,6 @@ namespace putils::magica_voxel {
 	struct vertex_data {
 		float color[3] = { 0.f, 0.f, 0.f };
 
-		putils_reflection_attributes(
-			putils_reflection_attribute(&vertex_data::color)
-		);
-
 		bool operator==(size_t i) const {
 			return color[0] == 0.f && color[1] == 0.f && color[2] == 0.f;
 		}
@@ -103,7 +99,12 @@ namespace putils::magica_voxel {
 			out_size->z = size.z;
 		}
 
-		PolyVox::RawVolume<vertex_data> volume(PolyVox::Region{ { 0, 0, 0, }, { size.x, size.z, size.y } });
+		PolyVox::RawVolume<vertex_data> volume(
+			PolyVox::Region{
+				// clang-format off
+				{ 0, 0, 0, },
+				// clang-format on
+				{ size.x, size.z, size.y } });
 
 		magica_voxel::chunk_header voxels_header;
 		detail::read_from_stream(voxels_header, stream);

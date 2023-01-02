@@ -54,8 +54,7 @@ namespace putils {
 	}
 
 	spin_lock::unique_lock::unique_lock(spin_lock & spin_lock) noexcept
-		: _spin_lock(spin_lock)
-	{
+		: _spin_lock(spin_lock) {
 		lock();
 	}
 
@@ -75,8 +74,7 @@ namespace putils {
 	}
 
 	spin_lock::shared_lock::shared_lock(spin_lock & spin_lock) noexcept
-		: _spin_lock(spin_lock)
-	{
+		: _spin_lock(spin_lock) {
 		lock();
 	}
 
@@ -86,8 +84,7 @@ namespace putils {
 	}
 
 	spin_lock::shared_lock::shared_lock(unique_lock && rhs) noexcept
-		: _spin_lock(rhs._spin_lock)
-	{
+		: _spin_lock(rhs._spin_lock) {
 		rhs._spin_lock.unlock_and_lock_shared();
 	}
 

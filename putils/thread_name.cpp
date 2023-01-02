@@ -2,8 +2,8 @@
 
 // windows
 #ifdef _MSC_VER
-#include <windows.h>
-#include <processthreadsapi.h>
+#	include <windows.h>
+#	include <processthreadsapi.h>
 #endif
 
 // putils
@@ -26,11 +26,11 @@ namespace putils {
 			wchar_t * buff;
 			GetThreadDescription(GetCurrentThread(), &buff);
 			const std::wstring s = buff;
-#pragma warning(disable : 4244) // Disable "conversion from wchar_t to char" warning
+#	pragma warning(disable : 4244) // Disable "conversion from wchar_t to char" warning
 			return std::string{ s.begin(), s.end() };
-#pragma warning(default : 4244)
+#	pragma warning(default : 4244)
 #else
-            return "";
+			return "";
 #endif
 		}();
 

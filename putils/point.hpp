@@ -8,7 +8,7 @@
 #include "lengthof.hpp"
 
 namespace putils {
-    template<typename Precision, size_t Dimensions>
+	template<typename Precision, size_t Dimensions>
 	struct point {
 		using buffer = Precision[Dimensions];
 		buffer raw;
@@ -17,44 +17,42 @@ namespace putils {
 	template<typename Precision, size_t Dimensions>
 	using vec = point<Precision, Dimensions>;
 
-    using point3d = point<double, 3>;
+	using point3d = point<double, 3>;
 	using vec3d = point3d;
 
-    using point2d = point<double, 2>;
+	using point2d = point<double, 2>;
 	using vec2d = point3d;
 
-    using point3i = point<int, 3>;
+	using point3i = point<int, 3>;
 	using vec3i = point3i;
 
-    using point2i = point<int, 2>;
+	using point2i = point<int, 2>;
 	using vec2i = point2i;
 
-    using point3ui = point<unsigned int, 3>;
+	using point3ui = point<unsigned int, 3>;
 	using vec3ui = point3ui;
 
-    using point2ui = point<unsigned int, 2>;
+	using point2ui = point<unsigned int, 2>;
 	using vec2ui = point2ui;
 
-    using point3f = point<float, 3>;
+	using point3f = point<float, 3>;
 	using vec3f = point3f;
 
-    using point2f = point<float, 2>;
+	using point2f = point<float, 2>;
 	using vec2f = point2f;
-
 
 	template<typename P, size_t D>
 #define refltype point<P, D>
-	putils_reflection_info_template{
+	putils_reflection_info_template {
 		static constexpr const char class_name_priv[] = { 'p', 'o', 'i', 'n', 't', '0' + D, 0 };
-        static constexpr const char * class_name = class_name_priv;
+		static constexpr const char * class_name = class_name_priv;
 		putils_reflection_attributes(
-			putils_reflection_attribute(raw)
-		);
+			putils_reflection_attribute(raw));
 	};
 #undef refltype
 
-    template<typename Precision>
-    struct point<Precision, 2> {
+	template<typename Precision>
+	struct point<Precision, 2> {
 		using buffer = Precision[2];
 		union {
 			buffer raw;
@@ -68,17 +66,17 @@ namespace putils {
 		point(Precision x, Precision y) noexcept;
 		point(const Precision * p) noexcept;
 
-        point(const point &) noexcept = default;
-        point & operator=(const point &) noexcept = default;
+		point(const point &) noexcept = default;
+		point & operator=(const point &) noexcept = default;
 
-        template<typename P>
+		template<typename P>
 		point(const point<P, 2> & other) noexcept;
-        template<typename P>
+		template<typename P>
 		point & operator=(const point<P, 2> & other) noexcept;
 
-        template<typename P>
+		template<typename P>
 		point(const point<P, 3> & other) noexcept;
-        template<typename P>
+		template<typename P>
 		point & operator=(const point<P, 3> & other) noexcept;
 
 		Precision & operator[](size_t index) noexcept;
@@ -87,18 +85,17 @@ namespace putils {
 
 	template<typename T>
 #define refltype point<T, 2>
-	putils_reflection_info_template{
+	putils_reflection_info_template {
 		putils_reflection_custom_class_name(point2);
 		putils_reflection_attributes(
 			putils_reflection_attribute(raw),
 			putils_reflection_attribute(x),
-			putils_reflection_attribute(y)
-		);
+			putils_reflection_attribute(y));
 	};
 #undef refltype
 
-    template<typename Precision>
-    struct point<Precision, 3> {
+	template<typename Precision>
+	struct point<Precision, 3> {
 		using buffer = Precision[3];
 		union {
 			buffer raw;
@@ -113,15 +110,15 @@ namespace putils {
 		point(Precision x, Precision y, Precision z) noexcept;
 		point(const Precision * p) noexcept;
 
-        point(const point &) noexcept = default;
-        point & operator=(const point &) noexcept = default;
+		point(const point &) noexcept = default;
+		point & operator=(const point &) noexcept = default;
 
 		template<typename P>
 		point(const point<P, 2> & other) noexcept;
-        template<typename P>
+		template<typename P>
 		point & operator=(const point<P, 2> & other) noexcept;
 
-        template<typename P>
+		template<typename P>
 		point(const point<P, 3> & other) noexcept;
 		template<typename P>
 		point & operator=(const point<P, 3> & other) noexcept;
@@ -132,16 +129,14 @@ namespace putils {
 
 	template<typename T>
 #define refltype point<T, 3>
-	putils_reflection_info_template{
+	putils_reflection_info_template {
 		putils_reflection_custom_class_name(point3);
 		putils_reflection_attributes(
 			putils_reflection_attribute(x),
 			putils_reflection_attribute(y),
-			putils_reflection_attribute(z)
-		);
+			putils_reflection_attribute(z));
 	};
 #undef refltype
-
 
 #define TemplateDecl template<typename P1, typename P2, size_t D>
 #define Point1 point<P1, D>

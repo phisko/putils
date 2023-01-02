@@ -7,10 +7,9 @@
 
 // windows
 #ifdef _MSC_VER
-# include "windows.h"
-# include "dbghelp.h"
+#	include "windows.h"
+#	include "dbghelp.h"
 #endif
-
 
 namespace putils {
 	std::string get_call_stack() noexcept {
@@ -32,7 +31,7 @@ namespace putils {
 		for (int i = 0; i < frames; i++) {
 			SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
 
-			DWORD  displacement;
+			DWORD displacement;
 			IMAGEHLP_LINE64 line;
 			SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &displacement, &line);
 

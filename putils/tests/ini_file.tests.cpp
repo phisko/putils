@@ -5,9 +5,9 @@
 #include "putils/ini_file.hpp"
 
 TEST(ini_file, parse) {
-    std::stringstream s;
-    s <<
-R"([Section]
+	std::stringstream s;
+	s <<
+		R"([Section]
 A=42
 B="hello"
 C=2.5
@@ -20,33 +20,33 @@ A = 84
 A= -42
 )";
 
-    putils::ini_file f;
-    s >> f;
+	putils::ini_file f;
+	s >> f;
 
-    EXPECT_EQ(f.sections.size(), 2);
+	EXPECT_EQ(f.sections.size(), 2);
 
-    EXPECT_EQ(f.sections["Section"].values.size(), 4);
-    EXPECT_EQ(f.sections["Section"].values["A"], "42");
-    EXPECT_EQ(f.sections["Section"].values["B"], "hello");
-    EXPECT_EQ(f.sections["Section"].values["C"], "2.5");
-    EXPECT_EQ(f.sections["Section"].values["D"], "hi");
+	EXPECT_EQ(f.sections["Section"].values.size(), 4);
+	EXPECT_EQ(f.sections["Section"].values["A"], "42");
+	EXPECT_EQ(f.sections["Section"].values["B"], "hello");
+	EXPECT_EQ(f.sections["Section"].values["C"], "2.5");
+	EXPECT_EQ(f.sections["Section"].values["D"], "hi");
 
-    EXPECT_EQ(f.sections["Section"].sections.size(), 1);
-    EXPECT_EQ(f.sections["Section"].sections["Subsection"].values.size(), 1);
-    EXPECT_EQ(f.sections["Section"].sections["Subsection"].values["A"], "84");
-    EXPECT_EQ(f.sections["Section"].sections["Subsection"].sections.size(), 0);
+	EXPECT_EQ(f.sections["Section"].sections.size(), 1);
+	EXPECT_EQ(f.sections["Section"].sections["Subsection"].values.size(), 1);
+	EXPECT_EQ(f.sections["Section"].sections["Subsection"].values["A"], "84");
+	EXPECT_EQ(f.sections["Section"].sections["Subsection"].sections.size(), 0);
 
-    EXPECT_EQ(f.sections["OtherSection"].sections.size(), 0);
-    EXPECT_EQ(f.sections["OtherSection"].values.size(), 1);
-    EXPECT_EQ(f.sections["OtherSection"].values["A"], "-42");
+	EXPECT_EQ(f.sections["OtherSection"].sections.size(), 0);
+	EXPECT_EQ(f.sections["OtherSection"].values.size(), 1);
+	EXPECT_EQ(f.sections["OtherSection"].values["A"], "-42");
 }
 
 TEST(ini_file, serialize) {
+	// clang-format off
     const putils::ini_file ini{
         .sections = {
             {
-                "Section",
-                {
+                "Section", {
                     .values = {
                         { "A", "42", },
                         { "B", "hello" },
@@ -55,8 +55,7 @@ TEST(ini_file, serialize) {
                     },
                     .sections = {
                         {
-                            "Subsection",
-                            {
+                            "Subsection", {
                                 .values = {
                                     { "A", "84" }
                                 }
@@ -66,8 +65,7 @@ TEST(ini_file, serialize) {
                 }
             },
             {
-                "OtherSection",
-                {
+                "OtherSection", {
                     .values = {
                         { "A", "-42" }
                     }
@@ -75,12 +73,13 @@ TEST(ini_file, serialize) {
             }
         }
     };
+	// clang-format on
 
-    std::stringstream s;
+	std::stringstream s;
     s << ini;
 
-    EXPECT_EQ(s.str(),
-R"([OtherSection]
+	EXPECT_EQ(s.str(),
+		R"([OtherSection]
 A=-42
 
 [Section]

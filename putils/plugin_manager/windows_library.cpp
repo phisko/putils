@@ -1,15 +1,15 @@
 #ifdef _WIN32
 
-#include "windows_library.hpp"
+#	include "windows_library.hpp"
 
 // stl
-#include <algorithm>
-#include <sstream>
+#	include <algorithm>
+#	include <sstream>
 
 // putils
-#include "putils/get_last_error_as_string.hpp"
-#include "putils/concatenate.hpp"
-#include "putils/profiling.hpp"
+#	include "putils/get_last_error_as_string.hpp"
+#	include "putils/concatenate.hpp"
+#	include "putils/profiling.hpp"
 
 namespace putils {
 	windows_library::windows_library(std::string_view name) noexcept : library(name) {

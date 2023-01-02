@@ -9,10 +9,12 @@
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
 
-template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...) noexcept> { using type = R (A...); };
-template <typename C, typename R, typename... A> struct remove_class<R (C::*)(A...) const noexcept> { using type = R (A...); };
+template<typename C, typename R, typename... A>
+struct remove_class<R (C::*)(A...) noexcept> { using type = R(A...); };
+template<typename C, typename R, typename... A>
+struct remove_class<R (C::*)(A...) const noexcept> { using type = R(A...); };
 
-template <size_t Size, typename Return, typename... Args>
+template<size_t Size, typename Return, typename... Args>
 struct type_caster<putils::function<Return(Args...), Size>> {
 	using type = putils::function<Return(Args...), Size>;
 	using retval_type = conditional_t<std::is_same<Return, void>::value, void_type, Return>;
@@ -43,19 +45,17 @@ public:
 		   captured variables), in which case the roundtrip can be avoided.
 		 */
 		if (auto cfunc = func.cpp_function()) {
-			auto *cfunc_self = PyCFunction_GET_SELF(cfunc.ptr());
+			auto * cfunc_self = PyCFunction_GET_SELF(cfunc.ptr());
 			if (isinstance<capsule>(cfunc_self)) {
 				auto c = reinterpret_borrow<capsule>(cfunc_self);
-				auto *rec = (function_record *) c;
+				auto * rec = (function_record *)c;
 
 				while (rec != nullptr) {
-					if (rec->is_stateless
-						&& same_type(typeid(function_type),
-									 *reinterpret_cast<const std::type_info *>(rec->data[1]))) {
+					if (rec->is_stateless && same_type(typeid(function_type), *reinterpret_cast<const std::type_info *>(rec->data[1]))) {
 						struct capture {
 							function_type f;
 						};
-						value = ((capture *) &rec->data)->f;
+						value = ((capture *)&rec->data)->f;
 						return true;
 					}
 					rec = rec->next;
@@ -73,11 +73,11 @@ public:
 			// This triggers a syntax error under very special conditions (very weird indeed).
 			explicit
 #endif
-			func_handle(function &&f_) noexcept
+				func_handle(function && f_) noexcept
 				: f(std::move(f_)) {
 			}
-			func_handle(const func_handle &f_) { operator=(f_); }
-			func_handle &operator=(const func_handle &f_) {
+			func_handle(const func_handle & f_) { operator=(f_); }
+			func_handle & operator=(const func_handle & f_) {
 				gil_scoped_acquire acq;
 				f = f_.f;
 				return *this;
@@ -91,7 +91,7 @@ public:
 		// to emulate 'move initialization capture' in C++11
 		struct func_wrapper {
 			func_handle hfunc;
-			explicit func_wrapper(func_handle &&hf) noexcept : hfunc(std::move(hf)) {}
+			explicit func_wrapper(func_handle && hf) noexcept : hfunc(std::move(hf)) {}
 			Return operator()(Args... args) const {
 				gil_scoped_acquire acq;
 				// casts the returned object as a rvalue to the return type
@@ -103,8 +103,8 @@ public:
 		return true;
 	}
 
-	template <typename Func>
-	static handle cast(Func &&f_, return_value_policy policy, handle /* parent */) {
+	template<typename Func>
+	static handle cast(Func && f_, return_value_policy policy, handle /* parent */) {
 		if (!f_) {
 			return none().inc_ref();
 		}
@@ -116,10 +116,8 @@ public:
 		return cpp_function(std::forward<Func>(f_), policy).release();
 	}
 
-PYBIND11_TYPE_CASTER(type,
-					 const_name("Callable[[") + concat(make_caster<Args>::name...)
-					 + const_name("], ") + make_caster<retval_type>::name
-					 + const_name("]"));
+	PYBIND11_TYPE_CASTER(type,
+		const_name("Callable[[") + concat(make_caster<Args>::name...) + const_name("], ") + make_caster<retval_type>::name + const_name("]"));
 };
 
 PYBIND11_NAMESPACE_END(detail)
