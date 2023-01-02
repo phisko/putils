@@ -8,11 +8,11 @@
 #define TString string<MaxSize, ClassName>
 
 #ifdef _MSC_VER
-# define MY_STRNCPY strncpy_s
-# define MY_STRNCAT strncat_s
+#	define MY_STRNCPY strncpy_s
+#	define MY_STRNCAT strncat_s
 #else
-# define MY_STRNCPY strncpy
-# define MY_STRNCAT strncat
+#	define MY_STRNCPY strncpy
+#	define MY_STRNCAT strncat
 #endif
 
 namespace putils {
@@ -23,7 +23,7 @@ namespace putils {
 	}
 
 	TemplateDecl
-	template<typename ...Args>
+	template<typename... Args>
 	constexpr TString::string(const char * format, Args... args) noexcept {
 		static_assert(MaxSize > 0);
 		_size = snprintf(_buff, MaxSize, format, args...);
@@ -81,11 +81,10 @@ namespace putils {
 	}
 
 	TemplateDecl
-	template<typename ...Args>
+	template<typename... Args>
 	constexpr void TString::set(const char * format, Args... args) noexcept {
 		_size = snprintf(_buff, MaxSize, format, args...);
 	}
-
 
 	TemplateDecl
 	constexpr void TString::assign(const char * s) noexcept {
@@ -156,7 +155,7 @@ namespace putils {
 	template<typename T>
 	constexpr TString TString::operator+(T rhs) const noexcept {
 		string ret(_buff);
-        ret += rhs;
+		ret += rhs;
 		return ret;
 	}
 

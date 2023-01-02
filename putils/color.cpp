@@ -86,7 +86,9 @@ namespace putils {
 	}
 
 	normalized_color & operator*=(normalized_color & lhs, float rhs) noexcept {
-		lhs.r *= rhs; lhs.g *= rhs; lhs.b *= rhs;
+		lhs.r *= rhs;
+		lhs.g *= rhs;
+		lhs.b *= rhs;
 		return lhs;
 	}
 
@@ -99,7 +101,9 @@ namespace putils {
 	}
 
 	normalized_color & operator/=(normalized_color & lhs, float rhs) noexcept {
-		lhs.r /= rhs; lhs.g /= rhs; lhs.b /= rhs;
+		lhs.r /= rhs;
+		lhs.g /= rhs;
+		lhs.b /= rhs;
 		return lhs;
 	}
 
@@ -112,7 +116,10 @@ namespace putils {
 	}
 
 	normalized_color & operator*=(normalized_color & lhs, const normalized_color & rhs) noexcept {
-		lhs.r *= rhs.r; lhs.g *= rhs.g; lhs.b *= rhs.b; lhs.a *= rhs.a;
+		lhs.r *= rhs.r;
+		lhs.g *= rhs.g;
+		lhs.b *= rhs.b;
+		lhs.a *= rhs.a;
 		return lhs;
 	}
 
@@ -125,7 +132,10 @@ namespace putils {
 	}
 
 	normalized_color & operator/=(normalized_color & lhs, const normalized_color & rhs) noexcept {
-		lhs.r /= rhs.r; lhs.g /= rhs.g; lhs.b /= rhs.b; lhs.a /= rhs.a;
+		lhs.r /= rhs.r;
+		lhs.g /= rhs.g;
+		lhs.b /= rhs.b;
+		lhs.a /= rhs.a;
 		return lhs;
 	}
 }

@@ -8,19 +8,19 @@ namespace putils {
 #define TPoint point<Precision, 2>
 	TemplateDecl
 	TPoint::point(Precision x, Precision y) noexcept
-		: x(x), y(y)
-	{}
+		: x(x),
+		  y(y) {}
 
 	TemplateDecl
 	TPoint::point(const Precision * p) noexcept
-		: x(p[0]), y(p[1])
-	{}
+		: x(p[0]),
+		  y(p[1]) {}
 
 	TemplateDecl
 	template<typename P>
 	TPoint::point(const point<P, 2> & other) noexcept
-		: x((Precision)other.x), y((Precision)other.y)
-	{}
+		: x((Precision)other.x),
+		  y((Precision)other.y) {}
 
 	TemplateDecl
 	template<typename P>
@@ -33,8 +33,8 @@ namespace putils {
 	TemplateDecl
 	template<typename P>
 	TPoint::point(const point<P, 3> & other) noexcept
-		: x((Precision)other.x), y((Precision)other.y)
-	{}
+		: x((Precision)other.x),
+		  y((Precision)other.y) {}
 
 	TemplateDecl
 	template<typename P>
@@ -59,37 +59,39 @@ namespace putils {
 #define TPoint point<Precision, 3>
 	TemplateDecl
 	TPoint::point(Precision x, Precision y, Precision z) noexcept
-		: x(x), y(y), z(z)
-	{}
+		: x(x), y(y), z(z) {}
 
 	TemplateDecl
 	TPoint::point(const Precision * p) noexcept
-		: x(p[0]), y(p[1]), z(p[2])
-	{}
+		: x(p[0]), y(p[1]), z(p[2]) {}
 
 	TemplateDecl
 	template<typename P>
 	TPoint::point(const point<P, 2> & other) noexcept
-		: x((Precision)other.x), y((Precision)other.y), z(0)
-	{}
+		: x((Precision)other.x),
+		  y((Precision)other.y),
+		  z(0) {}
 
 	TemplateDecl
 	template<typename P>
 	TPoint & TPoint::operator=(const point<P, 2> & other) noexcept {
-		x = (Precision)other.x; y = (Precision)other.y; z = 0;
+		x = (Precision)other.x;
+		y = (Precision)other.y;
+		z = 0;
 		return *this;
 	}
 
 	TemplateDecl
 	template<typename P>
 	TPoint::point(const point<P, 3> & other) noexcept
-		: x((Precision)other.x), y((Precision)other.y), z((Precision)other.z)
-	{}
+		: x((Precision)other.x), y((Precision)other.y), z((Precision)other.z) {}
 
 	TemplateDecl
 	template<typename P>
 	TPoint & TPoint::operator=(const point<P, 3> & other) noexcept {
-		x = (Precision)other.x; y = (Precision)other.y; z = (Precision)other.z;
+		x = (Precision)other.x;
+		y = (Precision)other.y;
+		z = (Precision)other.z;
 		return *this;
 	}
 
@@ -112,11 +114,11 @@ namespace putils {
 
 	TemplateDecl
 	bool operator==(const Point1 & lhs, const point2 & rhs) noexcept {
-        for (size_t i = 0; i < D; ++i) {
-            if (lhs[i] != rhs[i])
-                return false;
-        }
-        return true;
+		for (size_t i = 0; i < D; ++i) {
+			if (lhs[i] != rhs[i])
+				return false;
+		}
+		return true;
 	}
 
 	TemplateDecl
@@ -125,24 +127,23 @@ namespace putils {
 	}
 
 #define OperatorImpl(name, assign_name, op) \
-	TemplateDecl\
-	Point1 name(const Point1 & lhs, const point2 & rhs) noexcept {\
-		Point1 ret = lhs;\
-		ret op rhs;\
-		return ret;\
-	}\
-	TemplateDecl\
-	Point1 & assign_name(Point1 & lhs, const point2 & rhs) noexcept {\
-		for (size_t i = 0; i < D; ++i)\
-			lhs.raw[i] op (P1)rhs.raw[i];\
-		return lhs;\
+	TemplateDecl \
+	Point1 name(const Point1 & lhs, const point2 & rhs) noexcept { \
+		Point1 ret = lhs; \
+		ret op rhs; \
+		return ret; \
+	} \
+	TemplateDecl \
+	Point1 & assign_name(Point1 & lhs, const point2 & rhs) noexcept { \
+		for (size_t i = 0; i < D; ++i) \
+			lhs.raw[i] op (P1)rhs.raw[i]; \
+		return lhs; \
 	}
 
 	OperatorImpl(operator+, operator+=, +=)
 	OperatorImpl(operator-, operator-=, -=)
 	OperatorImpl(operator*, operator*=, *=)
 	OperatorImpl(operator/, operator/=, /=)
-
 #undef OperatorImpl
 
 	TemplateDecl
@@ -161,7 +162,8 @@ namespace putils {
 #define TPoint point<P, D>
 
 	TemplateDecl
-	TPoint operator-(const TPoint & p) noexcept {
+		TPoint
+		operator-(const TPoint & p) noexcept {
 		TPoint ret = p;
 		for (size_t i = 0; i < D; ++i)
 			ret[i] = -ret[i];
@@ -169,18 +171,18 @@ namespace putils {
 	}
 
 #define OperatorImpl(name, assign_name, op) \
-	TemplateDecl\
-	TPoint name(const TPoint & lhs, float rhs) noexcept {\
-		TPoint ret = lhs;\
-		ret op rhs;\
-		return ret;\
-	}\
-	TemplateDecl\
-	TPoint & assign_name(TPoint & lhs, float rhs) noexcept {\
-		for (size_t i = 0; i < D; ++i)\
-			lhs.raw[i] op (P)rhs;\
-		return lhs;\
-	}\
+	TemplateDecl \
+	TPoint name(const TPoint & lhs, float rhs) noexcept { \
+		TPoint ret = lhs; \
+		ret op rhs; \
+		return ret; \
+	} \
+	TemplateDecl \
+	TPoint & assign_name(TPoint & lhs, float rhs) noexcept { \
+		for (size_t i = 0; i < D; ++i) \
+			lhs.raw[i] op(P) rhs; \
+		return lhs; \
+	}
 
 	OperatorImpl(operator*, operator*=, *=);
 	OperatorImpl(operator/, operator/=, /=);
@@ -226,10 +228,10 @@ namespace putils {
 #undef TPoint
 
 	template<typename Precision>
-	vec<Precision, 3> cross(const vec<Precision, 3> & v, const vec<Precision, 3> &v2) noexcept {
+	vec<Precision, 3> cross(const vec<Precision, 3> & v, const vec<Precision, 3> & v2) noexcept {
 		return {
-			v.y * v2.z - v.z * v2.y ,
-			v.z * v2.x - v.x * v2.z ,
+			v.y * v2.z - v.z * v2.y,
+			v.z * v2.x - v.x * v2.z,
 			v.x * v2.y - v.y * v2.x
 		};
 	}

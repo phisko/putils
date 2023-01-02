@@ -10,14 +10,14 @@
 
 namespace sol {
 	namespace detail {
-		template <typename Signature, size_t MaxSize>
+		template<typename Signature, size_t MaxSize>
 		struct lua_type_of<putils::function<Signature, MaxSize>> : std::integral_constant<type, type::function> {};
 	}
 
 	namespace stack {
-		template <typename Signature, size_t MaxSize>
+		template<typename Signature, size_t MaxSize>
 		struct unqualified_pusher<putils::function<Signature, MaxSize>> {
-			static int push(lua_State* L, detail::yield_tag_t, const putils::function<Signature, MaxSize>& fx) {
+			static int push(lua_State * L, detail::yield_tag_t, const putils::function<Signature, MaxSize> & fx) {
 				if (fx) {
 					function_detail::select<true>(L, fx);
 					return 1;
@@ -25,7 +25,7 @@ namespace sol {
 				return stack::push(L, lua_nil);
 			}
 
-			static int push(lua_State* L, detail::yield_tag_t, putils::function<Signature, MaxSize>&& fx) {
+			static int push(lua_State * L, detail::yield_tag_t, putils::function<Signature, MaxSize> && fx) {
 				if (fx) {
 					function_detail::select<true>(L, std::move(fx));
 					return 1;
@@ -33,7 +33,7 @@ namespace sol {
 				return stack::push(L, lua_nil);
 			}
 
-			static int push(lua_State* L, const putils::function<Signature, MaxSize>& fx) {
+			static int push(lua_State * L, const putils::function<Signature, MaxSize> & fx) {
 				if (fx) {
 					function_detail::select<false>(L, fx);
 					return 1;
@@ -41,7 +41,7 @@ namespace sol {
 				return stack::push(L, lua_nil);
 			}
 
-			static int push(lua_State* L, putils::function<Signature, MaxSize>&& fx) {
+			static int push(lua_State * L, putils::function<Signature, MaxSize> && fx) {
 				if (fx) {
 					function_detail::select<false>(L, std::move(fx));
 					return 1;
@@ -52,19 +52,19 @@ namespace sol {
 	}
 
 	namespace stack {
-		template <typename Signature, size_t MaxSize>
+		template<typename Signature, size_t MaxSize>
 		struct unqualified_getter<putils::function<Signature, MaxSize>> {
 			typedef meta::bind_traits<Signature> fx_t;
 			typedef typename fx_t::args_list args_lists;
 			typedef meta::tuple_types<typename fx_t::return_type> return_types;
 
-			template <typename... R>
-			static putils::function<Signature, MaxSize> get_std_func(types<R...>, lua_State* L, int index) {
+			template<typename... R>
+			static putils::function<Signature, MaxSize> get_std_func(types<R...>, lua_State * L, int index) {
 				detail::std_shim<R...> fx(unsafe_function(L, index));
 				return std::move(fx);
 			}
 
-			static putils::function<Signature, MaxSize> get(lua_State* L, int index, record& tracking) {
+			static putils::function<Signature, MaxSize> get(lua_State * L, int index, record & tracking) {
 				tracking.use(1);
 				type t = type_of(L, index);
 				if (t == type::none || t == type::lua_nil) {

@@ -14,21 +14,21 @@
 #include "profiling.hpp"
 
 namespace putils {
-    template<putils::streamable<std::stringstream> Obj>
-    std::string to_string(Obj && obj) noexcept {
+	template<putils::streamable<std::stringstream> Obj>
+	std::string to_string(Obj && obj) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-        if constexpr (std::is_enum<std::decay_t<Obj>>())
-            return std::string(magic_enum::enum_name(obj));
-        else {
-            std::stringstream s;
-            s << FWD(obj);
-            return s.str();
-        }
-    }
+		if constexpr (std::is_enum<std::decay_t<Obj>>())
+			return std::string(magic_enum::enum_name(obj));
+		else {
+			std::stringstream s;
+			s << FWD(obj);
+			return s.str();
+		}
+	}
 
 	template<putils::unstreamable<std::stringstream> Obj>
-    void parse(Obj & obj, std::string_view str) noexcept {
+	void parse(Obj & obj, std::string_view str) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
 		std::stringstream s;
@@ -36,7 +36,8 @@ namespace putils {
 		s >> obj;
 	}
 
-	template<typename E> requires std::is_enum_v<E>
+	template<typename E>
+		requires std::is_enum_v<E>
 	void parse(E & obj, std::string_view str) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
@@ -49,10 +50,10 @@ namespace putils {
 		assert(false); // Unknown value
 	}
 
-    template<typename Obj>
-    Obj parse(std::string_view str) noexcept {
-        Obj ret;
-        parse(ret, str);
-        return ret;
-    }
+	template<typename Obj>
+	Obj parse(std::string_view str) noexcept {
+		Obj ret;
+		parse(ret, str);
+		return ret;
+	}
 }

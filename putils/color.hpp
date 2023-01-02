@@ -8,13 +8,13 @@ namespace putils {
 		union {
 			unsigned char attributes[4];
 			struct {
-                unsigned char a;
-                unsigned char b;
-                unsigned char g;
+				unsigned char a;
+				unsigned char b;
+				unsigned char g;
 				unsigned char r;
 			};
 			unsigned int rgba;
-            static_assert(sizeof(rgba) == sizeof(attributes));
+			static_assert(sizeof(rgba) == sizeof(attributes));
 		};
 
 		explicit color(unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 255) noexcept : r(r), g(g), b(b), a(a) {}
@@ -23,14 +23,13 @@ namespace putils {
 	};
 
 #define refltype color
-	putils_reflection_info{
+	putils_reflection_info {
 		putils_reflection_class_name;
 		putils_reflection_attributes(
 			putils_reflection_attribute(r),
 			putils_reflection_attribute(g),
 			putils_reflection_attribute(b),
-			putils_reflection_attribute(a)
-		);
+			putils_reflection_attribute(a));
 	};
 #undef refltype
 
@@ -57,8 +56,7 @@ namespace putils {
 			putils_reflection_attribute(r),
 			putils_reflection_attribute(g),
 			putils_reflection_attribute(b),
-			putils_reflection_attribute(a)
-		);
+			putils_reflection_attribute(a));
 	};
 #undef refltype
 

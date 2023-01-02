@@ -36,11 +36,11 @@ namespace putils::curl {
 	}
 
 #ifdef _WIN32
-# define MY_POPEN _popen
-# define MY_PCLOSE _pclose
+#	define MY_POPEN _popen
+#	define MY_PCLOSE _pclose
 #else
-# define MY_POPEN popen
-# define MY_PCLOSE pclose
+#	define MY_POPEN popen
+#	define MY_PCLOSE pclose
 #endif
 
 	std::string http_request(const std::string & base_url, const std::unordered_map<std::string, std::string> & params) noexcept {

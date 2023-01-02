@@ -12,7 +12,7 @@
 
 namespace putils {
 	namespace detail_string {
-        constexpr char default_class_name[32] = "putils_string";
+		constexpr char default_class_name[32] = "putils_string";
 	}
 
 	template<size_t MaxSize, const char * ClassName = detail_string::default_class_name>
@@ -26,10 +26,10 @@ namespace putils {
 		constexpr string() noexcept;
 
 		constexpr string(const char * str) noexcept;
-		constexpr string(const std::string & s) noexcept; 
+		constexpr string(const std::string & s) noexcept;
 		constexpr string(std::string_view s) noexcept;
 
-		template<typename ...Args>
+		template<typename... Args>
 		constexpr string(const char * format, Args... args) noexcept;
 
 		constexpr string & operator=(const char * rhs) noexcept;
@@ -42,7 +42,7 @@ namespace putils {
 		// Reflectible (no overload/template)
 		constexpr void assign(const char * s) noexcept;
 
-		template<typename ...Args>
+		template<typename... Args>
 		constexpr void set(const char * format, Args... args) noexcept;
 
 		constexpr string & operator+=(const char * pRhs) noexcept;
@@ -77,7 +77,7 @@ namespace putils {
 		using buffer = value_type[MaxSize];
 
 		constexpr operator std::string_view() const noexcept;
-		
+
 		constexpr char operator[](size_t i) const noexcept;
 		constexpr char & operator[](size_t i) noexcept;
 
@@ -107,7 +107,7 @@ namespace putils {
 
 	template<size_t MaxSize, const char * ClassName>
 #define refltype string<MaxSize, ClassName>
-	putils_reflection_info_template{
+	putils_reflection_info_template {
 		static constexpr auto class_name = ClassName;
 		putils_reflection_methods(
 			putils_reflection_attribute(clear),
@@ -116,8 +116,7 @@ namespace putils {
 			putils_reflection_attribute(c_str),
 			putils_reflection_attribute(size),
 			putils_reflection_attribute(empty),
-			putils_reflection_attribute(full)
-		);
+			putils_reflection_attribute(full));
 	};
 #undef refltype
 
@@ -145,7 +144,6 @@ namespace putils {
 	constexpr bool operator==(const string<S1, N1> & lhs, const string<S2, N2> & rhs) noexcept;
 	template<size_t S1, const char * N1, size_t S2, const char * N2>
 	constexpr bool operator!=(const string<S1, N1> & lhs, const string<S2, N2> & rhs) noexcept;
-
 
 	template<size_t Size, const char * Name>
 	constexpr inline bool operator==(const char * lhs, const putils::string<Size, Name> & rhs) noexcept;

@@ -11,7 +11,7 @@ namespace putils {
 	}
 
 	template<typename T, size_t N>
-	constexpr size_t lengthof(const T(&)[N]) noexcept {
+	constexpr size_t lengthof(const T (&)[N]) noexcept {
 		return N;
 	}
 }

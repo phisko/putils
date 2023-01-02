@@ -16,7 +16,7 @@
 #include "putils/profiling.hpp"
 
 namespace putils::reflection::runtime {
-    namespace impl {
+	namespace impl {
 		template<typename MemberType>
 		static attribute_info::array_helper make_array_helper_impl() noexcept {
 			PUTILS_PROFILING_SCOPE;
@@ -56,11 +56,11 @@ namespace putils::reflection::runtime {
 			if constexpr (std::is_array<MemberType>())
 				return make_array_helper_impl<MemberType>();
 
-			if constexpr (putils::indexable<MemberType> && requires (const MemberType & m) { m.size(); })
+			if constexpr (putils::indexable<MemberType> && requires(const MemberType & m) { m.size(); })
 				if constexpr (std::is_reference<putils::indexed_type<MemberType>>()) // Need this in a nested if, as putils::is_indexable has to be checked first and there is no early-exit for if constexpr
 					return make_array_helper_impl<MemberType>();
 
-    		return std::nullopt;
+			return std::nullopt;
 		}
 
 		template<typename MemberType>

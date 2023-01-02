@@ -44,7 +44,7 @@ namespace putils::python {
 			});
 
 			if constexpr (putils::streamable<std::stringstream, T>)
- 				type.def("__str__", [](const T & obj) { return putils::to_string(obj); });
+				type.def("__str__", [](const T & obj) { return putils::to_string(obj); });
 
 			if constexpr (std::ranges::range<T>)
 				type.def("__iter__", [](const T & obj) { return py::make_iterator(obj.begin(), obj.end()); });

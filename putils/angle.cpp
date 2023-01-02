@@ -6,9 +6,9 @@
 namespace putils {
 	float constrain_angle(float angle) noexcept {
 		angle = fmodf(angle + pi, pi * 2.f);
-        if (angle < 0)
+		if (angle < 0)
 			angle += pi * 2.f;
-        return angle - pi;
+		return angle - pi;
 	}
 
 	float get_yaw_from_normalized_direction(const vec3f & dir) noexcept {

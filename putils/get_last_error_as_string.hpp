@@ -6,7 +6,7 @@
 #include <string>
 
 namespace putils {
-    PUTILS_CORE_EXPORT std::string get_last_error_as_string() noexcept;
+	PUTILS_CORE_EXPORT std::string get_last_error_as_string() noexcept;
 }
 
 #endif
