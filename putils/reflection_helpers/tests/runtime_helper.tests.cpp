@@ -35,7 +35,8 @@ putils_reflection_info {
 		putils_reflection_attribute(nested_object),
 		putils_reflection_attribute(nested_array),
 		putils_reflection_attribute(nested_vector),
-		putils_reflection_attribute(nested_map));
+		putils_reflection_attribute(nested_map)
+	);
 };
 #undef refltype
 
@@ -43,7 +44,8 @@ putils_reflection_info {
 putils_reflection_info {
 	putils_reflection_attributes(
 		putils_reflection_attribute(i),
-		putils_reflection_attribute(s));
+		putils_reflection_attribute(s)
+	);
 };
 #undef refltype
 

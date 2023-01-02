@@ -36,8 +36,9 @@ namespace putils {
 	void TObservable::remove_observer(intptr_t id) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-		_observers.erase(std::find_if(_observers.begin(), _observers.end(),
-			[id](const auto & p) { return p.first == id; }));
+		_observers.erase(
+			std::ranges::find_if(_observers, [id](const auto & p) { return p.first == id; })
+		);
 	}
 
 	template<typename... Args>

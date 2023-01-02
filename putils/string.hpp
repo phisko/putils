@@ -116,7 +116,8 @@ namespace putils {
 			putils_reflection_attribute(c_str),
 			putils_reflection_attribute(size),
 			putils_reflection_attribute(empty),
-			putils_reflection_attribute(full));
+			putils_reflection_attribute(full)
+		);
 	};
 #undef refltype
 

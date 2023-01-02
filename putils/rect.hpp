@@ -19,10 +19,12 @@ namespace putils {
 
 		putils_reflection_attributes(
 			putils_reflection_attribute(position),
-			putils_reflection_attribute(size));
+			putils_reflection_attribute(size)
+		);
 
 		putils_reflection_used_types(
-			putils_reflection_type(typename refltype::my_point));
+			putils_reflection_type(typename refltype::my_point)
+		);
 	};
 #undef refltype
 

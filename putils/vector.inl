@@ -2,6 +2,7 @@
 
 #define TemplateDecl template<typename T, size_t MaxSize, const char * ClassName>
 #define TVector vector<T, MaxSize, ClassName>
+// clang-format off
 
 namespace putils {
 
@@ -223,5 +224,6 @@ namespace putils {
 	}
 }
 
+// clang-format on
 #undef TemplateDecl
 #undef TVector

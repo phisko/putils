@@ -1,5 +1,5 @@
-﻿AccessModifierOffset: 0
-AlignAfterOpenBracket: DontAlign
+﻿AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveMacros: false
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -37,7 +37,7 @@ ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: false
 IncludeBlocks: Preserve
 IndentCaseLabels: true
-IndentPPDirectives: AfterHash
+IndentPPDirectives: None
 IndentWidth: '4'
 IndentWrappedFunctionNames: true
 KeepEmptyLinesAtTheStartOfBlocks: false

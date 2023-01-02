@@ -10,9 +10,13 @@ PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
 
 template<typename C, typename R, typename... A>
-struct remove_class<R (C::*)(A...) noexcept> { using type = R(A...); };
+struct remove_class<R (C::*)(A...) noexcept> {
+	using type = R(A...);
+};
 template<typename C, typename R, typename... A>
-struct remove_class<R (C::*)(A...) const noexcept> { using type = R(A...); };
+struct remove_class<R (C::*)(A...) const noexcept> {
+	using type = R(A...);
+};
 
 template<size_t Size, typename Return, typename... Args>
 struct type_caster<putils::function<Return(Args...), Size>> {
@@ -116,8 +120,7 @@ public:
 		return cpp_function(std::forward<Func>(f_), policy).release();
 	}
 
-	PYBIND11_TYPE_CASTER(type,
-		const_name("Callable[[") + concat(make_caster<Args>::name...) + const_name("], ") + make_caster<retval_type>::name + const_name("]"));
+	PYBIND11_TYPE_CASTER(type, const_name("Callable[[") + concat(make_caster<Args>::name...) + const_name("], ") + make_caster<retval_type>::name + const_name("]"));
 };
 
 PYBIND11_NAMESPACE_END(detail)

@@ -3,6 +3,7 @@
 namespace putils {
 #define TemplateDecl template<typename T, void (*Dtor)(T &)>
 #define TRAII raii<T, Dtor, false>
+	// clang-format off
 
 	TemplateDecl
 	TRAII::raii(T && res) noexcept
@@ -75,6 +76,7 @@ namespace putils {
 			Dtor(_res);
 	}
 
+	// clang-format on
 #undef TemplateDecl
 #undef TRAII
 }

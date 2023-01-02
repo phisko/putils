@@ -42,43 +42,45 @@ A= -42
 }
 
 TEST(ini_file, serialize) {
-	// clang-format off
-    const putils::ini_file ini{
-        .sections = {
-            {
-                "Section", {
-                    .values = {
-                        { "A", "42", },
-                        { "B", "hello" },
-                        { "C", "2.5" },
-                        { "D", "hi" }
-                    },
-                    .sections = {
-                        {
-                            "Subsection", {
-                                .values = {
-                                    { "A", "84" }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                "OtherSection", {
-                    .values = {
-                        { "A", "-42" }
-                    }
-                }
-            }
-        }
-    };
-	// clang-format on
+	const putils::ini_file ini{
+		.sections = {
+			{
+				"Section",
+				{
+					.values = {
+						{
+							"A",
+							"42",
+						},
+						{ "B", "hello" },
+						{ "C", "2.5" },
+						{ "D", "hi" },
+					},
+					.sections = {
+						{
+							"Subsection",
+							{
+								.values = { { "A", "84" } },
+							},
+						},
+					},
+				},
+			},
+			{
+				"OtherSection",
+				{
+					.values = {
+						{ "A", "-42" },
+					},
+				},
+			} }
+	};
 
 	std::stringstream s;
-    s << ini;
+	s << ini;
 
-	EXPECT_EQ(s.str(),
+	EXPECT_EQ(
+		s.str(),
 		R"([OtherSection]
 A=-42
 
@@ -90,5 +92,6 @@ D=hi
 
 [Section/Subsection]
 A=84
-)");
+)"
+	);
 }

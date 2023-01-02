@@ -15,7 +15,8 @@ namespace {
 putils_reflection_info {
 	putils_reflection_attributes(
 		putils_reflection_attribute(i),
-		putils_reflection_attribute(s));
+		putils_reflection_attribute(s)
+	);
 };
 #undef refltype
 
@@ -106,13 +107,15 @@ TEST(json_helper, from_json_vector) {
 
 TEST(json_helper, from_json_map) {
 	std::map<std::string, int> obj;
-	putils::reflection::from_json(nlohmann::json::parse(R"(
+	putils::reflection::from_json(
+		nlohmann::json::parse(R"(
 {
     "one": 1,
     "two": 2
 }
 )"),
-		obj);
+		obj
+	);
 	EXPECT_EQ(obj.size(), 2);
 	EXPECT_EQ(obj["one"], 1);
 	EXPECT_EQ(obj["two"], 2);
@@ -120,13 +123,15 @@ TEST(json_helper, from_json_map) {
 
 TEST(json_helper, from_json_unordered_map) {
 	std::unordered_map<std::string, int> obj;
-	putils::reflection::from_json(nlohmann::json::parse(R"(
+	putils::reflection::from_json(
+		nlohmann::json::parse(R"(
 {
     "one": 1,
     "two": 2
 }
 )"),
-		obj);
+		obj
+	);
 	EXPECT_EQ(obj.size(), 2);
 	EXPECT_EQ(obj["one"], 1);
 	EXPECT_EQ(obj["two"], 2);

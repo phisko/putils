@@ -45,7 +45,8 @@ namespace putils::reflection {
 		return ImGui::Combo(
 			label, (int *)&e,
 			[](void *, int idx, const char ** out) { *out = names[idx].c_str(); return true; },
-			nullptr, (int)lengthof(names));
+			nullptr, (int)lengthof(names)
+		);
 	}
 
 	namespace detail::imgui {

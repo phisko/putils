@@ -7,8 +7,8 @@
 
 // windows
 #ifdef _MSC_VER
-#	include "windows.h"
-#	include "dbghelp.h"
+#include "windows.h"
+#include "dbghelp.h"
 #endif
 
 namespace putils {

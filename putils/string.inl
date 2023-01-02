@@ -6,6 +6,7 @@
 
 #define TemplateDecl template<size_t MaxSize, const char * ClassName>
 #define TString string<MaxSize, ClassName>
+// clang-format off
 
 #ifdef _MSC_VER
 #	define MY_STRNCPY strncpy_s
@@ -376,5 +377,6 @@ namespace std {
 #undef MY_STRNCPY
 #undef MY_STRNCAT
 
+// clang-format on
 #undef TemplateDecl
 #undef TString

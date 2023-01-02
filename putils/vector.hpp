@@ -129,7 +129,8 @@ putils_reflection_info_template {
 		putils_reflection_attribute(size),
 		putils_reflection_attribute(empty),
 		putils_reflection_attribute(full),
-		putils_reflection_attribute(clear));
+		putils_reflection_attribute(clear)
+	);
 };
 #undef refltype
 

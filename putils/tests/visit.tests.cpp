@@ -12,14 +12,17 @@ TEST(overloaded, visit) {
 
 	int res_int = 0;
 	std::string res_str;
-	std::visit(putils::overloaded{
-				   [&](int i) {
-					   res_int = i;
-				   },
-				   [&](const std::string & s) {
-					   res_str = s;
-				   } },
-		v);
+	std::visit(
+		putils::overloaded{
+			[&](int i) {
+				res_int = i;
+			},
+			[&](const std::string & s) {
+				res_str = s;
+			},
+		},
+		v
+	);
 	EXPECT_EQ(res_int, 0);
 	EXPECT_EQ(res_str, "hello");
 }

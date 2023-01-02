@@ -29,7 +29,8 @@ namespace putils {
 			putils_reflection_attribute(r),
 			putils_reflection_attribute(g),
 			putils_reflection_attribute(b),
-			putils_reflection_attribute(a));
+			putils_reflection_attribute(a)
+		);
 	};
 #undef refltype
 
@@ -56,7 +57,8 @@ namespace putils {
 			putils_reflection_attribute(r),
 			putils_reflection_attribute(g),
 			putils_reflection_attribute(b),
-			putils_reflection_attribute(a));
+			putils_reflection_attribute(a)
+		);
 	};
 #undef refltype
 

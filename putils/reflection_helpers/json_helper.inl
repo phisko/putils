@@ -30,9 +30,9 @@ namespace putils::reflection {
 					json_object = obj;
 				else {
 #ifdef _WIN32
-#	define MY_STRNCPY strncpy_s
+#define MY_STRNCPY strncpy_s
 #else
-#	define MY_STRNCPY strncpy
+#define MY_STRNCPY strncpy
 #endif
 					MY_STRNCPY(obj, json_object.template get<std::string>().c_str(), putils::lengthof<TNoRef>());
 #undef MY_STRNCPY

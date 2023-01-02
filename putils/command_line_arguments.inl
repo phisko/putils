@@ -42,7 +42,8 @@ namespace putils {
 						return true;
 					member = putils::parse<AttributeType>(args[i]);
 					return true;
-				} else if (!is_flag) {
+				}
+				else if (!is_flag) {
 					if (args[i].substr(0, key.size()) != key || args[i][key.size()] != '=')
 						continue;
 					const auto value = args[i].substr(key.size() + 1);

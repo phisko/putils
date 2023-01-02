@@ -46,7 +46,8 @@ namespace putils {
 				if (current_section == nullptr)
 					std::cerr << "Invalid section name '" << match[1].str() << "'" << std::endl;
 				continue;
-			} else if (current_section == nullptr) {
+			}
+			else if (current_section == nullptr) {
 				std::cerr << "Invalid INI file, should start with a section" << std::endl;
 				continue;
 			}

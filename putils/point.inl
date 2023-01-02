@@ -6,6 +6,8 @@
 namespace putils {
 #define TemplateDecl template<typename Precision>
 #define TPoint point<Precision, 2>
+	// clang-format off
+
 	TemplateDecl
 	TPoint::point(Precision x, Precision y) noexcept
 		: x(x),
@@ -224,6 +226,7 @@ namespace putils {
 		return ret;
 	}
 
+	// clang-format on
 #undef TemplateDecl
 #undef TPoint
 

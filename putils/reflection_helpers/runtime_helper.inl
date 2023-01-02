@@ -28,7 +28,9 @@ namespace putils::reflection::runtime {
 						return putils::lengthof(*array);
 					else
 						return array->size();
+					// clang-format off
 				},
+				// clang-format on
 				.get_element_impl = [](const void * attribute, size_t index) noexcept -> void * {
 					auto * array = (MemberType *)attribute;
 					auto & element = (*array)[(int)index];
@@ -38,7 +40,9 @@ namespace putils::reflection::runtime {
 					auto * array = (MemberType *)attribute;
 					for (auto & element : *array)
 						iterator(&element);
+					// clang-format off
 				}
+				// clang-format on
 			};
 
 			using indexed = std::decay_t<putils::indexed_type<MemberType>>;
@@ -74,7 +78,9 @@ namespace putils::reflection::runtime {
 				.get_size_impl = [](const void * attribute) noexcept {
 					auto * map = (MemberType *)attribute;
 					return map->size();
+					// clang-format off
 				},
+				// clang-format on
 				.get_value_impl = [](const void * attribute, const char * key_string) noexcept -> void * {
 					auto * map = (MemberType *)attribute;
 
@@ -90,7 +96,9 @@ namespace putils::reflection::runtime {
 
 					for (auto & [key, value] : *map)
 						iterator(&key, &value);
+					// clang-format off
 				}
+				// clang-format on
 			};
 
 			if constexpr (putils::reflection::has_attributes<key_type>()) {

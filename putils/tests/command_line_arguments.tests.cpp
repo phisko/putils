@@ -29,7 +29,8 @@ putils_reflection_info{
 		putils_reflection_attribute(s1, putils_reflection_metadata("flag", "s")),
 		putils_reflection_attribute(s2),
 		putils_reflection_attribute(f1),
-		putils_reflection_attribute(f2))
+		putils_reflection_attribute(f2)
+	)
 };
 #undef refltype
 

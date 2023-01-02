@@ -47,7 +47,8 @@ namespace putils {
 		static constexpr const char class_name_priv[] = { 'p', 'o', 'i', 'n', 't', '0' + D, 0 };
 		static constexpr const char * class_name = class_name_priv;
 		putils_reflection_attributes(
-			putils_reflection_attribute(raw));
+			putils_reflection_attribute(raw)
+		);
 	};
 #undef refltype
 
@@ -90,7 +91,8 @@ namespace putils {
 		putils_reflection_attributes(
 			putils_reflection_attribute(raw),
 			putils_reflection_attribute(x),
-			putils_reflection_attribute(y));
+			putils_reflection_attribute(y)
+		);
 	};
 #undef refltype
 
@@ -134,13 +136,15 @@ namespace putils {
 		putils_reflection_attributes(
 			putils_reflection_attribute(x),
 			putils_reflection_attribute(y),
-			putils_reflection_attribute(z));
+			putils_reflection_attribute(z)
+		);
 	};
 #undef refltype
 
 #define TemplateDecl template<typename P1, typename P2, size_t D>
 #define Point1 point<P1, D>
 #define point2 point<P2, D>
+	// clang-format off
 
 	TemplateDecl
 	bool operator==(const Point1 & lhs, const point2 & rhs) noexcept;
@@ -204,6 +208,7 @@ namespace putils {
 	TemplateDecl
 	point<float, D> normalized(const TPoint & p, float desired_length = 1) noexcept;
 
+	// clang-format on
 #undef TemplateDecl
 #undef TPoint
 

@@ -8,7 +8,7 @@
 #include "function.hpp"
 
 #ifndef PUTILS_OBSERVER_SIZE
-#	define PUTILS_OBSERVER_SIZE 64
+#define PUTILS_OBSERVER_SIZE 64
 #endif
 
 namespace putils {

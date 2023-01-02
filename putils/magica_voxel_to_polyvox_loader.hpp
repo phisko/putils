@@ -101,10 +101,10 @@ namespace putils::magica_voxel {
 
 		PolyVox::RawVolume<vertex_data> volume(
 			PolyVox::Region{
-				// clang-format off
-				{ 0, 0, 0, },
-				// clang-format on
-				{ size.x, size.z, size.y } });
+				{ 0, 0, 0 },
+				{ size.x, size.z, size.y },
+			}
+		);
 
 		magica_voxel::chunk_header voxels_header;
 		detail::read_from_stream(voxels_header, stream);
