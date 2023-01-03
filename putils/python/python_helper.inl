@@ -43,7 +43,7 @@ namespace putils::python {
 					type.def(attr.name, attr.ptr);
 			});
 
-			if constexpr (putils::streamable<std::stringstream, T>)
+			if constexpr (putils::streamable<T, std::stringstream>)
 				type.def("__str__", [](const T & obj) { return putils::to_string(obj); });
 
 			if constexpr (std::ranges::range<T>)
