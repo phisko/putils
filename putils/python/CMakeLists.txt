@@ -1,2 +1,2 @@
 add_library(putils_python INTERFACE)
-putils_conan_download_and_link_packages(putils_python INTERFACE pybind11/2.10.0)
+putils_conan_download_and_link_packages(putils_python INTERFACE pybind11/2.10.1)
