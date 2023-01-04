@@ -27,7 +27,7 @@ namespace putils {
 		// V-table implementation
 		template<typename Ret, typename... Args>
 		struct fixed_function_vtable_base {
-			Ret (*call)(void *, Args &&...) noexcept = nullptr;
+			Ret (*call)(void *, Args...) noexcept = nullptr;
 			void (*destroy)(void *) noexcept = nullptr;
 		};
 
@@ -261,7 +261,7 @@ namespace putils {
 
 	private:
 		template<typename Functor>
-		static Ret call_impl(void * functor, Args &&... args) noexcept {
+		static Ret call_impl(void * functor, Args... args) noexcept {
 			return (*static_cast<Functor *>(functor))(std::forward<Args>(args)...);
 		}
 
