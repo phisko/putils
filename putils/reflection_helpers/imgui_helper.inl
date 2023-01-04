@@ -120,7 +120,7 @@ namespace putils::reflection {
 
 		else if constexpr (!putils::is_function<T>() && (std::is_pointer<T>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>())) {
 			if (obj) {
-				if constexpr (std::is_same<std::remove_pointer_t<T>, void>())
+				if constexpr (std::is_void<std::remove_pointer_t<T>>())
 					ImGui::Text("%p", obj);
 				else
 					imgui_edit(name, *obj);
