@@ -1,5 +1,8 @@
 #include "raii.hpp"
 
+// meta
+#include "putils/meta/fwd.hpp"
+
 namespace putils {
 #define TemplateDecl template<typename T, void (*Dtor)(T &)>
 #define TRAII raii<T, Dtor, false>
@@ -7,7 +10,7 @@ namespace putils {
 
 	TemplateDecl
 	TRAII::raii(T && res) noexcept
-		: _res(std::forward<T>(res)) {}
+		: _res(FWD(res)) {}
 
 	TemplateDecl
 	TRAII::raii(raii && other) noexcept
