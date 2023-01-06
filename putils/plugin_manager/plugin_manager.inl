@@ -8,6 +8,9 @@
 #include "library_factory.hpp"
 #include "putils/profiling.hpp"
 
+// meta
+#include "putils/meta/fwd.hpp"
+
 namespace putils {
 	template<typename... P>
 	void plugin_manager::rescan_directory(const char * path, const char * to_execute, P &&... params) noexcept {
@@ -84,7 +87,7 @@ namespace putils {
 		for (const auto & [_, plugin] : _libraries) {
 			const auto func = plugin->template load_method<void, P...>(name);
 			if (func != nullptr)
-				func(std::forward<P>(params)...);
+				func(FWD(params)...);
 		}
 	}
 
@@ -97,7 +100,7 @@ namespace putils {
 		for (const auto & [_, plugin] : _libraries) {
 			const auto func = plugin->template load_method<T, P...>(name);
 			if (func != nullptr) {
-				ret.push_back(func(std::forward<P>(params)...));
+				ret.push_back(func(FWD(params)...));
 				if (ret.full())
 					return ret;
 			}
