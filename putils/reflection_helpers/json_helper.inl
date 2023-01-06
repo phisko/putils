@@ -1,4 +1,5 @@
 // meta
+#include "putils/meta/traits/is_function.hpp"
 #include "putils/meta/traits/is_specialization.hpp"
 
 // putils
@@ -125,6 +126,10 @@ namespace putils::reflection {
 					json_object = obj;
 				else
 					obj = json_object;
+			}
+
+			else if constexpr (putils::is_function<T>()) {
+				// Do nothing
 			}
 
 			else if constexpr (std::is_empty<T>()) {
