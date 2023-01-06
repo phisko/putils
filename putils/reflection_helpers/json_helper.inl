@@ -15,12 +15,13 @@ namespace putils::reflection {
 		void from_to_json(JSONRef && json_object, TRef && obj) noexcept {
 			PUTILS_PROFILING_SCOPE;
 
-			using TNoRef = std::remove_reference_t<TRef>;
-			using T = std::decay_t<TRef>;
+			using JSON = std::remove_reference_t<JSONRef>;
+			constexpr bool serialize = !std::is_const<JSON>();
 
-			using json = std::remove_reference_t<JSONRef>;
-			constexpr bool serialize = !std::is_const<json>();
+			using TNoRef = std::remove_reference_t<TRef>;
 			constexpr bool deserialize = !std::is_const<TNoRef>();
+
+			using T = std::decay_t<TRef>;
 
 			if constexpr (std::is_same<TNoRef, const char *>()) {
 				if constexpr (serialize)
