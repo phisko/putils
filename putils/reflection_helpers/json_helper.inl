@@ -99,6 +99,18 @@ namespace putils::reflection {
 				}
 			}
 
+			else if constexpr ((std::is_pointer<TNoRef>() || putils::is_specialization<TNoRef, std::unique_ptr>()) && !std::is_void<std::remove_pointer_t<TNoRef>>()) {
+				if constexpr (deserialize)
+					if (!obj) {
+						using pointed_type = std::remove_pointer_t<TNoRef>;
+						if constexpr (std::is_default_constructible<pointed_type>())
+							obj = new pointed_type;
+						else
+							return;
+					}
+				from_to_json(FWD(json_object), *obj);
+			}
+
 			else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
 				if constexpr (serialize) {
 					putils::reflection::for_each_attribute(obj, [&](const auto & attr) noexcept {
