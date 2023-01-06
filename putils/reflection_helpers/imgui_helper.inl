@@ -118,9 +118,10 @@ namespace putils::reflection {
 			}
 		}
 
-		else if constexpr (!putils::is_function<T>() && (std::is_pointer<T>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>())) {
+
+		if constexpr (!putils::is_function<T>() && (std::is_pointer<TNoRef>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>())) {
 			if (obj) {
-				if constexpr (std::is_void<std::remove_pointer_t<T>>())
+				if constexpr (std::is_void<std::remove_pointer_t<TNoRef>>())
 					ImGui::Text("%p", obj);
 				else
 					imgui_edit(name, *obj);
@@ -182,7 +183,7 @@ namespace putils::reflection {
 			}
 		}
 
-		else if constexpr (std::ranges::range<T>) {
+		else if constexpr (std::ranges::range<TNoRef>) {
 			if constexpr (requires { obj.empty(); }) {
 				if (obj.empty()) {
 					detail::imgui::display_in_columns(name, [] {
