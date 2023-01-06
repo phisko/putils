@@ -1,6 +1,14 @@
 # [static_assert](static_assert.hpp)
 
 ```cpp
+#define putils_static_assert_false(T)
+```
+
+Allows you to do a `static_assert(false)` that only fails for `T`.
+
+## Helper type
+
+```cpp
 template<typename T>
 struct always_false : std::false_type {};
 ```
