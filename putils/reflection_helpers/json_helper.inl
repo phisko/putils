@@ -140,7 +140,15 @@ namespace putils::reflection {
 			}
 
 			else {
-				assert(false);
+				// unknown type
+				if constexpr (serialize) {
+					if constexpr (requires { json_object = obj; })
+						json_object = obj;
+				}
+				else if constexpr (deserialize) {
+					if constexpr (requires { obj = json_object; })
+						obj = json_object;
+				}
 			}
 		}
 	}
