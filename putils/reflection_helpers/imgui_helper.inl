@@ -90,7 +90,7 @@ namespace putils::reflection {
 		PUTILS_PROFILING_SCOPE;
 
 		using T = std::decay_t<TRef>;
-		if constexpr (putils::reflection::has_attributes<T>())
+		if constexpr (putils::reflection::is_reflectible<T>())
 			putils::reflection::for_each_attribute(obj, [](const auto & attr) {
 				imgui_edit(attr.name, attr.member);
 			});
@@ -108,16 +108,6 @@ namespace putils::reflection {
 		using T = std::decay_t<TRef>;
 		const auto id = detail::imgui::get_id(name, obj);
 		const auto name_with_id = detail::imgui::get_name_with_id(name, obj);
-
-		if constexpr (putils::reflection::has_attributes<T>()) {
-			if (ImGui::TreeNode(name_with_id.c_str())) {
-				putils::reflection::for_each_attribute(obj, [](const auto & attr) noexcept {
-					imgui_edit(attr.name, attr.member);
-				});
-				ImGui::TreePop();
-			}
-		}
-
 
 		if constexpr (!putils::is_function<T>() && (std::is_pointer<TNoRef>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>())) {
 			if (obj) {
@@ -291,6 +281,15 @@ namespace putils::reflection {
 			}
 		}
 
+		else if constexpr (putils::reflection::is_reflectible<T>()) {
+			if (ImGui::TreeNode(name_with_id.c_str())) {
+				putils::reflection::for_each_attribute(obj, [](const auto & attr) noexcept {
+					imgui_edit(attr.name, attr.member);
+				});
+				ImGui::TreePop();
+			}
+		}
+
 		else if constexpr (std::is_enum<T>()) {
 			detail::imgui::display_in_columns(name, [&]() noexcept {
 				if constexpr (is_const)
@@ -372,6 +371,7 @@ namespace putils::reflection {
 				});
 			}
 		}
+
 		else {
 			detail::imgui::display_in_columns(name, [] {
 				ImGui::Text("unknown type");
