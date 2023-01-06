@@ -46,6 +46,17 @@ namespace putils::reflection {
 					json_object = obj;
 			}
 
+			else if constexpr (putils::is_specialization<TNoRef, std::optional>()) {
+				if constexpr (serialize) {
+					if (obj)
+						from_to_json(FWD(json_object), *obj);
+				}
+				else if constexpr (deserialize) {
+					obj.emplace();
+					from_to_json(FWD(json_object), *obj);
+				}
+			}
+
 			else if constexpr (requires { obj.c_str(); }) {
 				if constexpr (serialize)
 					json_object = obj.c_str();
