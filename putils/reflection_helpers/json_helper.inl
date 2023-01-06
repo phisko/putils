@@ -122,7 +122,7 @@ namespace putils::reflection {
 				from_to_json(FWD(json_object), *obj);
 			}
 
-			else if constexpr (putils::reflection::has_attributes<T>() || putils::reflection::has_parents<T>()) {
+			else if constexpr (putils::reflection::is_reflectible<T>()) {
 				if constexpr (serialize) {
 					putils::reflection::for_each_attribute(obj, [&](const auto & attr) noexcept {
 						json_object[attr.name] = to_json(attr.member);
