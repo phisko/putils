@@ -68,7 +68,7 @@ namespace putils::reflection {
 				}
 			}
 
-			else if constexpr (std::ranges::range<T> || std::is_array<TNoRef>()) {
+			else if constexpr (std::ranges::range<TNoRef>) {
 				if constexpr (serialize) {
 					for (const auto & it : obj)
 						json_object.push_back(to_json(it));
