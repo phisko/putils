@@ -50,6 +50,14 @@ putils_conan_download_and_link_packages(
     ${options}
 )
 
+option(PUTILS_GENERATE_REFLECTION OFF)
+if(PUTILS_GENERATE_REFLECTION)
+    putils_generate_reflection_headers(
+            TARGET putils_core
+            SOURCES ${src}
+    )
+endif()
+
 # Profiling
 
 option(PUTILS_PROFILING OFF)
