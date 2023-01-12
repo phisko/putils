@@ -151,10 +151,7 @@ namespace putils::reflection {
 					// If we can use the key as the treenode title, do so
 					if constexpr (putils::streamable<putils_typeof(key), std::stringstream>) {
 						const auto key_string = putils::to_string(key);
-						if (ImGui::TreeNode(detail::imgui::get_name_with_id(key_string.c_str(), key).c_str())) {
-							imgui_edit(value);
-							ImGui::TreePop();
-						}
+						imgui_edit(key_string.c_str(), FWD(value));
 					}
 					// Otherwise, display two treenodes for the key and value
 					else {
