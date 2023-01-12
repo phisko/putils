@@ -1,6 +1,5 @@
 #pragma once
 
-#include "type_attributes.hpp"
 #include "putils/reflection.hpp"
 
 #define refltype putils::reflection::runtime::type_attributes
