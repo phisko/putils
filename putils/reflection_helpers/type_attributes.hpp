@@ -47,12 +47,15 @@ namespace putils::reflection::runtime {
 
 			//private:
 			using get_size_signature = putils::member_function_signature<decltype(&array_helper::get_size)>;
+			//! putils reflect off
 			get_size_signature * get_size_impl = nullptr;
 
 			using get_element_signature = putils::member_function_signature<decltype(&array_helper::get_element)>;
+			//! putils reflect off
 			get_element_signature * get_element_impl = nullptr;
 
 			using for_each_signature = putils::member_function_signature<decltype(&array_helper::for_each)>;
+			//! putils reflect off
 			for_each_signature * for_each_impl = nullptr;
 		};
 
