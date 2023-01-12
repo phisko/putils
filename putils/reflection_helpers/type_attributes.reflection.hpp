@@ -54,10 +54,7 @@ putils_reflection_info {
 	putils_reflection_class_name;
 	putils_reflection_attributes(
 		putils_reflection_attribute(key_attributes),
-		putils_reflection_attribute(value_attributes),
-		putils_reflection_attribute(get_size_impl),
-		putils_reflection_attribute(get_value_impl),
-		putils_reflection_attribute(for_each_impl)
+		putils_reflection_attribute(value_attributes)
 	);
 	putils_reflection_methods(
 		putils_reflection_attribute(get_size),
