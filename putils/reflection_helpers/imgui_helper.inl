@@ -12,6 +12,7 @@
 
 // meta
 #include "putils/meta/concepts/streamable.hpp"
+#include "putils/meta/fwd.hpp"
 #include "putils/meta/traits/is_function.hpp"
 #include "putils/meta/traits/is_specialization.hpp"
 #include "putils/meta/traits/function_return_type.hpp"
@@ -114,7 +115,7 @@ namespace putils::reflection {
 				if constexpr (std::is_void<std::remove_pointer_t<TNoRef>>())
 					ImGui::Text("%p", obj);
 				else
-					imgui_edit(name, *obj);
+					imgui_edit(name, FWD(*obj));
 			}
 			else
 				detail::imgui::display_in_columns(name, []() noexcept {
@@ -161,7 +162,7 @@ namespace putils::reflection {
 						}
 
 						if (ImGui::TreeNode(detail::imgui::get_name_with_id("value", value).c_str())) {
-							imgui_edit(value);
+							imgui_edit(FWD(value));
 							ImGui::TreePop();
 						}
 					}
@@ -183,7 +184,7 @@ namespace putils::reflection {
 			if (ImGui::TreeNode(name_with_id.c_str())) {
 				int i = 0;
 				for (auto && val : obj)
-					imgui_edit(putils::string<64>("%d", i++).c_str(), val);
+					imgui_edit(putils::string<64>("%d", i++).c_str(), FWD(val));
 
 				if constexpr (!is_const && requires { obj.emplace_back(); }) {
 					if (ImGui::MenuItem("Add"))
@@ -280,8 +281,8 @@ namespace putils::reflection {
 
 		else if constexpr (putils::reflection::is_reflectible<T>()) {
 			if (ImGui::TreeNode(name_with_id.c_str())) {
-				putils::reflection::for_each_attribute(obj, [](const auto & attr) noexcept {
-					imgui_edit(attr.name, attr.member);
+				putils::reflection::for_each_attribute(FWD(obj), [](const auto & attr) noexcept {
+					imgui_edit(attr.name, FWD(attr.member));
 				});
 				ImGui::TreePop();
 			}
