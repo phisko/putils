@@ -9,11 +9,22 @@ endif()
 
 add_library(putils INTERFACE)
 
+add_subdirectory(reflection)
+
 # Core
 
-file(GLOB src putils/*.cpp putils/*.hpp putils/reflection_helpers/*.cpp putils/reflection_helpers/*.hpp)
+putils_src_files(
+    src
+    DIRECTORIES
+        putils
+        putils/reflection_helpers
+    EXTENSIONS
+        cpp hpp
+)
 add_library(putils_core ${src})
 target_include_directories(putils_core PUBLIC .)
+target_link_libraries(putils_core PUBLIC putils_reflection)
+
 target_link_libraries(putils INTERFACE putils_core)
 
 option(PUTILS_NDEBUG "Disable debug code" OFF)
@@ -24,9 +35,6 @@ else()
         target_link_libraries(putils_core PUBLIC Dbghelp)
     endif()
 endif()
-
-add_subdirectory(reflection)
-target_link_libraries(putils_core PUBLIC putils_reflection)
 
 # Export the symbols if we're built as a DLL
 putils_export_symbols(putils_core)
