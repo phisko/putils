@@ -70,6 +70,7 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [thread_name](putils/thread_name.md): sets or gets the OS-level name for the current thread
 * [scoped_setter](putils/scoped_setter.md): sets the value of a variable for the duration of the current scope
 * [sign](putils/sign.md): function returning -1, 0 or 1 depending on the sign of the parameter
+* [split](putils/split.md): split a string according to a delimiter
 * [static_assert](putils/static_assert.md): type template to let `static_assert` fail for a specific type
 * [to_string](putils/to_string.md): uses a `std::stringstream` to serialize an object
 * [url](putils/url.md): URL encoder and decoder
