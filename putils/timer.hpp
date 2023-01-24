@@ -10,7 +10,7 @@ namespace putils {
 	class PUTILS_CORE_EXPORT timer {
 	public:
 		using t_clock = std::chrono::steady_clock;
-		using t_duration = std::chrono::duration<float, std::ratio<1>>;
+		using t_duration = std::chrono::duration<float>;
 		using seconds = t_duration;
 
 	public:
