@@ -14,6 +14,7 @@ namespace putils {
 		using seconds = t_duration;
 
 	public:
+		timer() noexcept = default;
 		timer(const seconds & duration) noexcept;
 
 		// Is the timer ringing
