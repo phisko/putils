@@ -1,6 +1,7 @@
 #include "imgui_helper.hpp"
 
 // stl
+#include <concepts>
 #include <map>
 #include <memory>
 
@@ -51,7 +52,7 @@ namespace putils::reflection {
 	}
 
 	namespace detail::imgui {
-		template<typename F>
+		template<std::invocable F>
 		void display_in_columns(const char * name, F && f) noexcept {
 			PUTILS_PROFILING_SCOPE;
 
