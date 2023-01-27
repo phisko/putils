@@ -26,6 +26,8 @@ namespace putils::python {
 		PUTILS_PROFILING_SCOPE;
 
 		try {
+			const py::gil_scoped_acquire acquire; // In case we're called from a worker thread
+
 			py::class_<T> type(m, putils::reflection::get_class_name<T>(), py::dynamic_attr());
 			putils::reflection::for_each_attribute<T>([&type](const auto & attr) noexcept {
 				using member_type = std::remove_reference_t<decltype(std::declval<T>().*(attr.ptr))>;
