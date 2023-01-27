@@ -16,8 +16,9 @@
 #include "putils/reflection.hpp"
 
 // putils
-#include "putils/to_string.hpp"
 #include "putils/profiling.hpp"
+#include "putils/range.hpp"
+#include "putils/to_string.hpp"
 
 namespace putils::python {
 	template<typename T>
@@ -47,7 +48,7 @@ namespace putils::python {
 				type.def("__str__", [](const T & obj) { return putils::to_string(obj); });
 
 			if constexpr (std::ranges::range<T>)
-				type.def("__iter__", [](const T & obj) { return py::make_iterator(obj.begin(), obj.end()); });
+				type.def("__iter__", [](const T & obj) { return py::make_iterator(putils_range(obj)); });
 		}
 		catch (const std::exception & e) {
 			std::cerr << "[Python] Failed to register type: " << e.what() << std::endl;
