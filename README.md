@@ -63,6 +63,7 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [on_scope_exit](putils/on_scope_exit.md): returns an object that calls a function in its dtor
 * [profiling.hpp](putils/profiling.hpp): macros wrapping [Tracy](https://github.com/wolfpld/tracy)
 * [rand](putils/rand.md): function using C++ 11's random number generation facilities
+* [range](putils/range.md): macro return the `begin` and `end` iterators of a container
 * [read_stream](putils/read_stream.md): function which extracts an entire std::istream to a std::string
 * [regex](putils/regex.md): utilities to easily construct and match regexes through literal operators
 * [remove_if](putils/remove_if.md): function taking a container and a predicate and calling std::remove_if
