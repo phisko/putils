@@ -8,6 +8,7 @@
 
 // putils
 #include "putils/profiling.hpp"
+#include "putils/range.hpp"
 
 namespace putils {
 	void set_thread_name(const wchar_t * name) noexcept {
@@ -27,7 +28,7 @@ namespace putils {
 			GetThreadDescription(GetCurrentThread(), &buff);
 			const std::wstring s = buff;
 #pragma warning(disable : 4244) // Disable "conversion from wchar_t to char" warning
-			return std::string{ s.begin(), s.end() };
+			return std::string{ putils_range(s) };
 #pragma warning(default : 4244)
 #else
 			return "";

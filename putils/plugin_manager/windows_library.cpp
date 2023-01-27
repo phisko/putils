@@ -4,6 +4,7 @@
 
 // stl
 #include <algorithm>
+#include <ranges>
 #include <sstream>
 
 // putils
@@ -17,7 +18,7 @@ namespace putils {
 
 		std::string copy(name);
 
-		std::replace(copy.begin(), copy.end(), '/', '\\');
+		std::ranges::replace(copy, '/', '\\');
 		_handle = LoadLibrary(copy.c_str());
 		if (_handle == nullptr)
 			std::cerr << "Failed to load library '" << name << "': " << get_last_error_as_string() << std::endl;
