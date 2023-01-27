@@ -51,7 +51,6 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [curl](putils/curl.md): function that runs a `curl` request over CLI (to avoid having to install curl packages. This is NOT the optimal way to do an HTTP request)
 * [default_constructors](putils/default_constructors.md): macros to avoid redundant declarations of default constructors
 * [epsilon](putils/epsilon.md): approximate comparison of floating point types
-* [erase](putils/erase.md): function taking a container and a value and erasing the value from the container
 * [forward_to](putils/forward_to.md): helper macros to forward arguments to an object
 * [get_call_stack](putils/get_call_stack.md): function which returns a formatted call-stack
 * [get_last_error_as_string](putils/get_last_error_as_string.md): function for Windows
