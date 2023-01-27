@@ -65,7 +65,6 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [range](putils/range.md): macro return the `begin` and `end` iterators of a container
 * [read_stream](putils/read_stream.md): function which extracts an entire std::istream to a std::string
 * [regex](putils/regex.md): utilities to easily construct and match regexes through literal operators
-* [remove_if](putils/remove_if.md): function taking a container and a predicate and calling std::remove_if
 * [same_sign](putils/same_sign.md): function indicating whether two scalars have the same sign
 * [thread_name](putils/thread_name.md): sets or gets the OS-level name for the current thread
 * [scoped_setter](putils/scoped_setter.md): sets the value of a variable for the duration of the current scope
