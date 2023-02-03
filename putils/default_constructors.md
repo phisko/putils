@@ -54,3 +54,13 @@ Defaults the move constructor and assignment operator for `T`.
 ```
 
 Deletes the move constructor and assignment operator for `T`.
+
+### `PUTILS_DELETE_COPY_AND_MOVE`
+
+```cpp
+#define PUTILS_DELETE_COPY_AND_MOVE(T) \
+	PUTILS_DELETE_COPY(T) \
+	PUTILS_DELETE_MOVE(T)
+```
+
+Deletes the copy and move constructors and assignment operators for `T`.
