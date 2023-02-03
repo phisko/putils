@@ -11,30 +11,26 @@
 #include "putils/range.hpp"
 
 namespace putils {
-	void set_thread_name(const wchar_t * name) noexcept {
+	void set_thread_name(std::string_view name) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
 #ifdef _MSC_VER
-		SetThreadDescription(GetCurrentThread(), name);
+		SetThreadDescription(GetCurrentThread(), std::wstring{ putils_range(name) }.c_str());
 #endif
 	}
 
-	const std::string & get_thread_name() noexcept {
+	std::string get_thread_name() noexcept {
 		PUTILS_PROFILING_SCOPE;
 
-		static thread_local const std::string ret = [] {
 #ifdef _MSC_VER
-			wchar_t * buff;
-			GetThreadDescription(GetCurrentThread(), &buff);
-			const std::wstring s = buff;
+		wchar_t * buff;
+		GetThreadDescription(GetCurrentThread(), &buff);
+		const std::wstring s = buff;
 #pragma warning(disable : 4244) // Disable "conversion from wchar_t to char" warning
-			return std::string{ putils_range(s) };
+		return std::string{ putils_range(s) };
 #pragma warning(default : 4244)
 #else
-			return "";
+		return "";
 #endif
-		}();
-
-		return ret;
 	}
 }
