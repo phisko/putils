@@ -143,68 +143,106 @@ namespace putils::reflection {
 		// 	ImGui::LabelText(name, obj);
 
 		else if constexpr (putils::is_specialization<T, std::map>() || putils::is_specialization<T, std::unordered_map>()) {
-			if (obj.empty()) {
-				detail::imgui::display_in_columns(name, [] {
-					ImGui::Text("empty");
-				});
-			}
-			else if (ImGui::TreeNode(name_with_id.c_str())) {
-				for (auto && [key, value] : obj) {
-					// If we can use the key as the treenode title, do so
-					if constexpr (putils::streamable<putils_typeof(key), std::stringstream>) {
-						const auto key_string = putils::to_string(key);
-						imgui_edit(key_string.c_str(), FWD(value));
-					}
-					// Otherwise, display two treenodes for the key and value
-					else {
-						if (ImGui::TreeNode(detail::imgui::get_name_with_id("key", key).c_str())) {
-							imgui_edit(key);
-							ImGui::TreePop();
+			if (ImGui::TreeNode(name_with_id.c_str())) {
+				using key_type = typename T::key_type;
+
+				auto to_erase = obj.end();
+				int i = 0;
+				for (auto it = obj.begin(); it != obj.end(); ++it) {
+					auto && [key, value] = *it;
+
+					putils::string<64> tree_node_title("%d", i++);
+					constexpr bool key_as_tree_node_title = putils::streamable<putils_typeof(key), std::stringstream>;
+					if constexpr (key_as_tree_node_title)
+						tree_node_title = putils::to_string(key);
+
+					const auto tree_node_open = ImGui::TreeNode(tree_node_title.c_str());
+					if constexpr (!is_const)
+						if (ImGui::BeginPopupContextItem()) {
+							if (ImGui::Button("Remove"))
+								to_erase = it;
+							ImGui::EndPopup();
 						}
 
-						if (ImGui::TreeNode(detail::imgui::get_name_with_id("value", value).c_str())) {
+					if (tree_node_open) {
+						if constexpr (key_as_tree_node_title)
 							imgui_edit(FWD(value));
-							ImGui::TreePop();
+						else {
+							if (ImGui::TreeNode(detail::imgui::get_name_with_id("key", key).c_str())) {
+								imgui_edit(key);
+								ImGui::TreePop();
+							}
+
+							if (ImGui::TreeNode(detail::imgui::get_name_with_id("value", value).c_str())) {
+								imgui_edit(FWD(value));
+								ImGui::TreePop();
+							}
 						}
+						ImGui::TreePop();
 					}
 				}
+
+				if constexpr (!is_const) {
+					if (to_erase != obj.end())
+						obj.erase(to_erase);
+
+					ImGui::Columns(3);
+					using key_type = typename T::key_type;
+					static key_type key;
+					imgui_edit(key);
+
+					ImGui::NextColumn();
+					using mapped_type = typename T::mapped_type;
+					static mapped_type value;
+					imgui_edit(value);
+
+					ImGui::NextColumn();
+
+					if (const auto it = obj.find(key); it != obj.end())
+						ImGui::TextDisabled("Key already in map");
+					else {
+						if (ImGui::Button("Add")) {
+							obj.emplace(key, value);
+							key = key_type{};
+							value = mapped_type{};
+						}
+					}
+
+					ImGui::Columns();
+				}
+
 				ImGui::TreePop();
 			}
 		}
 
 		else if constexpr (std::ranges::range<TNoRef>) {
-			if constexpr (requires { obj.empty(); }) {
-				if (obj.empty()) {
-					detail::imgui::display_in_columns(name, [] {
-						ImGui::Text("Empty");
-					});
-					return;
-				}
-			}
-
 			if (ImGui::TreeNode(name_with_id.c_str())) {
 				int i = 0;
-				for (auto && val : obj)
-					imgui_edit(putils::string<64>("%d", i++).c_str(), FWD(val));
 
-				if constexpr (!is_const && requires { obj.emplace_back(); }) {
-					if (ImGui::MenuItem("Add"))
-						obj.emplace_back();
-					static int remove_index = 0;
-					ImGui::Columns(2);
-					if (ImGui::MenuItem("Remove")) {
-						int i = 0;
-						for (auto it = obj.begin(); it != obj.end(); ++it) {
-							if (i == remove_index) {
-								obj.erase(it);
-								break;
-							}
-							++i;
+				auto to_erase = std::end(obj);
+				for (auto it = std::begin(obj); it != std::end(obj); ++it) {
+					const auto tree_node_open = ImGui::TreeNode(putils::string<64>("%d", i++).c_str());
+					if constexpr (!is_const)
+						if (ImGui::BeginPopupContextItem()) {
+							if (ImGui::Button("Remove"))
+								to_erase = it;
+							ImGui::EndPopup();
 						}
+
+					if (tree_node_open) {
+						imgui_edit(FWD(*it));
+						ImGui::TreePop();
 					}
-					ImGui::NextColumn();
-					ImGui::InputInt("##index", &remove_index);
-					ImGui::Columns();
+				}
+
+				if constexpr (!is_const) {
+					if constexpr (requires { obj.erase(to_erase); })
+						if (to_erase != std::end(obj))
+							obj.erase(to_erase);
+
+					if constexpr (requires { obj.emplace_back(); })
+						if (ImGui::MenuItem("Add"))
+							obj.emplace_back();
 				}
 
 				ImGui::TreePop();
