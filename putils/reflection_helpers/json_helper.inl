@@ -139,12 +139,23 @@ namespace putils::reflection {
 			}
 
 			else if constexpr (std::is_enum<T>()) {
-				if constexpr (serialize)
-					json_object = magic_enum::enum_name<T>(obj);
-				else if constexpr (deserialize) {
-					for (const auto & p : magic_enum::enum_entries<T>())
-						if (json_object == putils::string<64>(p.second).c_str())
-							obj = p.first;
+				if constexpr (magic_enum::enum_count<T>() > 0) {
+					if constexpr (serialize)
+						json_object = magic_enum::enum_name<T>(obj);
+					else if constexpr (deserialize) {
+						for (const auto & p: magic_enum::enum_entries<T>())
+							if (json_object == putils::string<64>(p.second).c_str())
+								obj = p.first;
+					}
+				}
+				else {
+					if constexpr (serialize)
+						from_to_json(FWD(json_object), std::underlying_type_t<T>(obj));
+					else {
+						auto non_enum_value = std::underlying_type_t<T>(obj);
+						from_to_json(FWD(json_object), non_enum_value);
+						obj = T(non_enum_value);
+					}
 				}
 			}
 
