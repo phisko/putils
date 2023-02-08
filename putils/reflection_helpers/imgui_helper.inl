@@ -290,12 +290,23 @@ namespace putils::reflection {
 		}
 
 		else if constexpr (std::is_enum<T>()) {
-			detail::imgui::display_in_columns(name, [&]() noexcept {
+			if constexpr (magic_enum::enum_count<T>() > 0) {
+				detail::imgui::display_in_columns(name, [&]() noexcept {
+					if constexpr (is_const)
+						ImGui::Text("%s", magic_enum::enum_name(obj).data());
+					else
+						imgui_enum_combo(id.c_str(), obj);
+				});
+			}
+			else {
 				if constexpr (is_const)
-					ImGui::Text("%s", magic_enum::enum_name(obj).data());
-				else
-					imgui_enum_combo(id.c_str(), obj);
-			});
+					imgui_edit(name, std::underlying_type_t<T>(obj));
+				else {
+					auto non_enum_value = std::underlying_type_t<T>(obj);
+					imgui_edit(name, non_enum_value);
+					obj = T(non_enum_value);
+				}
+			}
 		}
 
 		else if constexpr (std::is_same_v<T, bool>) {
