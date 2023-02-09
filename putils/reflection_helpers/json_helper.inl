@@ -143,7 +143,7 @@ namespace putils::reflection {
 					if constexpr (serialize)
 						json_object = magic_enum::enum_name<T>(obj);
 					else if constexpr (deserialize) {
-						for (const auto & p: magic_enum::enum_entries<T>())
+						for (const auto & p : magic_enum::enum_entries<T>())
 							if (json_object == putils::string<64>(p.second).c_str())
 								obj = p.first;
 					}
