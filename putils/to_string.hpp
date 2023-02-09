@@ -5,6 +5,9 @@
 #include <string>
 #include <string_view>
 
+// magic_enum
+#include <magic_enum.hpp>
+
 // meta
 #include "putils/meta/concepts/streamable.hpp"
 #include "putils/meta/concepts/unstreamable.hpp"

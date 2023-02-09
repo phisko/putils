@@ -31,6 +31,12 @@ TEST(to_string, enum) {
 	EXPECT_EQ(putils::to_string(e), "A");
 }
 
+TEST(to_string, empty_enum) {
+	enum E {};
+	const E e = E(42);
+	EXPECT_EQ(putils::to_string(e), "42");
+}
+
 TEST(parse, int) {
 	int i = 0;
 	putils::parse(i, "42");
@@ -66,4 +72,14 @@ TEST(parse, enum) {
 	EXPECT_EQ(e, E::A);
 
 	EXPECT_EQ(putils::parse<E>("B"), E::B);
+}
+
+TEST(parse, empty_enum) {
+	enum class E {};
+
+	E e = E(42);
+	putils::parse(e, "84");
+	EXPECT_EQ(e, E(84));
+
+	EXPECT_EQ(putils::parse<E>("42"), E(42));
 }
