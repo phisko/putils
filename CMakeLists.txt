@@ -27,7 +27,7 @@ target_link_libraries(putils_core PUBLIC putils_reflection)
 
 target_link_libraries(putils INTERFACE putils_core)
 
-option(PUTILS_NDEBUG "Disable debug code" OFF)
+option(PUTILS_NDEBUG "Disable debug code")
 if (PUTILS_NDEBUG)
     target_compile_definitions(putils_core PUBLIC PUTILS_NDEBUG)
 else()
@@ -58,7 +58,7 @@ putils_conan_download_and_link_packages(
     ${options}
 )
 
-option(PUTILS_GENERATE_REFLECTION OFF)
+option(PUTILS_GENERATE_REFLECTION "Generate reflection headers")
 if(PUTILS_GENERATE_REFLECTION)
     putils_generate_reflection_headers(
             TARGET putils_core
@@ -68,7 +68,7 @@ endif()
 
 # Profiling
 
-option(PUTILS_PROFILING OFF)
+option(PUTILS_PROFILING "Enable profiling with Tracy")
 if(PUTILS_PROFILING)
 	target_compile_definitions(putils_core PUBLIC PUTILS_PROFILING TRACY_ENABLE)
     if (MSVC)
@@ -89,7 +89,9 @@ endif()
 
 # Plugin manager
 
-option(PUTILS_PLUGIN_MANAGER "Build PluginManager" OFF)
+option(PUTILS_PLUGIN_MANAGER "Build plugin_manager")
+include(CMakePrintHelpers)
+cmake_print_variables(PUTILS_PLUGIN_MANAGER)
 if (PUTILS_PLUGIN_MANAGER)
     add_subdirectory(putils/plugin_manager)
     target_link_libraries(putils INTERFACE putils_plugin_manager)
@@ -97,18 +99,13 @@ if (PUTILS_PLUGIN_MANAGER)
 endif()
 
 # Lua
-
-option(PUTILS_LUA "Build Lua helper" OFF)
+option(PUTILS_LUA "Build Lua helper")
 if(PUTILS_LUA)
     add_subdirectory(putils/lua)
     target_link_libraries(putils INTERFACE putils_lua)
     target_compile_definitions(putils INTERFACE PUTILS_LUA)
 
-endif()
-
-# ImGui Lua bindings
-
-if (PUTILS_LUA)
+    # ImGui Lua bindings
     file(GLOB imgui_lua_src
             putils/imgui_lua_bindings/*.cpp
             putils/imgui_lua_bindings/*.hpp)
@@ -128,8 +125,7 @@ if (PUTILS_LUA)
 endif()
 
 # Python
-
-option(PUTILS_PYTHON "Build Python helper" OFF)
+option(PUTILS_PYTHON "Build Python helper")
 if(PUTILS_PYTHON)
     add_subdirectory(putils/python)
     target_link_libraries(putils INTERFACE putils_python)
@@ -140,7 +136,7 @@ endif()
 # Tests
 #
 
-option(PUTILS_TESTS "Build tests" OFF)
+option(PUTILS_TESTS "Build tests")
 if (PUTILS_TESTS)
 	enable_testing()
     set(test_exe_name putils_tests)
