@@ -90,8 +90,6 @@ endif()
 # Plugin manager
 
 option(PUTILS_PLUGIN_MANAGER "Build plugin_manager")
-include(CMakePrintHelpers)
-cmake_print_variables(PUTILS_PLUGIN_MANAGER)
 if (PUTILS_PLUGIN_MANAGER)
     add_subdirectory(putils/plugin_manager)
     target_link_libraries(putils INTERFACE putils_plugin_manager)
