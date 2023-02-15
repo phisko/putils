@@ -1,4 +1,4 @@
-# [Export](Export.hpp)
+# [export](export.hpp)
 
 ```cpp
 #define EXPORT ...
