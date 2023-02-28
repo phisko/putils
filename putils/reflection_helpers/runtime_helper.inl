@@ -6,8 +6,8 @@
 
 // meta
 #include "putils/meta/concepts/indexable.hpp"
+#include "putils/meta/concepts/specialization.hpp"
 #include "putils/meta/traits/indexed_type.hpp"
-#include "putils/meta/traits/is_specialization.hpp"
 
 // putils
 #include "putils/to_string.hpp"
@@ -116,7 +116,7 @@ namespace putils::reflection::runtime {
 		static std::optional<attribute_info::map_helper> make_map_helper() noexcept {
 			PUTILS_PROFILING_SCOPE;
 
-			if constexpr (putils::is_specialization<MemberType, std::map>() || putils::is_specialization<MemberType, std::unordered_map>())
+			if constexpr (putils::specialization<MemberType, std::map> || putils::specialization<MemberType, std::unordered_map>)
 				return make_map_helper_impl<MemberType>();
 
 			return std::nullopt;

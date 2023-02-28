@@ -1,6 +1,6 @@
 // meta
-#include "putils/meta/traits/is_function.hpp"
-#include "putils/meta/traits/is_specialization.hpp"
+#include "putils/meta/concepts/callable.hpp"
+#include "putils/meta/concepts/specialization.hpp"
 
 // putils
 #include "json_helper.hpp"
@@ -47,7 +47,7 @@ namespace putils::reflection {
 					json_object = obj;
 			}
 
-			else if constexpr (putils::is_specialization<TNoRef, std::optional>()) {
+			else if constexpr (putils::specialization<TNoRef, std::optional>) {
 				if constexpr (serialize) {
 					if (obj)
 						from_to_json(FWD(json_object), *obj);
@@ -65,7 +65,7 @@ namespace putils::reflection {
 					obj = json_object.template get<std::string>().c_str();
 			}
 
-			else if constexpr (putils::is_specialization<T, std::map>() || putils::is_specialization<T, std::unordered_map>()) {
+			else if constexpr (putils::specialization<T, std::map> || putils::specialization<T, std::unordered_map>) {
 				if constexpr (serialize) {
 					for (const auto & [key, value] : obj)
 						json_object[putils::to_string(key)] = to_json(value);
@@ -111,7 +111,7 @@ namespace putils::reflection {
 				}
 			}
 
-			else if constexpr ((std::is_pointer<TNoRef>() || putils::is_specialization<TNoRef, std::unique_ptr>()) && !std::is_void<std::remove_pointer_t<TNoRef>>()) {
+			else if constexpr ((std::is_pointer<TNoRef>() || putils::specialization<TNoRef, std::unique_ptr>) && !std::is_void<std::remove_pointer_t<TNoRef>>()) {
 				if constexpr (deserialize)
 					if (!obj) {
 						using pointed_type = std::remove_pointer_t<TNoRef>;
@@ -166,7 +166,7 @@ namespace putils::reflection {
 					obj = json_object;
 			}
 
-			else if constexpr (putils::is_function<T>()) {
+			else if constexpr (putils::callable<T>) {
 				// Do nothing
 			}
 
