@@ -12,10 +12,10 @@
 #include <magic_enum.hpp>
 
 // meta
+#include "putils/meta/concepts/callable.hpp"
+#include "putils/meta/concepts/specialization.hpp"
 #include "putils/meta/concepts/streamable.hpp"
 #include "putils/meta/fwd.hpp"
-#include "putils/meta/traits/is_function.hpp"
-#include "putils/meta/traits/is_specialization.hpp"
 #include "putils/meta/traits/function_return_type.hpp"
 #include "putils/meta/traits/function_arguments.hpp"
 
@@ -111,7 +111,7 @@ namespace putils::reflection {
 		const auto id = detail::imgui::get_id(name, obj);
 		const auto name_with_id = detail::imgui::get_name_with_id(name, obj);
 
-		if constexpr (!putils::is_function<T>() && (std::is_pointer<TNoRef>() || putils::is_specialization<T, std::unique_ptr>() || putils::is_specialization<T, std::shared_ptr>() || putils::is_specialization<T, std::optional>())) {
+		if constexpr (!putils::callable<T> && (std::is_pointer<TNoRef>() || putils::specialization<T, std::unique_ptr> || putils::specialization<T, std::shared_ptr> || putils::specialization<T, std::optional>)) {
 			if (obj) {
 				if constexpr (std::is_void<std::remove_pointer_t<TNoRef>>())
 					ImGui::Text("%p", obj);
@@ -142,7 +142,7 @@ namespace putils::reflection {
 		// else if constexpr (std::is_same_v<T, const char *>::value)
 		// 	ImGui::LabelText(name, obj);
 
-		else if constexpr (putils::is_specialization<T, std::map>() || putils::is_specialization<T, std::unordered_map>()) {
+		else if constexpr (putils::specialization<T, std::map> || putils::specialization<T, std::unordered_map>) {
 			if (ImGui::TreeNode(name_with_id.c_str())) {
 				using key_type = typename T::key_type;
 
@@ -285,7 +285,7 @@ namespace putils::reflection {
 			});
 		}
 
-		else if constexpr (putils::is_function<T>()) {
+		else if constexpr (putils::callable<T>) {
 			if (obj == nullptr)
 				return;
 

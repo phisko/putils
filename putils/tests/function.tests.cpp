@@ -2,10 +2,10 @@
 #include <gtest/gtest.h>
 
 // meta
+#include "putils/meta/concepts/callable.hpp"
 #include "putils/meta/traits/function_arguments.hpp"
 #include "putils/meta/traits/function_return_type.hpp"
 #include "putils/meta/traits/function_signature.hpp"
-#include "putils/meta/traits/is_function.hpp"
 
 // putils
 #include "putils/function.hpp"
@@ -41,9 +41,9 @@ TEST(function, function_signature) {
 	SUCCEED();
 }
 
-TEST(function, is_function) {
+TEST(function, callable) {
 	const putils::function<void(int, double), 64> f;
-	static_assert(putils::is_function<decltype(f)>());
+	static_assert(putils::callable<decltype(f)>);
 	SUCCEED();
 }
 
