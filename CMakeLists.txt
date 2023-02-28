@@ -43,20 +43,8 @@ if (UNIX)
     target_compile_options(putils_core PUBLIC -fPIC)
 endif()
 
-putils_conan_download_and_link_packages(
-    putils_core PUBLIC
-    magic_enum/0.7.3
-    nlohmann_json/3.10.5
-)
-
-putils_conan_set_shared_options(options imgui)
-putils_conan_download_and_link_packages(
-    putils_core PUBLIC
-    imgui/cci.20220621+1.88.docking
-    IMPORTS # Copy the bindings
-        "res, * -> ${CMAKE_CURRENT_BINARY_DIR}/imgui_res"
-    ${options}
-)
+find_package(magic_enum CONFIG REQUIRED)
+target_link_libraries(putils_core PUBLIC magic_enum::magic_enum)
 
 option(PUTILS_GENERATE_REFLECTION "Generate reflection headers")
 if(PUTILS_GENERATE_REFLECTION)
@@ -126,4 +114,7 @@ if (PUTILS_TESTS)
 
     putils_add_test_executable(${test_exe_name} ${test_src})
     target_link_libraries(${test_exe_name} PRIVATE putils)
+
+    find_package(nlohmann_json CONFIG REQUIRED)
+    target_link_libraries(${test_exe_name} PRIVATE nlohmann_json::nlohmann_json)
 endif()

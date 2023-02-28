@@ -1,8 +1,9 @@
 add_library(putils_lua INTERFACE)
 target_include_directories(putils_lua INTERFACE .)
 
-putils_conan_download_and_link_packages(
-    putils_lua INTERFACE
-    lua/5.4.4
-    sol2/3.2.3
-)
+find_package(Lua REQUIRED)
+target_include_directories(putils_lua INTERFACE ${LUA_INCLUDE_DIR})
+target_link_libraries(putils_lua INTERFACE ${LUA_LIBRARIES})
+
+find_package(sol2 CONFIG REQUIRED)
+target_link_libraries(putils_lua INTERFACE sol2::sol2)

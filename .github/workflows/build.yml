@@ -29,9 +29,11 @@ jobs:
   build:
     uses: phisko/cmake-cxx-conan/.github/workflows/build.yml@main
     with:
+      vcpkg_commit: 'd5bc0e71e06dfe6594ffb8fb2430919f1b435f94'
       apt_dependencies: libgl-dev libglu1-mesa-dev
       cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON
   build_shared:
     uses: phisko/cmake-cxx-conan/.github/workflows/build.yml@main
     with:
+      vcpkg_commit: 'd5bc0e71e06dfe6594ffb8fb2430919f1b435f94'
       cmake_options: -DPUTILS_IMGUI=ON -DPUTILS_LUA=ON -DPUTILS_MEDIATOR=ON -DPUTILS_PLUGIN_MANAGER=ON -DPUTILS_PYTHON=ON -DPUTILS_TESTS=ON -DBUILD_SHARED_LIBS=ON
