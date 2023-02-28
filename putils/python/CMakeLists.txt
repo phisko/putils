@@ -1,2 +1,4 @@
 add_library(putils_python INTERFACE)
-putils_conan_download_and_link_packages(putils_python INTERFACE pybind11/2.10.1)
+
+find_package(pybind11 CONFIG REQUIRED)
+target_link_libraries(putils_python INTERFACE pybind11::embed)
