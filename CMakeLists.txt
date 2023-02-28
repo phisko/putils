@@ -3,11 +3,11 @@ project(putils HOMEPAGE_URL "https://github.com/phisko/putils")
 
 set(CMAKE_CXX_STANDARD 20)
 
-if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNOMINMAX")
-endif()
-
 add_library(putils INTERFACE)
+
+if(MSVC)
+    target_compile_options(putils INTERFACE /DNOMINMAX)
+endif()
 
 add_subdirectory(reflection)
 
@@ -72,6 +72,9 @@ if(PUTILS_PROFILING)
 		GIT_SHALLOW TRUE
 	)
 	FetchContent_MakeAvailable(tracy)
+    if(MSVC)
+        target_compile_options(TracyClient PUBLIC /DNOMINMAX)
+    endif()
 	target_link_libraries(putils_core PUBLIC TracyClient)
 endif()
 
