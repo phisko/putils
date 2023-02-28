@@ -102,24 +102,6 @@ if(PUTILS_LUA)
     add_subdirectory(putils/lua)
     target_link_libraries(putils INTERFACE putils_lua)
     target_compile_definitions(putils INTERFACE PUTILS_LUA)
-
-    # ImGui Lua bindings
-    file(GLOB imgui_lua_src
-            putils/imgui_lua_bindings/*.cpp
-            putils/imgui_lua_bindings/*.hpp)
-    add_library(putils_imgui_lua_bindings ${imgui_lua_src})
-    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_core)
-    target_link_libraries(putils_imgui_lua_bindings)
-    target_link_libraries(putils_imgui_lua_bindings PUBLIC putils_lua)
-    target_link_libraries(putils INTERFACE putils_imgui_lua_bindings)
-
-    # Export the symbols if we're built as a DLL
-    putils_export_symbols(putils_imgui_lua_bindings)
-
-    if (MSVC)
-        # Disable "'argument': conversion from 'double' to 'float'" warnings
-        target_compile_options(putils_imgui_lua_bindings PRIVATE /wd4244)
-    endif()
 endif()
 
 # Python
