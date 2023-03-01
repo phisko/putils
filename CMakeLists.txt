@@ -5,10 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_library(putils INTERFACE)
 
-if(MSVC)
-    target_compile_options(putils INTERFACE /DNOMINMAX)
-endif()
-
 add_subdirectory(reflection)
 
 # Core
@@ -41,6 +37,10 @@ putils_export_symbols(putils_core)
 
 if (UNIX)
     target_compile_options(putils_core PUBLIC -fPIC)
+endif()
+
+if(MSVC)
+    target_compile_options(putils_core INTERFACE /DNOMINMAX)
 endif()
 
 find_package(magic_enum CONFIG REQUIRED)
