@@ -12,7 +12,7 @@
 #endif
 
 namespace putils {
-	std::string get_call_stack() noexcept {
+	std::string get_call_stack(int frames_to_ignore) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
 		std::string ret;
@@ -35,8 +35,8 @@ namespace putils {
 			IMAGEHLP_LINE64 line;
 			SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &displacement, &line);
 
-			static constexpr auto stack_frames_to_ignore = 5;
-			if (i >= stack_frames_to_ignore) {
+			static constexpr auto stack_frames_to_ignore = 1;
+			if (i >= stack_frames_to_ignore + stack_frames_to_ignore) {
 				const putils::string<256> s("\t %i: %s - (l.%i)", frames - i - 1, symbol->Name, line.LineNumber);
 				if (!ret.empty())
 					ret += '\n';
