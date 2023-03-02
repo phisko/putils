@@ -1,15 +1,4 @@
-# [to_string](to_string.hpp)
-
-## to_string
-
-```cpp
-template<typename Obj>
-std::string to_string(Obj && obj) noexcept;
-```
-
-Serializes `obj` using `std::stringstream`.
-
-## parse
+# [parse](parse.hpp)
 
 ```cpp
 template<typename Obj>
