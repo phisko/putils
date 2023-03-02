@@ -1,6 +1,9 @@
 // gtest
 #include <gtest/gtest.h>
 
+// fmt
+#include <fmt/core.h>
+
 // putils
 #include "putils/reflection_helpers/runtime_helper.hpp"
 
@@ -232,7 +235,7 @@ TEST(runtime_helper, map_attribute) {
 	EXPECT_EQ(attr->map->get_size(&obj.nested_map), obj.nested_map.size());
 
 	for (const auto & [key, value] : obj.nested_map)
-		EXPECT_EQ(attr->map->get_value(&obj.nested_map, putils::to_string(key).c_str()), &value);
+		EXPECT_EQ(attr->map->get_value(&obj.nested_map, fmt::format("{}", key).c_str()), &value);
 
 	attr->map->for_each(&obj.nested_map, [&](const void * key, void * value) {
 		const auto k = (int *)key;

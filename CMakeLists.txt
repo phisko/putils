@@ -43,6 +43,9 @@ if(MSVC)
     target_compile_options(putils_core INTERFACE /DNOMINMAX)
 endif()
 
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(putils_core PUBLIC fmt::fmt)
+
 find_package(magic_enum CONFIG REQUIRED)
 target_link_libraries(putils_core PUBLIC magic_enum::magic_enum)
 

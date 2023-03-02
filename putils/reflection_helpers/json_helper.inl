@@ -4,9 +4,9 @@
 
 // putils
 #include "json_helper.hpp"
-#include "putils/to_string.hpp"
 #include "putils/string.hpp"
 #include "putils/lengthof.hpp"
+#include "putils/parse.hpp"
 #include "putils/profiling.hpp"
 
 namespace putils::reflection {
@@ -68,7 +68,7 @@ namespace putils::reflection {
 			else if constexpr (putils::specialization<T, std::map> || putils::specialization<T, std::unordered_map>) {
 				if constexpr (serialize) {
 					for (const auto & [key, value] : obj)
-						json_object[putils::to_string(key)] = to_json(value);
+						json_object[fmt::format("{}", key)] = to_json(value);
 				}
 				else if constexpr (deserialize) {
 					obj.clear();

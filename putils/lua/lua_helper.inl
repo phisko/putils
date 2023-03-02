@@ -5,7 +5,6 @@
 
 // putils
 #include "putils/function.hpp"
-#include "putils/to_string.hpp"
 #include "putils/profiling.hpp"
 
 namespace sol {
@@ -92,6 +91,6 @@ namespace putils::lua {
 		});
 
 		if constexpr (putils::streamable<T, std::ostream>)
-			type[sol::meta_function::to_string] = [](const T & obj) { return putils::to_string(obj); };
+			type[sol::meta_function::to_string] = [](const T & obj) { return fmt::format("{}", obj); };
 	}
 }

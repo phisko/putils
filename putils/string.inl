@@ -8,153 +8,59 @@
 #define TString string<MaxSize, ClassName>
 // clang-format off
 
-#ifdef _MSC_VER
-#	define MY_STRNCPY strncpy_s
-#	define MY_STRNCAT strncat_s
-#else
-#	define MY_STRNCPY strncpy
-#	define MY_STRNCAT strncat
-#endif
-
 namespace putils {
 	TemplateDecl
-	constexpr TString::string() noexcept {
-		static_assert(MaxSize > 0);
-		_buff[0] = 0;
+	constexpr TString::string(std::string_view str) noexcept {
+		assign(str);
 	}
 
 	TemplateDecl
-	template<typename... Args>
-	constexpr TString::string(const char * format, Args... args) noexcept {
-		static_assert(MaxSize > 0);
-		_size = snprintf(_buff, MaxSize, format, args...);
+	constexpr TString::string(const char * str) noexcept {
+		assign(str);
 	}
 
 	TemplateDecl
-	constexpr TString::string(const char * str) noexcept : _size(strlen(str)) {
-		static_assert(MaxSize > 0);
-		MY_STRNCPY(_buff, str, MaxSize);
-	}
-
-	TemplateDecl
-	constexpr TString::string(const std::string & s) noexcept : _size(s.size()) {
-		static_assert(MaxSize > 0);
-		assert(_size < MaxSize);
-		MY_STRNCPY(_buff, s.data(), _size);
-	}
-
-	TemplateDecl
-	constexpr TString::string(std::string_view s) noexcept : _size(s.size()) {
-		static_assert(MaxSize > 0);
-		assert(_size < MaxSize);
-		MY_STRNCPY(_buff, s.data(), _size);
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator=(const char * rhs) noexcept {
-		MY_STRNCPY(_buff, rhs, MaxSize);
-		_size = strlen(rhs);
+	constexpr TString & TString::operator=(std::string_view str) noexcept {
+		assign(str);
 		return *this;
 	}
 
 	TemplateDecl
-	template<size_t N, const char * S>
-	constexpr TString & TString::operator=(const string<N, S> & rhs) noexcept {
-		MY_STRNCPY(_buff, rhs.c_str(), MaxSize);
-		_size = rhs.size();
+	constexpr TString & TString::operator=(const char * str) noexcept {
+		assign(str);
 		return *this;
 	}
 
 	TemplateDecl
-	constexpr TString & TString::operator=(std::string_view rhs) noexcept {
-		assert(rhs.size() < MaxSize);
-		MY_STRNCPY(_buff, rhs.data(), rhs.size());
-		_size = rhs.size();
-		return *this;
+	template<typename... FmtArgs>
+	constexpr TString::string(fmt::format_string<FmtArgs...> format, FmtArgs &&... fmt_args) noexcept {
+		set(format, FWD(fmt_args)...);
 	}
 
 	TemplateDecl
-	constexpr TString & TString::operator=(const std::string & rhs) noexcept {
-		assert(rhs.size() < MaxSize);
-		MY_STRNCPY(_buff, rhs.data(), rhs.size());
-		_size = rhs.size();
-		return *this;
+	template<typename... FmtArgs>
+	constexpr void TString::set(fmt::format_string<FmtArgs...> format, FmtArgs &&... fmt_args) noexcept {
+		_size = fmt::format_to_n(_buff, MaxSize - 1, format, FWD(fmt_args)...).size;
+		_buff[_size] = 0;
 	}
 
 	TemplateDecl
-	template<typename... Args>
-	constexpr void TString::set(const char * format, Args... args) noexcept {
-		_size = snprintf(_buff, MaxSize, format, args...);
+	constexpr void TString::assign(std::string_view str) noexcept {
+		set("{}", str);
 	}
 
 	TemplateDecl
-	constexpr void TString::assign(const char * s) noexcept {
-		*this = s;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(const char * pRhs) noexcept {
-		MY_STRNCAT(_buff, pRhs, MaxSize - _size);
-		_size += strlen(pRhs);
-		assert(_size < MaxSize);
-		return *this;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(std::string_view rhs) noexcept {
-		MY_STRNCAT(_buff, rhs.data(), rhs.size());
-		_size += rhs.size();
-		assert(_size < MaxSize);
-		return *this;
-	}
-
-	TemplateDecl
-	template<size_t Size, const char * Name>
-	constexpr TString & TString::operator+=(const string<Size, Name> & rhs) noexcept {
-		return *this += rhs.c_str();
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(char rhs) noexcept {
-		_buff[_size++] = rhs;
-		assert(_size < MaxSize);
+	template<typename T>
+	constexpr TString & TString::operator+=(const T & rhs) noexcept {
+		const auto dest = _buff + _size;
+		_size += fmt::format_to_n(dest, MaxSize - _size - 1, "{}", rhs).size;
 		_buff[_size] = 0;
 		return *this;
 	}
 
 	TemplateDecl
-	constexpr TString & TString::operator+=(int rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%d", rhs);
-		return *this;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(float rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%f", rhs);
-		return *this;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(size_t rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%zu", rhs);
-		return *this;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(unsigned int rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%u", rhs);
-		return *this;
-	}
-
-	TemplateDecl
-	constexpr TString & TString::operator+=(intptr_t rhs) noexcept {
-		_size += snprintf(_buff + _size, MaxSize - _size, "%zu", rhs);
-		return *this;
-	}
-
-	TemplateDecl
 	template<typename T>
-	constexpr TString TString::operator+(T rhs) const noexcept {
+	constexpr TString TString::operator+(const T & rhs) const noexcept {
 		string ret(_buff);
 		ret += rhs;
 		return ret;
@@ -163,15 +69,15 @@ namespace putils {
 	TemplateDecl
 	constexpr TString TString::substr(size_t start, size_t count) const noexcept {
 		string ret;
-		MY_STRNCPY(ret._buff, _buff + start, count);
-		ret._size = std::min(strlen(_buff + start), count);
+		ret._size = fmt::format_to_n(ret._buff, std::min(MaxSize - 1, count), "{}", _buff + start).size;
+		ret._buff[ret._size] = 0;
 		return ret;
 	}
 
 	TemplateDecl
 	constexpr void TString::clear() noexcept {
-		_buff[0] = 0;
 		_size = 0;
+		_buff[_size] = 0;
 	}
 
 	TemplateDecl
@@ -373,9 +279,6 @@ namespace std {
 		return result;
 	}
 }
-
-#undef MY_STRNCPY
-#undef MY_STRNCAT
 
 // clang-format on
 #undef TemplateDecl
