@@ -6,13 +6,13 @@ Helper functions for manipulating [reflectible](https://github.com/phisko/reflec
 
 ```cpp
 template<typename T>
-void imgui_edit(T && obj);
+bool imgui_edit(T && obj);
 
 template<typename T>
-void imgui_edit(const char * label, T && obj);
+bool imgui_edit(const char * label, T && obj);
 ```
 
-Displays `obj`, in an editable way if `obj` is not const.
+Displays `obj`, in an editable way if `obj` is not const. Returns whether `obj` was modified.
 
 Currently supported types:
 * all `reflectible` types
