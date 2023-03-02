@@ -60,6 +60,7 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [magica_voxel](putils/magica_voxel.md): structure declarations for the [magica_voxel format](https://ephtracy.github.io/)
 * [magica_voxel_to_polyvox_loader](putils/magica_voxel_to_polyvox_loader.md): conversion functions to parse the magica_voxel format into [PolyVox](https://bitbucket.org/volumesoffun/polyvox/src/develop/) objects
 * [on_scope_exit](putils/on_scope_exit.md): returns an object that calls a function in its dtor
+* [parse](putils/parse.md): uses a `std::stringstream` to parse an object
 * [profiling.hpp](putils/profiling.hpp): macros wrapping [Tracy](https://github.com/wolfpld/tracy)
 * [rand](putils/rand.md): function using C++ 11's random number generation facilities
 * [range](putils/range.md): macro return the `begin` and `end` iterators of a container
@@ -71,7 +72,6 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [sign](putils/sign.md): function returning -1, 0 or 1 depending on the sign of the parameter
 * [split](putils/split.md): split a string according to a delimiter
 * [static_assert](putils/static_assert.md): type template to let `static_assert` fail for a specific type
-* [to_string](putils/to_string.md): uses a `std::stringstream` to serialize an object
 * [url](putils/url.md): URL encoder and decoder
 * [visit](putils/visit.md): `overloaded` type letting you pass multiple lambdas to `std::visit`
 * [with](putils/with.md): `with` macro mimicking the Kotlin construct
