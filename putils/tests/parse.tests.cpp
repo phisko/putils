@@ -2,40 +2,7 @@
 #include <gtest/gtest.h>
 
 // putils
-#include "putils/to_string.hpp"
-
-TEST(to_string, int) {
-	EXPECT_EQ(putils::to_string(42), "42");
-}
-
-TEST(to_string, string) {
-	EXPECT_EQ(putils::to_string("42"), "42");
-}
-
-TEST(to_string, bool) {
-	EXPECT_EQ(putils::to_string(false), "false");
-}
-
-TEST(to_string, stream) {
-	std::stringstream s;
-	s << 42;
-	EXPECT_EQ(putils::to_string(s), "42");
-}
-
-TEST(to_string, enum) {
-	enum E {
-		A,
-		B
-	};
-	const E e = E::A;
-	EXPECT_EQ(putils::to_string(e), "A");
-}
-
-TEST(to_string, empty_enum) {
-	enum E {};
-	const E e = E(42);
-	EXPECT_EQ(putils::to_string(e), "42");
-}
+#include "putils/parse.hpp"
 
 TEST(parse, int) {
 	int i = 0;

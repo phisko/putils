@@ -1,4 +1,4 @@
-#include "to_string.hpp"
+#include "parse.hpp"
 
 // stl
 #include <sstream>
@@ -11,24 +11,6 @@
 #include "profiling.hpp"
 
 namespace putils {
-	template<putils::streamable<std::stringstream> Obj>
-	std::string to_string(Obj && obj) noexcept {
-		PUTILS_PROFILING_SCOPE;
-
-		using decayed = std::decay_t<Obj>;
-		if constexpr (std::is_enum<decayed>()) {
-			if constexpr (magic_enum::enum_count<decayed>() > 0)
-				return std::string(magic_enum::enum_name(obj));
-			else
-				return to_string(std::underlying_type_t<decayed>(obj));
-		}
-		else {
-			std::stringstream s;
-			s << FWD(obj);
-			return s.str();
-		}
-	}
-
 	template<putils::unstreamable<std::stringstream> Obj>
 	void parse(Obj & obj, std::string_view str) noexcept {
 		PUTILS_PROFILING_SCOPE;

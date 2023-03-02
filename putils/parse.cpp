@@ -1,4 +1,4 @@
-#include "to_string.hpp"
+#include "parse.hpp"
 
 // stl
 #include <sstream>
@@ -8,20 +8,6 @@
 #include "profiling.hpp"
 
 namespace putils {
-	std::string to_string(bool v) noexcept {
-		PUTILS_PROFILING_SCOPE;
-
-		std::stringstream s;
-		s << std::boolalpha << v;
-		return s.str();
-	}
-
-	std::string to_string(std::istream & s) noexcept {
-		PUTILS_PROFILING_SCOPE;
-
-		return read_stream(s);
-	}
-
 	template<>
 	void parse(bool & obj, std::string_view str) noexcept {
 		obj = str == "true";
