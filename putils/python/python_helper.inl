@@ -18,7 +18,6 @@
 // putils
 #include "putils/profiling.hpp"
 #include "putils/range.hpp"
-#include "putils/to_string.hpp"
 
 namespace putils::python {
 	template<typename T>
@@ -47,7 +46,7 @@ namespace putils::python {
 			});
 
 			if constexpr (putils::streamable<T, std::stringstream>)
-				type.def("__str__", [](const T & obj) { return putils::to_string(obj); });
+				type.def("__str__", [](const T & obj) { return fmt::format("{}", obj); });
 
 			if constexpr (std::ranges::range<T>)
 				type.def("__iter__", [](const T & obj) { return py::make_iterator(putils_range(obj)); });

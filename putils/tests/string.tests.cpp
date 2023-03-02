@@ -24,7 +24,7 @@ TEST(string, ctor_string_view) {
 
 TEST(string, ctor_format) {
 	const std::string_view ss("hello");
-	const putils::string<64> ps("%s%s", "hel", "lo");
+	const putils::string<64> ps("{}{}", "hel", "lo");
 	EXPECT_EQ(ps, ss);
 }
 
@@ -52,7 +52,7 @@ TEST(string, assign_string_view) {
 TEST(string, assign_putils_string) {
 	const std::string_view ss("hello");
 	putils::string<64> ps;
-	ps = putils::string<128>("%s%s", "hel", "lo");
+	ps = putils::string<128>("{}{}", "hel", "lo");
 	EXPECT_EQ(ps, ss);
 }
 
@@ -64,7 +64,7 @@ TEST(string, assign) {
 
 TEST(string, set) {
 	putils::string<64> ps;
-	ps.set("%s%s", "hel", "lo");
+	ps.set("{}{}", "hel", "lo");
 	EXPECT_EQ(ps, "hello");
 }
 
@@ -101,7 +101,7 @@ TEST(string, append_int) {
 TEST(string, append_float) {
 	putils::string<64> ps("hello");
 	ps += 42.f;
-	EXPECT_EQ(ps, "hello42.000000");
+	EXPECT_EQ(ps, "hello42");
 }
 
 TEST(string, append__size_t) {
@@ -155,7 +155,7 @@ TEST(string, get_appended_int) {
 TEST(string, get_appended_float) {
 	const putils::string<64> ps("hello");
 	const putils::string<64> res = ps + 42.f;
-	EXPECT_EQ(res, "hello42.000000");
+	EXPECT_EQ(res, "hello42");
 }
 
 TEST(string, get_appended_size_t) {

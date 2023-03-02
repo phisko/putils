@@ -8,9 +8,9 @@
 #include "putils/reflection.hpp"
 
 // putils
-#include "to_string.hpp"
-#include "string.hpp"
+#include "parse.hpp"
 #include "profiling.hpp"
+#include "string.hpp"
 
 namespace putils {
 	namespace impl {
@@ -84,11 +84,11 @@ namespace putils {
 		T ret;
 
 		putils::reflection::for_each_attribute(ret, [&](const auto & attr) noexcept {
-			const putils::string<1024> option("--%s", attr.name);
+			const putils::string<1024> option("--{}", attr.name);
 			if (impl::parse_value(args, option, attr.member, false))
 				return;
 			if (const auto flag = putils::reflection::get_metadata<const char *>(attr.metadata, "flag")) {
-				const putils::string<1024> dash_flag("-%s", *flag);
+				const putils::string<1024> dash_flag("-{}", *flag);
 				impl::parse_value(args, dash_flag, attr.member, true);
 			}
 		});

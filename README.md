@@ -75,3 +75,8 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [url](putils/url.md): URL encoder and decoder
 * [visit](putils/visit.md): `overloaded` type letting you pass multiple lambdas to `std::visit`
 * [with](putils/with.md): `with` macro mimicking the Kotlin construct
+
+# Formatters
+
+* [enum_formatter](putils/reflection_helpers/enum_formatter.md): `fmt::formatter` specialization for enum types
+* [reflectible_formatter](putils/reflection_helpers/reflectible_formatter.md): `fmt::formatter` specialization for reflectible types

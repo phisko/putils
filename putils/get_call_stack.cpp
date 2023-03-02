@@ -37,7 +37,7 @@ namespace putils {
 
 			static constexpr auto stack_frames_to_ignore = 1;
 			if (i >= stack_frames_to_ignore + stack_frames_to_ignore) {
-				const putils::string<256> s("\t %i: %s - (l.%i)", frames - i - 1, symbol->Name, line.LineNumber);
+				const putils::string<256> s("\t {}: {} - (l.{})", frames - i - 1, symbol->Name, line.LineNumber);
 				if (!ret.empty())
 					ret += '\n';
 				ret += s;

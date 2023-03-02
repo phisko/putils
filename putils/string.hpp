@@ -7,6 +7,9 @@
 #include <string_view>
 #include <span>
 
+// fmt
+#include <fmt/core.h>
+
 // reflection
 #include "putils/reflection.hpp"
 
@@ -23,45 +26,28 @@ namespace putils {
 		static constexpr auto max_size = MaxSize;
 
 	public:
-		constexpr string() noexcept;
+		constexpr string() noexcept = default;
 
+		constexpr string(std::string_view str) noexcept;
 		constexpr string(const char * str) noexcept;
-		constexpr string(const std::string & s) noexcept;
-		constexpr string(std::string_view s) noexcept;
 
-		template<typename... Args>
-		constexpr string(const char * format, Args... args) noexcept;
+		constexpr string & operator=(std::string_view str) noexcept;
+		constexpr string & operator=(const char * str) noexcept;
 
-		constexpr string & operator=(const char * rhs) noexcept;
-		constexpr string & operator=(std::string_view rhs) noexcept;
-		constexpr string & operator=(const std::string & rhs) noexcept;
-
-		template<size_t N, const char * S>
-		constexpr string & operator=(const string<N, S> & rhs) noexcept;
+		template<typename... FmtArgs>
+		constexpr string(fmt::format_string<FmtArgs...> format, FmtArgs &&... fmt_args) noexcept;
 
 		// Reflectible (no overload/template)
-		constexpr void assign(const char * s) noexcept;
+		constexpr void assign(std::string_view str) noexcept;
 
-		template<typename... Args>
-		constexpr void set(const char * format, Args... args) noexcept;
-
-		constexpr string & operator+=(const char * pRhs) noexcept;
-		constexpr string & operator+=(std::string_view rhs) noexcept;
-
-		template<size_t Size, const char * Name>
-		constexpr string & operator+=(const string<Size, Name> & rhs) noexcept;
-
-		constexpr string & operator+=(char rhs) noexcept;
-		constexpr string & operator+=(int rhs) noexcept;
-		constexpr string & operator+=(float rhs) noexcept;
-
-		constexpr string & operator+=(size_t rhs) noexcept;
-
-		constexpr string & operator+=(unsigned int rhs) noexcept;
-		constexpr string & operator+=(intptr_t rhs) noexcept;
+		template<typename... FmtArgs>
+		constexpr void set(fmt::format_string<FmtArgs...> format, FmtArgs &&... fmt_args) noexcept;
 
 		template<typename T>
-		constexpr string operator+(T rhs) const noexcept;
+		constexpr string & operator+=(const T & rhs) noexcept;
+
+		template<typename T>
+		constexpr string operator+(const T & rhs) const noexcept;
 
 		constexpr string substr(size_t start = 0, size_t count = MaxSize) const noexcept;
 

@@ -26,7 +26,6 @@
 #include "putils/string.hpp"
 #include "putils/color.hpp"
 #include "putils/lengthof.hpp"
-#include "putils/to_string.hpp"
 #include "putils/profiling.hpp"
 
 namespace putils::reflection {
@@ -74,7 +73,7 @@ namespace putils::reflection {
 
 			if (name == nullptr)
 				return putils::string<64>("##") + (intptr_t)&member;
-			return putils::string<64>("##%s", name) + (intptr_t)&member;
+			return putils::string<64>("##{}", name) + (intptr_t)&member;
 		}
 
 		template<typename Member>
@@ -83,7 +82,7 @@ namespace putils::reflection {
 
 			if (name == nullptr)
 				return putils::string<64>("##") + (intptr_t)&member;
-			return putils::string<64>("%s##", name) + (intptr_t)&member;
+			return putils::string<64>("{}##", name) + (intptr_t)&member;
 		}
 	}
 
@@ -160,10 +159,10 @@ namespace putils::reflection {
 				for (auto it = obj.begin(); it != obj.end(); ++it) {
 					auto && [key, value] = *it;
 
-					putils::string<64> tree_node_title("%d", i++);
+					putils::string<64> tree_node_title("{}", i++);
 					constexpr bool key_as_tree_node_title = putils::streamable<putils_typeof(key), std::stringstream>;
 					if constexpr (key_as_tree_node_title)
-						tree_node_title = putils::to_string(key);
+						tree_node_title = fmt::format("{}", key);
 
 					const auto tree_node_open = ImGui::TreeNode(tree_node_title.c_str());
 					if constexpr (!is_const)
@@ -233,7 +232,7 @@ namespace putils::reflection {
 
 				auto to_erase = std::end(obj);
 				for (auto it = std::begin(obj); it != std::end(obj); ++it) {
-					const auto tree_node_open = ImGui::TreeNode(putils::string<64>("%d", i++).c_str());
+					const auto tree_node_open = ImGui::TreeNode(putils::string<64>("{}", i++).c_str());
 					if constexpr (!is_const)
 						if (ImGui::BeginPopupContextItem()) {
 							if (ImGui::Button("Remove")) {
@@ -328,7 +327,7 @@ namespace putils::reflection {
 
 					size_t i = 0;
 					putils::tuple_for_each(args, [&](auto & arg) {
-						ret |= imgui_edit(putils::string<64>("Arg %zu", i).c_str(), arg);
+						ret |= imgui_edit(putils::string<64>("Arg {}", i).c_str(), arg);
 						++i;
 					});
 

@@ -48,7 +48,7 @@ namespace putils::library_factory {
 #elif defined(_WIN32)
 		static const std::regex end(R"(^.*\.dll$)");
 
-		const auto to_load = std::regex_match(name, end) ? std::string(name) : string(name) + ".dll";
+		const auto to_load = std::regex_match(name, end) ? string(name) : string(name) + ".dll";
 		auto lib = std::make_unique<windows_library>(to_load);
 		_register.emplace(name, std::move(lib));
 #elif defined(__unix__)
