@@ -89,7 +89,6 @@ namespace putils {
 	putils_reflection_info_template {
 		putils_reflection_custom_class_name(point2);
 		putils_reflection_attributes(
-			putils_reflection_attribute(raw),
 			putils_reflection_attribute(x),
 			putils_reflection_attribute(y)
 		);
