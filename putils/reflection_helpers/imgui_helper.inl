@@ -88,21 +88,28 @@ namespace putils::reflection {
 	}
 
 	template<typename TRef>
-	void imgui_edit(TRef && obj) noexcept {
+	bool imgui_edit(TRef && obj) noexcept {
 		PUTILS_PROFILING_SCOPE;
 
+		bool ret = false;
+
 		using T = std::decay_t<TRef>;
-		if constexpr (putils::reflection::is_reflectible<T>())
-			putils::reflection::for_each_attribute(obj, [](const auto & attr) {
-				imgui_edit(attr.name, attr.member);
+		if constexpr (putils::reflection::is_reflectible<T>()) {
+			putils::reflection::for_each_attribute(obj, [&](const auto & attr) {
+				ret |= imgui_edit(attr.name, attr.member);
 			});
+		}
 		else
-			imgui_edit(nullptr, FWD(obj));
+			ret |= imgui_edit(nullptr, FWD(obj));
+
+		return ret;
 	}
 
 	template<typename TRef>
-	void imgui_edit(const char * name, TRef && obj) noexcept {
+	bool imgui_edit(const char * name, TRef && obj) noexcept {
 		PUTILS_PROFILING_SCOPE;
+
+		bool ret = false;
 
 		using TNoRef = std::remove_reference_t<TRef>;
 		constexpr bool is_const = std::is_const<TNoRef>();
@@ -116,7 +123,7 @@ namespace putils::reflection {
 				if constexpr (std::is_void<std::remove_pointer_t<TNoRef>>())
 					ImGui::Text("%p", obj);
 				else
-					imgui_edit(name, FWD(*obj));
+					ret |= imgui_edit(name, FWD(*obj));
 			}
 			else
 				detail::imgui::display_in_columns(name, []() noexcept {
@@ -132,8 +139,10 @@ namespace putils::reflection {
 				else {
 					putils::string<1024> s = obj.c_str();
 					ImGui::PushItemWidth(-1.f);
-					if (ImGui::InputText(id.c_str(), s.begin(), s.max_size, ImGuiInputTextFlags_EnterReturnsTrue))
+					if (ImGui::InputText(id.c_str(), s.begin(), s.max_size, ImGuiInputTextFlags_EnterReturnsTrue)) {
+						ret = true;
 						obj = s.c_str();
+					}
 					ImGui::PopItemWidth();
 				}
 			});
@@ -159,22 +168,24 @@ namespace putils::reflection {
 					const auto tree_node_open = ImGui::TreeNode(tree_node_title.c_str());
 					if constexpr (!is_const)
 						if (ImGui::BeginPopupContextItem()) {
-							if (ImGui::Button("Remove"))
+							if (ImGui::Button("Remove")) {
+								ret = true;
 								to_erase = it;
+							}
 							ImGui::EndPopup();
 						}
 
 					if (tree_node_open) {
 						if constexpr (key_as_tree_node_title)
-							imgui_edit(FWD(value));
+							ret |= imgui_edit(FWD(value));
 						else {
 							if (ImGui::TreeNode(detail::imgui::get_name_with_id("key", key).c_str())) {
-								imgui_edit(key);
+								ret |= imgui_edit(key);
 								ImGui::TreePop();
 							}
 
 							if (ImGui::TreeNode(detail::imgui::get_name_with_id("value", value).c_str())) {
-								imgui_edit(FWD(value));
+								ret |= imgui_edit(FWD(value));
 								ImGui::TreePop();
 							}
 						}
@@ -189,12 +200,12 @@ namespace putils::reflection {
 					ImGui::Columns(3);
 					using key_type = typename T::key_type;
 					static key_type key;
-					imgui_edit(key);
+					ret |= imgui_edit(key);
 
 					ImGui::NextColumn();
 					using mapped_type = typename T::mapped_type;
 					static mapped_type value;
-					imgui_edit(value);
+					ret |= imgui_edit(value);
 
 					ImGui::NextColumn();
 
@@ -202,6 +213,7 @@ namespace putils::reflection {
 						ImGui::TextDisabled("Key already in map");
 					else {
 						if (ImGui::Button("Add")) {
+							ret = true;
 							obj.emplace(key, value);
 							key = key_type{};
 							value = mapped_type{};
@@ -224,13 +236,15 @@ namespace putils::reflection {
 					const auto tree_node_open = ImGui::TreeNode(putils::string<64>("%d", i++).c_str());
 					if constexpr (!is_const)
 						if (ImGui::BeginPopupContextItem()) {
-							if (ImGui::Button("Remove"))
+							if (ImGui::Button("Remove")) {
+								ret = true;
 								to_erase = it;
+							}
 							ImGui::EndPopup();
 						}
 
 					if (tree_node_open) {
-						imgui_edit(FWD(*it));
+						ret |= imgui_edit(FWD(*it));
 						ImGui::TreePop();
 					}
 				}
@@ -241,8 +255,10 @@ namespace putils::reflection {
 							obj.erase(to_erase);
 
 					if constexpr (requires { obj.emplace_back(); })
-						if (ImGui::MenuItem("Add"))
+						if (ImGui::MenuItem("Add")) {
+							ret = true;
 							obj.emplace_back();
+						}
 				}
 
 				ImGui::TreePop();
@@ -260,8 +276,10 @@ namespace putils::reflection {
 						ImGui::OpenPopup(name_with_id.c_str());
 
 					if (ImGui::BeginPopup(name_with_id.c_str())) {
-						if (ImGui::ColorPicker4(name_with_id.c_str(), normalized.attributes))
+						if (ImGui::ColorPicker4(name_with_id.c_str(), normalized.attributes)) {
+							ret = true;
 							obj = putils::to_color(normalized);
+						}
 						ImGui::EndPopup();
 					}
 				}
@@ -278,7 +296,8 @@ namespace putils::reflection {
 						ImGui::OpenPopup(name_with_id.c_str());
 
 					if (ImGui::BeginPopup(name_with_id.c_str())) {
-						ImGui::ColorPicker4(name_with_id.c_str(), obj.attributes);
+						if (ImGui::ColorPicker4(name_with_id.c_str(), obj.attributes))
+							ret = true;
 						ImGui::EndPopup();
 					}
 				}
@@ -287,7 +306,7 @@ namespace putils::reflection {
 
 		else if constexpr (putils::callable<T>) {
 			if (obj == nullptr)
-				return;
+				return false;
 
 			using args = putils::function_arguments<T>;
 
@@ -297,10 +316,10 @@ namespace putils::reflection {
 
 					using return_type = putils::function_return_type<T>;
 					if constexpr (!std::is_same<return_type, void>() && std::is_default_constructible<return_type>()) {
-						static return_type ret;
+						static return_type function_ret;
 						if (ImGui::Button("Call"))
-							ret = std::apply(obj, args);
-						imgui_edit("Return value", (const return_type &)ret);
+							function_ret = std::apply(obj, args);
+						imgui_edit("Return value", (const return_type &)function_ret);
 					}
 					else {
 						if (ImGui::Button("Call"))
@@ -309,7 +328,7 @@ namespace putils::reflection {
 
 					size_t i = 0;
 					putils::tuple_for_each(args, [&](auto & arg) {
-						imgui_edit(putils::string<64>("Arg %zu", i).c_str(), arg);
+						ret |= imgui_edit(putils::string<64>("Arg %zu", i).c_str(), arg);
 						++i;
 					});
 
@@ -320,8 +339,8 @@ namespace putils::reflection {
 
 		else if constexpr (putils::reflection::is_reflectible<T>()) {
 			if (ImGui::TreeNode(name_with_id.c_str())) {
-				putils::reflection::for_each_attribute(FWD(obj), [](const auto & attr) noexcept {
-					imgui_edit(attr.name, FWD(attr.member));
+				putils::reflection::for_each_attribute(FWD(obj), [&](const auto & attr) noexcept {
+					ret |= imgui_edit(attr.name, FWD(attr.member));
 				});
 				ImGui::TreePop();
 			}
@@ -338,10 +357,10 @@ namespace putils::reflection {
 			}
 			else {
 				if constexpr (is_const)
-					imgui_edit(name, std::underlying_type_t<T>(obj));
+					ret |= imgui_edit(name, std::underlying_type_t<T>(obj));
 				else {
 					auto non_enum_value = std::underlying_type_t<T>(obj);
-					imgui_edit(name, non_enum_value);
+					ret |= imgui_edit(name, non_enum_value);
 					obj = T(non_enum_value);
 				}
 			}
@@ -352,7 +371,8 @@ namespace putils::reflection {
 				if constexpr (is_const)
 					ImGui::Text(obj ? "true" : "false");
 				else
-					ImGui::Checkbox(id.c_str(), &obj);
+					if (ImGui::Checkbox(id.c_str(), &obj))
+						ret = true;
 			});
 		}
 
@@ -413,8 +433,10 @@ namespace putils::reflection {
 							assert(false);
 					}();
 					auto val = obj;
-					if (ImGui::InputScalar(id.c_str(), data_type, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue))
+					if (ImGui::InputScalar(id.c_str(), data_type, &val, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
+						ret = true;
 						obj = val;
+					}
 					ImGui::PopItemWidth();
 				});
 			}
@@ -425,5 +447,7 @@ namespace putils::reflection {
 				ImGui::Text("unknown type");
 			});
 		}
+
+		return ret;
 	}
 }
