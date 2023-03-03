@@ -9,7 +9,6 @@
 
 // putils
 #include "putils/get_last_error_as_string.hpp"
-#include "putils/concatenate.hpp"
 #include "putils/profiling.hpp"
 
 namespace putils {
