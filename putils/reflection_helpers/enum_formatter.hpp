@@ -18,7 +18,10 @@ namespace fmt {
 
 		template<typename FormatContext>
 		auto format(T obj, FormatContext & ctx) const -> decltype(ctx.out()) {
-			return fmt::format_to(ctx.out(), "{}", magic_enum::enum_name(obj));
+			if constexpr (magic_enum::enum_count<T>() == 0)
+				return fmt::format_to(ctx.out(), "{}", int(obj));
+			else
+				return fmt::format_to(ctx.out(), "{}", magic_enum::enum_name(obj));
 		}
 	};
 }
