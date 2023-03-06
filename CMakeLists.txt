@@ -114,9 +114,7 @@ option(PUTILS_TESTS "Build tests")
 if (PUTILS_TESTS)
 	enable_testing()
     set(test_exe_name putils_tests)
-    file(GLOB test_src
-            putils/tests/*.tests.cpp
-            putils/reflection_helpers/tests/*.tests.cpp)
+    file(GLOB_RECURSE test_src putils/*.tests.cpp)
 
     putils_add_test_executable(${test_exe_name} ${test_src})
     target_link_libraries(${test_exe_name} PRIVATE putils)
