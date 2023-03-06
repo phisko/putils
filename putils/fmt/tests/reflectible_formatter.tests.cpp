@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 // putils
-#include "putils/reflection_helpers/reflectible_formatter.hpp"
+#include "putils/fmt/fmt.hpp"
 
 struct empty {};
 #define refltype empty
@@ -13,7 +13,7 @@ putils_reflection_info {
 
 TEST(reflectible_formatter, empty) {
 	const auto str = fmt::format("{}", empty{});
-	EXPECT_EQ(str, "()");
+	EXPECT_EQ(str, "{}");
 }
 
 struct values {
@@ -33,5 +33,9 @@ putils_reflection_info {
 
 TEST(reflectible_formatter, values) {
 	const auto str = fmt::format("{}", values{});
-	EXPECT_EQ(str, "(i: 42, d: 84, s: hello)");
+	EXPECT_EQ(str, "{i: 42, d: 84, s: hello}");
+}
+
+TEST(reflectible_formatter, formattable) {
+	static_assert(putils::formattable<values>);
 }
