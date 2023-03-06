@@ -153,7 +153,12 @@ namespace putils {
 	}
 
 	TemplateDecl
-	constexpr bool TVector::full() const {
+	constexpr auto TVector::max_size() const noexcept {
+		return MaxSize;
+	}
+
+	TemplateDecl
+	constexpr bool TVector::full() const noexcept {
 		return _size >= MaxSize;
 	}
 

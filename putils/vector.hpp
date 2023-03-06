@@ -77,7 +77,8 @@ namespace putils {
 
 		constexpr auto size() const noexcept;
 		constexpr bool empty() const noexcept;
-		constexpr bool full() const;
+		constexpr auto max_size() const noexcept;
+		constexpr bool full() const noexcept;
 
 		constexpr auto begin() const noexcept;
 		constexpr auto end() const noexcept;

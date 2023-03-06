@@ -159,6 +159,11 @@ namespace putils {
 	}
 
 	TemplateDecl
+	constexpr size_t TString::max_size() const noexcept {
+		return MaxSize - 1;
+	}
+
+	TemplateDecl
 	constexpr bool TString::full() const noexcept {
 		return _size >= MaxSize - 1;
 	}
