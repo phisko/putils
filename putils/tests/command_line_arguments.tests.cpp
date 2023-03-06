@@ -21,6 +21,7 @@ struct options {
 	std::string s2;
 	float f1 = 0.f;
 	float f2 = 0.f;
+	std::optional<int> opt;
 };
 
 #define refltype options
@@ -29,15 +30,15 @@ putils_reflection_info{
 		putils_reflection_attribute(s1, putils_reflection_metadata("flag", "s")),
 		putils_reflection_attribute(s2),
 		putils_reflection_attribute(f1),
-		putils_reflection_attribute(f2)
+		putils_reflection_attribute(f2),
+		putils_reflection_attribute(opt)
 	)
 };
 #undef refltype
 
 TEST(command_line_arguments, parse_one_space) {
 	const std::vector<std::string_view> args{
-		"--s1",
-		"hello",
+		"--s1", "hello",
 	};
 	const auto parsed = putils::parse_arguments<options>(std::span(args));
 	EXPECT_EQ(parsed.s1, "hello");
@@ -53,25 +54,23 @@ TEST(command_line_arguments, parse_one_assign) {
 
 TEST(command_line_arguments, parse_multiple) {
 	const std::vector<std::string_view> args{
-		"--s1",
-		"hello",
+		"--s1", "hello",
 		"--s2=hi",
-		"--f1",
-		"42.5",
-		"--f2",
-		"-84",
+		"--f1", "42.5",
+		"--f2", "-84",
+		"--opt=42"
 	};
 	const auto parsed = putils::parse_arguments<options>(std::span(args));
 	EXPECT_EQ(parsed.s1, "hello");
 	EXPECT_EQ(parsed.s2, "hi");
 	EXPECT_EQ(parsed.f1, 42.5f);
 	EXPECT_EQ(parsed.f2, -84.f);
+	EXPECT_EQ(*parsed.opt, 42);
 }
 
 TEST(command_line_arguments, flag_metadata) {
 	const std::vector<std::string_view> args{
-		"-s",
-		"hello",
+		"-s", "hello",
 	};
 	const auto parsed = putils::parse_arguments<options>(std::span(args));
 	EXPECT_EQ(parsed.s1, "hello");

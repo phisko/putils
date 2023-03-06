@@ -1,13 +1,14 @@
+#include "json_helper.hpp"
+
 // meta
 #include "putils/meta/concepts/callable.hpp"
 #include "putils/meta/concepts/specialization.hpp"
 
 // putils
-#include "json_helper.hpp"
 #include "putils/string.hpp"
 #include "putils/lengthof.hpp"
-#include "putils/parse.hpp"
 #include "putils/profiling.hpp"
+#include "putils/scn/scn.hpp"
 
 namespace putils::reflection {
 	namespace detail::json {
@@ -74,8 +75,9 @@ namespace putils::reflection {
 					obj.clear();
 					for (const auto & [json_key, value] : json_object.items()) {
 						using key_type = typename T::key_type;
-						auto key = putils::parse<key_type>(json_key.c_str());
-						from_json(value, obj[std::move(key)]);
+						key_type key;
+						if (scn::scan_default(json_key, key))
+							from_json(value, obj[std::move(key)]);
 					}
 				}
 			}
