@@ -271,3 +271,9 @@ TEST(string, full) {
 	ps.clear();
 	EXPECT_FALSE(ps.full());
 }
+
+TEST(string, fmt) {
+	const putils::string<6> ps("hello");
+	const auto result = fmt::format("{}", ps);
+	EXPECT_EQ(result, ps);
+}
