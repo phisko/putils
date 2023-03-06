@@ -11,8 +11,8 @@
 
 // putils
 #include "putils/lengthof.hpp"
-#include "putils/parse.hpp"
 #include "putils/profiling.hpp"
+#include "putils/scn/scn.hpp"
 #include "putils/vector.hpp"
 
 namespace putils::reflection::runtime {
@@ -84,7 +84,10 @@ namespace putils::reflection::runtime {
 				.get_value_impl = [](const void * attribute, const char * key_string) noexcept -> void * {
 					auto * map = (MemberType *)attribute;
 
-					const auto key = putils::parse<key_type>(key_string);
+					key_type key;
+					const std::string_view key_string_view(key_string);
+					if (!scn::scan_default(key_string_view, key))
+						return nullptr;
 
 					const auto it = map->find(key);
 					if (it != map->end())

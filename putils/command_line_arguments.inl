@@ -8,12 +8,17 @@
 #include "putils/reflection.hpp"
 
 // putils
-#include "parse.hpp"
 #include "profiling.hpp"
+#include "scn/scn.hpp"
 #include "string.hpp"
 
 namespace putils {
 	namespace impl {
+		template<typename T>
+		struct is_optional : std::false_type {};
+		template<typename T>
+		struct is_optional<std::optional<T>> : std::true_type {};
+
 		template<typename T>
 		struct remove_optional;
 
@@ -29,25 +34,33 @@ namespace putils {
 
 		template<typename T>
 		static bool parse_value(std::span<const std::string_view> args, std::string_view key, T & member, bool is_flag) noexcept {
-			using AttributeType = impl::remove_optional<putils_typeof(member)>::type;
+			using attribute_type = impl::remove_optional<putils_typeof(member)>::type;
+
+			const auto parse_value = [&](std::string_view value) {
+				if constexpr (impl::is_optional<putils_typeof(member)>())
+					(void)scn::scan_default(value, member.emplace());
+				else
+					(void)scn::scan_default(value, member);
+			};
 
 			for (size_t i = 0; i < args.size(); ++i) {
 				if (args[i] == key) {
-					if constexpr (std::is_same<AttributeType, bool>()) {
+					if constexpr (std::is_same<attribute_type, bool>()) {
 						member = true;
 						return true;
 					}
 					++i;
 					if (i >= args.size())
 						return true;
-					member = putils::parse<AttributeType>(args[i]);
+
+					parse_value(args[i]);
 					return true;
 				}
 				else if (!is_flag) {
 					if (args[i].substr(0, key.size()) != key || args[i][key.size()] != '=')
 						continue;
 					const auto value = args[i].substr(key.size() + 1);
-					member = putils::parse<AttributeType>(value);
+					parse_value(value);
 					return true;
 				}
 			}
