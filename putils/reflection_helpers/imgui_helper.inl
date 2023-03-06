@@ -138,7 +138,7 @@ namespace putils::reflection {
 				else {
 					putils::string<1024> s = obj.c_str();
 					ImGui::PushItemWidth(-1.f);
-					if (ImGui::InputText(id.c_str(), s.begin(), s.max_size, ImGuiInputTextFlags_EnterReturnsTrue)) {
+					if (ImGui::InputText(id.c_str(), s.begin(), s.max_size(), ImGuiInputTextFlags_EnterReturnsTrue)) {
 						ret = true;
 						obj = s.c_str();
 					}

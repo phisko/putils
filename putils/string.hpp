@@ -23,7 +23,6 @@ namespace putils {
 	public:
 		using value_type = char;
 		static constexpr auto npos = std::string::npos;
-		static constexpr auto max_size = MaxSize;
 
 	public:
 		constexpr string() noexcept = default;
@@ -74,6 +73,7 @@ namespace putils {
 		constexpr size_t size() const noexcept;
 		constexpr size_t length() const noexcept;
 		constexpr bool empty() const noexcept;
+		constexpr size_t max_size() const noexcept;
 		constexpr bool full() const noexcept;
 
 	public:
