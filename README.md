@@ -38,6 +38,8 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [Meta](https://github.com/phisko/meta)
 * [plugin_manager](putils/plugin_manager/README.md) (enabled with the `PUTILS_PLUGIN_MANAGER` CMake option)
 * [Reflection](https://github.com/phisko/reflection)
+* [fmt](putils/fmt/): formatters and concepts for [fmt](https://github.com/fmtlib/fmt)
+* [scn](putils/scn/): scanners and concepts for [scn](https://github.com/eliaskosunen/scnlib)
 
 ## Function-only headers
 
@@ -75,8 +77,3 @@ Another example is the [register_type](putils/lua/README.md) function provided f
 * [url](putils/url.md): URL encoder and decoder
 * [visit](putils/visit.md): `overloaded` type letting you pass multiple lambdas to `std::visit`
 * [with](putils/with.md): `with` macro mimicking the Kotlin construct
-
-# Formatters
-
-* [enum_formatter](putils/reflection_helpers/enum_formatter.md): `fmt::formatter` specialization for enum types
-* [reflectible_formatter](putils/reflection_helpers/reflectible_formatter.md): `fmt::formatter` specialization for reflectible types
