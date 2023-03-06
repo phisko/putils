@@ -46,6 +46,9 @@ endif()
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(putils_core PUBLIC fmt::fmt)
 
+find_package(scn CONFIG REQUIRED)
+target_link_libraries(putils_core PUBLIC scn::scn)
+
 find_package(magic_enum CONFIG REQUIRED)
 target_link_libraries(putils_core PUBLIC magic_enum::magic_enum)
 
