@@ -143,3 +143,26 @@ TEST(json_helper, from_json_reflection) {
 	EXPECT_EQ(obj.i, -42);
 	EXPECT_EQ(obj.s, "hi");
 }
+
+TEST(json_helper, to_json_nullptr) {
+	int * i = nullptr;
+	EXPECT_EQ(putils::reflection::to_json(i).dump(), "null");
+}
+
+TEST(json_helper, from_json_nullptr) {
+	int * i = nullptr;
+	putils::reflection::from_json(nlohmann::json::parse("42"), i);
+	EXPECT_EQ(i, nullptr);
+}
+
+TEST(json_helper, from_json_non_null_to_null) {
+	int * i = new int(42);
+	putils::reflection::from_json(nlohmann::json::parse("null"), i);
+	EXPECT_EQ(i, nullptr);
+}
+
+TEST(json_helper, from_json_pointer) {
+	int * i = new int(42);
+	putils::reflection::from_json(nlohmann::json::parse("84"), i);
+	EXPECT_EQ(*i, 84);
+}
