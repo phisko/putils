@@ -295,8 +295,7 @@ namespace putils::reflection {
 						ImGui::OpenPopup(name_with_id.c_str());
 
 					if (ImGui::BeginPopup(name_with_id.c_str())) {
-						if (ImGui::ColorPicker4(name_with_id.c_str(), obj.attributes))
-							ret = true;
+						ret |= ImGui::ColorPicker4(name_with_id.c_str(), obj.attributes);
 						ImGui::EndPopup();
 					}
 				}
@@ -351,7 +350,7 @@ namespace putils::reflection {
 					if constexpr (is_const)
 						ImGui::Text("%s", magic_enum::enum_name(obj).data());
 					else
-						imgui_enum_combo(id.c_str(), obj);
+						ret |= imgui_enum_combo(id.c_str(), obj);
 				});
 			}
 			else {
@@ -370,8 +369,7 @@ namespace putils::reflection {
 				if constexpr (is_const)
 					ImGui::Text(obj ? "true" : "false");
 				else
-					if (ImGui::Checkbox(id.c_str(), &obj))
-						ret = true;
+					ret |= ImGui::Checkbox(id.c_str(), &obj);
 			});
 		}
 
