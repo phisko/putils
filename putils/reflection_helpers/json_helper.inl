@@ -114,15 +114,21 @@ namespace putils::reflection {
 			}
 
 			else if constexpr ((std::is_pointer<TNoRef>() || putils::specialization<TNoRef, std::unique_ptr>) && !std::is_void<std::remove_pointer_t<TNoRef>>()) {
-				if constexpr (deserialize)
-					if (!obj) {
-						using pointed_type = std::remove_pointer_t<TNoRef>;
-						if constexpr (std::is_default_constructible<pointed_type>())
-							obj = new pointed_type;
-						else
-							return;
-					}
-				from_to_json(FWD(json_object), *obj);
+				if constexpr (deserialize) {
+					if (!obj)
+						return;
+
+					if (json_object == nullptr)
+						obj = nullptr;
+					else
+						from_to_json(FWD(json_object), *obj);
+				}
+				else {
+					if (!obj)
+						from_to_json(FWD(json_object), nullptr);
+					else
+						from_to_json(FWD(json_object), *obj);
+				}
 			}
 
 			else if constexpr (putils::reflection::is_reflectible<T>()) {
