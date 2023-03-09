@@ -8,8 +8,8 @@ namespace putils {
 		PUTILS_PROFILING_SCOPE;
 
 		std::vector<std::string_view> ret;
-		for (int i = 0; i < ac; ++i)
-			ret.emplace_back(av[i]);
+		for (const auto arg : std::span(av, ac))
+			ret.emplace_back(arg);
 		return ret;
 	}
 }
