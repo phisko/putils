@@ -28,20 +28,18 @@ namespace putils {
 		symbol->MaxNameLen = 256;
 		symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 
-		for (int i = 0; i < frames; i++) {
-			SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
+		static constexpr auto stack_frames_to_ignore = 1;
+		for (int i = stack_frames_to_ignore + frames_to_ignore; i < frames; ++i) {
+			SymFromAddr(process, DWORD64(stack[i]), nullptr, symbol);
 
 			DWORD displacement;
 			IMAGEHLP_LINE64 line;
-			SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &displacement, &line);
+			SymGetLineFromAddr64(process, DWORD64(stack[i]), &displacement, &line);
 
-			static constexpr auto stack_frames_to_ignore = 1;
-			if (i >= stack_frames_to_ignore + stack_frames_to_ignore) {
-				const putils::string<256> s("\t {}: {} - (l.{})", frames - i - 1, symbol->Name, line.LineNumber);
-				if (!ret.empty())
-					ret += '\n';
-				ret += s;
-			}
+			const putils::string<256> s("\t {}: {} - (l.{})", frames - i - 1, symbol->Name, line.LineNumber);
+			if (!ret.empty())
+				ret += '\n';
+			ret += s;
 		}
 #endif
 		return ret;
