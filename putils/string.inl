@@ -41,6 +41,7 @@ namespace putils {
 	template<typename... FmtArgs>
 	constexpr void TString::set(fmt::format_string<FmtArgs...> format, FmtArgs &&... fmt_args) noexcept {
 		_size = fmt::format_to_n(_buff, MaxSize - 1, format, FWD(fmt_args)...).size;
+		_size = std::min(_size, MaxSize - 1);
 		_buff[_size] = 0;
 	}
 
@@ -70,6 +71,7 @@ namespace putils {
 	constexpr TString TString::substr(size_t start, size_t count) const noexcept {
 		string ret;
 		ret._size = fmt::format_to_n(ret._buff, std::min(MaxSize - 1, count), "{}", _buff + start).size;
+		ret._size = std::min(_size, MaxSize - 1);
 		ret._buff[ret._size] = 0;
 		return ret;
 	}
